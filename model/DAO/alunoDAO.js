@@ -16,3 +16,9 @@ var prisma = new PrismaClient()
 const insertAluno = async function (dadosAluno){
     let sql = `insert into tbl_aluno`
 }
+
+// Seleciona todos os alunos
+
+const selectAllAlunos = async function (){
+    let sql = `select `
+}
