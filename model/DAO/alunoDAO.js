@@ -12,6 +12,54 @@ var { PrismaClient } = require('@prisma/client')
 var prisma = new PrismaClient()
 
 
+// Seleciona todos os alunos
+const selectAllAlunos = async function (){
+
+    let sql = `
+    select  tbl_aluno.nome, tbl_aluno.data_nascimento, tbl_aluno.telefone,
+            tbl_aluno.email, tbl_aluno.foto, tbl_aluno.cpf, tbl_aluno_objetivo
+            tbl_aluno.questao_condicao_medica, tbl_aluno.questao_lesoes, tbl_aluno.questao_medicamento,
+            tbl_aluno.peso, tbl_aluno.altura
+
+            from tbl_aluno
+                inner join tbl_genero
+                    on tbl_genero.id = tbl_aluno.id_genero;`
+
+    let resultadoAluno = await prisma.$queryRawUnsafe(sql)
+
+    if(resultadoAluno.length > 0) {
+        return resultadoAluno
+    } else{
+        return false
+    }
+}
+
+// Seleciona um aluno pelo seu id
+const selectAlunoById = async function(idAluno){
+
+    let sql = `select * from tbl_aluno where id = ${idAluno}`
+
+    let resultadoAluno = await prisma.$queryRawUnsafe(sql)
+
+    if(resultadoAluno.length > 0)
+        return resultadoAluno
+    else
+        return false
+}
+
+// Seleciona um aluno pelo seu nome
+const selectAlunoByName = async function(nomeAluno){
+
+    let sql = `select * from tbl_aluno where nome like '%${nomeAluno}$'`
+
+    let resultadoAluno = await prisma.$queryRawUnsafe(sql)
+
+    if(resultadoAluno.length > 0)
+        return resultadoAluno
+    else
+        return false
+}
+
 // Insert de dados do aluno
 const insertAluno = async function (dadosAluno){
     let sql = `insert into tbl_aluno (
@@ -51,16 +99,19 @@ const insertAluno = async function (dadosAluno){
         return false
 }
 
-// Seleciona todos os alunos
-const selectAllAlunos = async function (){
-    let sql = `
-    select  tbl_aluno.nome, tbl_aluno.data_nascimento, tbl_aluno.telefone,
-            tbl_aluno.email, tbl_aluno.foto, tbl_aluno.cpf, tbl_aluno_objetivo
-            tbl_aluno.questao_condicao_medica, tbl_aluno.questao_lesoes, tbl_aluno.questao_medicamento,
-            tbl_aluno.peso, tbl_aluno.altura
-
-            from tbl_aluno
-                inner join tbl_aluno_academia
-                    on tbl_aluno.id = tbl_aluno_academia.id_aluno;
-    `
+// Atualiza os dados do aluno
+const updateAluno = async function(dadosAluno){
+    let sql = ` update tbl_aluno set
+                nome = '${dadosAluno.nome}',
+                nome = '${dadosAluno.data_nascimento}',
+                nome = '${dadosAluno.telefone}',
+                nome = '${dadosAluno.email}',
+                nome = '${dadosAluno.senha}',
+                nome = '${dadosAluno.cpf}',
+                nome = '${dadosAluno.questao_condicao_medica}',
+                nome = '${dadosAluno.nome}',
+                nome = '${dadosAluno.nome}',
+                nome = '${dadosAluno.nome}',
+                nome = '${dadosAluno.nome}',
+                nome = '${dadosAluno.nome}',`
 }
