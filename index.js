@@ -55,6 +55,42 @@ app.post('/kalos/genero', cors(), bodyParserJSON, async function (request, respo
     }
 })
 
+app.put('/kalos/genero/id/:id', cors(), bodyParserJSON, async function(request, response){
+
+    let contentType = request.headers['content-type']
+
+    // validacao para receber em formato json
+    if(String(contentType).toLowerCase() == 'application/json'){
+
+        let dadosBody = request.body
+
+        let idGenero = request.params.id
+
+        let resultadoDadosGenero = await controllerGenero.atualizarGenero(dadosBody, idGenero)
+
+        response.status(resultadoDadosGenero.status)
+        response.json(resultadoDadosGenero)
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.message(message.ERROR_INVALID_CONTENT_TYPE.message)
+
+    }
+})
+
+app.delete('/kalos/genero/id/:id', cors(), async function(request, response){
+
+    let idGenero = request.params.id
+
+    let dadosGenero = await controllerGenero.deletarGenero(idGenero)
+
+    response.status(dadosGenero.status)
+    response.json(dadosGenero)
+})
+
+
+
+
+
 app.listen(8080, function(){
     console.log('console rodando')
 })

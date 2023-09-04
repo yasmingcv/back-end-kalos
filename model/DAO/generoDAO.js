@@ -15,10 +15,12 @@ var prisma = new PrismaClient()
 
 // Seleciona o gênero pelo id
 const selectGeneroById = async function(idGenero){
+    console.log(idGenero)
     let sql = `select * from tbl_genero where id = ${idGenero}`
 
-    let resultadoGenero = await prisma.$executeRawUnsafe(sql)
+    let resultadoGenero = await prisma.$queryRawUnsafe(sql)
 
+    console.log(resultadoGenero)
     if(resultadoGenero.length > 0)
         return resultadoGenero
     else
@@ -47,7 +49,7 @@ const insertGenero = async function(dadosGenero){
 // Atualiza os dados do gênero
 const updateGenero = async function(dadosGenero){
     let sql = `update tbl_genero set
-                nome = '${dadosGenero.id}'`
+                nome = '${dadosGenero.nome}' where id = ${dadosGenero.id}`
 
     let resultadoGenero= await prisma.$executeRawUnsafe(sql)
 
