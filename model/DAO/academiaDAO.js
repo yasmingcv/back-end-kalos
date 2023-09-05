@@ -14,11 +14,12 @@ var prisma = new PrismaClient()
 
 const selectAcademiaByPassword = async function (dadosAcademia){
     let sql  = `select * from tbl_academia 
-                    where email = ${dadosAcademia.email}
+                    where email = '${dadosAcademia.email}'
                     and
-                    senha = ${dadosAcademia.senha}`
+                    senha = '${dadosAcademia.senha}'`
 
-    let rsAcademia = prisma.$queryRawUnsafe(sql)
+
+    let rsAcademia = await prisma.$queryRawUnsafe(sql)
 
     if(rsAcademia.length > 0){
         return rsAcademia

@@ -17,13 +17,14 @@ const selectAllAlunos = async function (){
 
     let sql = `
     select  tbl_aluno.nome, tbl_aluno.data_nascimento, tbl_aluno.telefone,
-            tbl_aluno.email, tbl_aluno.foto, tbl_aluno.cpf, tbl_aluno_objetivo
-            tbl_aluno.questao_condicao_medica, tbl_aluno.questao_lesoes, tbl_aluno.questao_medicamento,
-            tbl_aluno.peso, tbl_aluno.altura
+    tbl_aluno.email, tbl_aluno.foto, tbl_aluno.cpf, tbl_aluno.objetivo,
+    tbl_aluno.questao_condicao_medica, tbl_aluno.questao_lesoes, tbl_aluno.questao_medicamento,
+    tbl_aluno.peso, tbl_aluno.altura, tbl_genero.nome as genero
 
-            from tbl_aluno
-                inner join tbl_genero
-                    on tbl_genero.id = tbl_aluno.id_genero;`
+    from tbl_aluno
+        inner join tbl_genero
+            on tbl_genero.id = tbl_aluno.id_genero;
+`
 
     let resultadoAluno = await prisma.$queryRawUnsafe(sql)
 

@@ -7,7 +7,7 @@
 
 const jwt = require("jsonwebtoken")
 const SECRET = "7a3c3a0v4n1y8k"
-const EXPIRES = 60
+const EXPIRES = 36000
 
 
 const createJWT = async function (payLoad){
@@ -17,15 +17,19 @@ const createJWT = async function (payLoad){
 }
 
 const validateJWT = async function (token){
-    let status = false
+    let status
 
     jwt.verify(token, SECRET, async function (err, decode){
-        if(!err){
-            status = true 
+        if(err){
+            status = false 
+        } else {
+            status = true
         }
 
-        return status
+        
     })
+    return status
+
 }
 
 module.exports = {

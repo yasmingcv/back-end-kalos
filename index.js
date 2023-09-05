@@ -29,12 +29,14 @@ app.use((request, response, next) => {
 })
 var message = require('./controller/modulo/config.js')
 var controllerGenero = require('./controller/controllerGenero.js')
+var controllerAcademia = require('./controller/controllerAcademia.js')
+var controllerAluno = require('./controller/controllerAluno.js')
 
 
 //Define que os dados que irao chegar na requisição será no padrão JSON
 const bodyParserJSON = bodyParser.json()
 
-/******************************************* ENDPOINT GENERO ********************************************/
+/******************************************* ENDPOINTs GENERO ********************************************/
 
 app.post('/kalos/genero', cors(), bodyParserJSON, async function (request, response){
 
@@ -88,7 +90,48 @@ app.delete('/kalos/genero/id/:id', cors(), async function(request, response){
 })
 
 
+/******************************************* ENDPOINTs ACADEMIA ********************************************/
 
+const verifyJWT = async function (request, response, next) {
+    let token = request.headers['x-access-token']
+
+    const jwt = require('./middleware/jwt.js')
+
+    const autenticidadeToken = await jwt.validateJWT(token)
+
+    if(autenticidadeToken){
+        next()
+    } else{
+        return response.status(401).end()
+    }
+}
+
+app.post('/kalos/academia/autenticar', cors(), bodyParserJSON, async function(request, response){
+    let contentType = request.headers['content-type']
+    
+    if(String(contentType).toLowerCase() == 'application/json'){
+        let dadosBody = request.body
+        let resultDadosAcademia = await controllerAcademia.autenticarAcademia(dadosBody)
+
+        response.status(200)//alterar pra msg
+        response.json(resultDadosAcademia)
+
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.message(message.ERROR_INVALID_CONTENT_TYPE.message)
+
+    }
+
+})
+
+/******************************************* ENDPOINTs ALUNO ********************************************/
+
+app.get('/kalos/aluno', cors(), verifyJWT, async function (request, response){
+    let dadosAlunos = await controllerAluno.getAlunos()
+
+    response.json(dadosAlunos)
+    response.status(dadosAlunos.status)
+})
 
 
 app.listen(8080, function(){
