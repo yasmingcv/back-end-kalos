@@ -183,11 +183,28 @@ const deletarAluno = async function(idAluno){
     }
 }
 
+const autenticarAluno = async function(dadosAluno){
+    const dados = await alunoDAO.selectAlunoByPassword(dadosAluno)
+   
+    const jwt = require('../middleware/jwt.js')
+
+    if(dados){
+        let tokenUser = await jwt.createJWT(dados.id)
+        dados[0].token = tokenUser
+
+        return dados[0]
+
+    } else {
+        return message.ERROR_UNAUTHORIZED   
+    }
+}
+
 module.exports = {
     getAlunos,
     getAlunoById,
     getAlunoByName,
     inserirAluno,
     atualizarAluno,
-    deletarAluno
+    deletarAluno,
+    autenticarAluno
 }
