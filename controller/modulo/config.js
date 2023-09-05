@@ -57,6 +57,12 @@ const ERROR_INVALID_SIGLA = {
     "A sigla informado na requisição não é válido ou não foi encaminhado.",
 };
 
+const ERROR_UNAUTHORIZED = {
+  status: 401,
+  message:
+    "Não autorizado",
+};
+
 /********************* MENSAGENS DE SUCESSO ********************/
 const SUCCESS_CREATE_ITEM   = {status:201, message: 'Item criado com sucesso.'}
 
@@ -86,5 +92,6 @@ module.exports = {
     SUCCESS_CREATE_ITEM,
     SUCCESS_UPDATE_ITEM,
     SUCCESS_DELETE_ITEM,
-    SUCCESS_REQUEST
+    SUCCESS_REQUEST,
+    ERROR_UNAUTHORIZED
 }
