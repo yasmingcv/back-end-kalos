@@ -114,4 +114,47 @@ const updateAluno = async function(dadosAluno){
                 nome = '${dadosAluno.nome}',
                 nome = '${dadosAluno.nome}',
                 nome = '${dadosAluno.nome}',`
+
+
+    let resultadoAluno = await prisma.$executeRawUnsafe(sql)
+
+    if (resultadoAluno)
+        return true
+    else
+        return false
+}
+
+// Deleta um aluno
+const deleteAluno = async function(idAluno){
+    let sql = `delete from tbl_aluno where id = ${idAluno}`
+
+    let resultadoAluno = await prisma.$queryRawUnsafe(sql)
+
+    if(resultadoAluno)
+        return true
+    else
+        return false
+    
+}
+
+const selectLastId = async function(){
+    let sql = `select * from tbl_aluno order by id desc limit1;`
+
+    let resultadoAluno = await prisma.$queryRawUnsafe(sql)
+
+    if(resultadoAluno.length > 0){
+        return resultadoAluno
+    } else
+        return false
+
+}
+
+module.exports = {
+    selectAllAlunos,
+    selectAlunoById,
+    selectAlunoByName,
+    insertAluno,
+    deleteAluno,
+    updateAluno,
+    selectLastId
 }
