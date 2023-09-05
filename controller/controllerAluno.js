@@ -1,13 +1,13 @@
-/******
+/**********************************************************************
  * Objetivo: Arquivo de controle dos dados dos alunos em nosso sistema
  * Data: 05/09/23
  * Autores: Artur Alves
  * Versão: 1.0
- ******/
+ ***********************************************************************/
 
 var alunoDAO = require('../model/DAO/alunoDAO.js')
 
-var message = require('./modulo/config.js')
+var message = require('./modulo/config.js') 
 
 // Retorna todos os alunos existentens no banco de dados
 const getAlunos = async function(){
