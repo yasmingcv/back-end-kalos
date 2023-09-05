@@ -150,6 +150,22 @@ const selectLastId = async function(){
 
 }
 
+const selectAlunoByPassword = async function (dadosAluno){
+    let sql  = `select * from tbl_aluno 
+                    where email = '${dadosAluno.email}'
+                    and
+                    senha = '${dadosAluno.senha}'`
+
+
+    let rsAluno = await prisma.$queryRawUnsafe(sql)
+
+    if(rsAluno.length > 0){
+        return rsAluno
+    } else {
+        return false
+    }
+}
+
 module.exports = {
     selectAllAlunos,
     selectAlunoById,
@@ -157,5 +173,6 @@ module.exports = {
     insertAluno,
     deleteAluno,
     updateAluno,
-    selectLastId
+    selectLastId,
+    selectAlunoByPassword
 }

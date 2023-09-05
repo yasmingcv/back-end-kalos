@@ -8,7 +8,6 @@
 //Import do arquivo de configurações das variáveis, constantes e funções globais
 var message = require('./modulo/config.js')
 
-
 var academiaDAO = require('../model/DAO/academiaDAO.js')
 
 const autenticarAcademia = async function(dadosAcademia){
@@ -23,8 +22,7 @@ const autenticarAcademia = async function(dadosAcademia){
         return dados[0]
 
     } else {
-        return false
-
+        return message.ERROR_UNAUTHORIZED   
     }
 }
 

@@ -113,7 +113,7 @@ app.post('/kalos/academia/autenticar', cors(), bodyParserJSON, async function(re
         let dadosBody = request.body
         let resultDadosAcademia = await controllerAcademia.autenticarAcademia(dadosBody)
 
-        response.status(200)//alterar pra msg
+        response.status(200)
         response.json(resultDadosAcademia)
 
     } else {
@@ -133,6 +133,23 @@ app.get('/kalos/aluno', cors(), verifyJWT, async function (request, response){
     response.status(dadosAlunos.status)
 })
 
+app.post('/kalos/aluno/autenticar', cors(), bodyParserJSON, async function(request, response){
+    let contentType = request.headers['content-type']
+    
+    if(String(contentType).toLowerCase() == 'application/json'){
+        let dadosBody = request.body
+        let resultDadosAluno = await controllerAluno.autenticarAluno(dadosBody)
+
+        response.status(200)
+        response.json(resultDadosAluno)
+
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.message(message.ERROR_INVALID_CONTENT_TYPE.message)
+
+    }
+
+})
 
 app.listen(8080, function(){
     console.log('console rodando')
