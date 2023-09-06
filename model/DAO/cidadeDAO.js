@@ -13,7 +13,11 @@ var prisma = new PrismaClient()
 
 const selectCidadeById = async function(idCidade){
 
-    let sql = `select from tbl_cidade where id = ${idCidade}`
+    let sql = ` select tbl_cidade.nome as nome_cidade, tbl_estado.nome as nome_estado
+    
+                        from tbl_cidade
+                            inner joins tbl_estado
+                                on tbl_estado.id = tbl_cidade.id_estado where tbl_cidade.id = ${idCidade}`
 
     let resultadoCidade = await prisma.$queryRawUnsafe(sql)
 

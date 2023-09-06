@@ -28,3 +28,66 @@ const inserirCidade = async function(dadosCidade){
         }
     }
 }
+
+const atualizarCidade = async function(dadosCidade, idCidade){
+    if(dadosCidade.nome == '' || dadosCidade.nome == undefined || !isNaN(dadosCidade.nome)){
+
+        return message.ERROR_REQUIRED_FIELDS
+
+    } else if(idCidade == '' || idCidade == undefined || isNaN(idCidade)){
+
+        return message.ERROR_INVALID_ID
+
+    } else {
+        dadosCidade.id = idCidade
+
+        let statusId = await cidadeDAO.selectCidadeById(idCidade)
+
+        if(statusId){
+            let resultadoDadosCidade = await cidadeDAO.updateCidade(dadosCidade)
+
+            if(resultadoDadosCidade){
+                let dadosCidadeJSON = {}
+
+                dadosCidadeJSON.status = message.SUCCESS_UPDATE_ITEM.status
+                dadosCidadeJSON.message = message.SUCCESS_UPDATE_ITEM.message
+                dadosCidadeJSON.cidade = dadosCidade
+
+                return dadosCidadeJSON
+            } else {
+                return message.ERROR_INTERNAL_SERVER
+            }
+        } else {
+            return message.ERROR_ID_NOT_FOUND
+        }
+    }
+}
+
+const deletarCidade = async function(idCidade){
+
+    if(idCidade == '' || idCidade == undefined || isNaN(idCidade)){
+        return message.ERROR_INVALID_ID
+    } else {
+
+        let statusId = await cidadeDAO.selectCidadeById(idCidade)
+
+        if(statusId){
+
+            let resultadoDadosCidade = await cidadeDAO.deleteCidade(idCidade)
+
+            if(resultadoDadosCidade){
+                return message.SUCCESS_DELETE_ITEM
+            } else {
+                return message.ERROR_INTERNAL_SERVER
+            }
+        } else {
+            return message.ERROR_ID_NOT_FOUND
+        }
+    }
+}
+
+module.exports = {
+    inserirCidade,
+    atualizarCidade,
+    deletarCidade
+}

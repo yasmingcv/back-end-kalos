@@ -38,7 +38,14 @@ const selectAllAlunos = async function (){
 // Seleciona um aluno pelo seu id
 const selectAlunoById = async function(idAluno){
 
-    let sql = `select * from tbl_aluno where id = ${idAluno}`
+    let sql = `select   tbl_aluno.nome, tbl_aluno.data_nascimento, tbl_aluno.telefone,
+    tbl_aluno.email, tbl_aluno.foto, tbl_aluno.cpf, tbl_aluno.objetivo,
+    tbl_aluno.questao_condicao_medica, tbl_aluno.questao_lesoes, tbl_aluno.questao_medicamento,
+    tbl_aluno.peso, tbl_aluno.altura, tbl_genero.nome as genero
+    
+    from tbl_aluno
+        inner join tbl_genero
+            on tbl_genero.id = tbl_aluno.id_genero where tbl_aluno.id = ${idAluno}`
 
     let resultadoAluno = await prisma.$queryRawUnsafe(sql)
 
@@ -51,7 +58,7 @@ const selectAlunoById = async function(idAluno){
 // Seleciona um aluno pelo seu nome
 const selectAlunoByName = async function(nomeAluno){
 
-    let sql = `select * from tbl_aluno where nome like '%${nomeAluno}$'`
+    let sql = `select * from tbl_aluno where nome like '%${nomeAluno}%'`
 
     let resultadoAluno = await prisma.$queryRawUnsafe(sql)
 
@@ -84,7 +91,7 @@ const insertAluno = async function (dadosAluno){
         '${dadosAluno.senha}',
         '${dadosAluno.cpf}',
         '${dadosAluno.questao_condicao_medica}',
-        '${dadosAluno.questao_lesao}',
+        '${dadosAluno.questao_lesoes}',
         '${dadosAluno.questao_medicamento}',
         '${dadosAluno.peso}',
         '${dadosAluno.altura}',
@@ -102,19 +109,20 @@ const insertAluno = async function (dadosAluno){
 
 // Atualiza os dados do aluno
 const updateAluno = async function(dadosAluno){
+    
     let sql = ` update tbl_aluno set
                 nome = '${dadosAluno.nome}',
-                nome = '${dadosAluno.data_nascimento}',
-                nome = '${dadosAluno.telefone}',
-                nome = '${dadosAluno.email}',
-                nome = '${dadosAluno.senha}',
-                nome = '${dadosAluno.cpf}',
-                nome = '${dadosAluno.questao_condicao_medica}',
-                nome = '${dadosAluno.nome}',
-                nome = '${dadosAluno.nome}',
-                nome = '${dadosAluno.nome}',
-                nome = '${dadosAluno.nome}',
-                nome = '${dadosAluno.nome}',`
+                data_nascimento = '${dadosAluno.data_nascimento}',
+                telefone = '${dadosAluno.telefone}',
+                email = '${dadosAluno.email}',
+                senha = '${dadosAluno.senha}',
+                cpf = '${dadosAluno.cpf}',
+                questao_condicao_medica = '${dadosAluno.questao_condicao_medica}',
+                questao_lesoes = '${dadosAluno.questao_lesoes}',
+                questao_medicamento = '${dadosAluno.questao_medicamento}',
+                peso = '${dadosAluno.peso}',
+                altura = '${dadosAluno.altura}',
+                objetivo = '${dadosAluno.objetivo}'`
 
 
     let resultadoAluno = await prisma.$executeRawUnsafe(sql)
@@ -139,7 +147,7 @@ const deleteAluno = async function(idAluno){
 }
 
 const selectLastId = async function(){
-    let sql = `select * from tbl_aluno order by id desc limit1;`
+    let sql = `select * from tbl_aluno order by id desc limit 1;`
 
     let resultadoAluno = await prisma.$queryRawUnsafe(sql)
 

@@ -30,7 +30,7 @@ const inserirEstado = async function(dadosEstado){
 }
 
 const atualizarEstado = async function(dadosEstado, idEstado){
-    if(dadosEstado.nome == '' || dadosEstado.nome == undefined || !isNaN(dadosEstado)){
+    if(dadosEstado.nome == '' || dadosEstado.nome == undefined || !isNaN(dadosEstado.nome)){
 
         return message.ERROR_REQUIRED_FIELDS
     } else if(idEstado == '' || idEstado == undefined || isNaN(idEstado)){

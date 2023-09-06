@@ -1,7 +1,7 @@
 /**********************************************************************
  * Objetivo: Arquivo de controle dos dados dos alunos em nosso sistema
  * Data: 05/09/23
- * Autores: Artur Alves
+ * Autores: Artur Alves e Yasmin Gonçalves
  * Versão: 1.0
  ***********************************************************************/
 
