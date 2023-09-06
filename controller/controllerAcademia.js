@@ -76,6 +76,26 @@ const getAcademiaByName = async function(nomeAcademia){
 
 const inserirAcademia = async function(dadosAcademia){
 
+    //Verifica se o atributo veio undefined ou se não foi digitado, se sim, define como "null",
+    //se não, adiciona aspas. No DAO, o atributo não contém aspas ao ser inserido, pois pode ser nulo, e se for nulo, não vai aspas.
+    if(dadosAcademia.facebook == undefined || dadosAcademia.facebook == ''){
+        dadosAcademia.facebook = null
+    } else {
+        dadosAcademia.facebook = "'" + dadosAcademia.facebook + "'"
+    }
+
+    if(dadosAcademia.whatsapp == undefined || dadosAcademia.whatsapp == ''){
+        dadosAcademia.whatsapp = null
+    } else {
+        dadosAcademia.whatsapp = "'" + dadosAcademia.whatsapp + "'"
+    }
+
+    if(dadosAcademia.instagram == undefined || dadosAcademia.instagram == ''){
+        dadosAcademia.instagram = null
+    } else {
+        dadosAcademia.instagram = "'" + dadosAcademia.instagram + "'"
+    }
+
     // Validação para tratar campos obrigatórios e caracteres
 
     if( dadosAcademia.nome == '' || dadosAcademia == undefined || !isNaN(dadosAcademia.nome ||
@@ -113,6 +133,26 @@ const inserirAcademia = async function(dadosAcademia){
 }
 
 const atualizarAcademia = async function (dadosAcademia, idAcademia){
+
+    //Verifica se o atributo veio undefined ou se não foi digitado, se sim, define como "null",
+    //se não, adiciona aspas. No DAO, o atributo não contém aspas ao ser inserido, pois pode ser nulo, e se for nulo, não vai aspas.
+    if(dadosAcademia.facebook == undefined || dadosAcademia.facebook == ''){
+        dadosAcademia.facebook = null
+    } else {
+        dadosAcademia.facebook = "'" + dadosAcademia.facebook + "'"
+    }
+
+    if(dadosAcademia.whatsapp == undefined || dadosAcademia.whatsapp == ''){
+        dadosAcademia.whatsapp = null
+    } else {
+        dadosAcademia.whatsapp = "'" + dadosAcademia.whatsapp + "'"
+    }
+
+    if(dadosAcademia.instagram == undefined || dadosAcademia.instagram == ''){
+        dadosAcademia.instagram = null
+    } else {
+        dadosAcademia.instagram = "'" + dadosAcademia.instagram + "'"
+    }
 
     // Validação para tratar campos obrigatórios e caracteres
 

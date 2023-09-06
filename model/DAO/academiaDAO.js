@@ -37,17 +37,24 @@ const selectAllAcademias = async function(){
 // Seleciona uma academia pelo seu id
 const selectAcademiaById = async function(idAcademia){
 
-    let sql = `select   tbl_academia.nome, tbl_academia.email, tbl_academia.senha,
-    tbl_academia.telefone, tbl_academia.cnpj, tbl_academia.foto, tbl_academia.descricao,
-    tbl_academia.cor_primaria, tbl_academia.cor_secundaria, tbl_academia.data_abertura,
-    tbl_academia.razao_social, tbl_academia.facebook, tbl_academia.whatsapp, tbl_academia.instagram,
-    tbl_academia.status,
-    tbl_endereco.logradouro as logradouro, tbl_endereco.numero as numero, tbl_endereco.bairro as bairro, tbl_endereco.complemento as complemento,
-    tbl_endereco.cep as cep
-    
-    from tbl_academia
-        inner join tbl_endereco
-            on tbl_endereco.id = tbl_academia.id_endereco where tbl_academia.id = ${idAcademia};`
+    let sql = ` select tbl_academia.id, tbl_academia.nome, tbl_academia.email, tbl_academia.senha, tbl_academia.telefone, 
+                tbl_academia.cnpj, tbl_academia.foto, tbl_academia.descricao, 
+                tbl_academia.cor_primaria, tbl_academia.cor_secundaria, tbl_academia.data_abertura,
+                tbl_academia.razao_social, tbl_academia.facebook, tbl_academia.whatsapp,
+                tbl_academia.instagram, tbl_academia.status,
+                tbl_endereco.logradouro, tbl_endereco.numero, tbl_endereco.bairro, tbl_endereco.complemento,
+                tbl_endereco.cep, tbl_cidade.nome as cidade,
+                tbl_estado.nome as estado
+                
+            from tbl_academia
+                inner join tbl_endereco
+                    on tbl_academia.id_endereco = tbl_endereco.id
+                inner join tbl_cidade
+                    on tbl_endereco.id_cidade = tbl_cidade.id
+                inner join tbl_estado
+                    on tbl_estado.id = tbl_cidade.id_estado
+                    
+                where tbl_academia.id = ${idAcademia}`
 
     let resultadoAcademia = await prisma.$queryRawUnsafe(sql)
 
@@ -60,7 +67,24 @@ const selectAcademiaById = async function(idAcademia){
 
 // Seleciona uma academia pelo seu nome
 const selectAcademiaByName = async function(nomeAcademia){
-    let sql = `select * from tbl_academia where nome like '%${nomeAcademia}%'`
+    let sql = ` select tbl_academia.id, tbl_academia.nome, tbl_academia.email, tbl_academia.senha, tbl_academia.telefone, 
+            tbl_academia.cnpj, tbl_academia.foto, tbl_academia.descricao, 
+            tbl_academia.cor_primaria, tbl_academia.cor_secundaria, tbl_academia.data_abertura,
+            tbl_academia.razao_social, tbl_academia.facebook, tbl_academia.whatsapp,
+            tbl_academia.instagram, tbl_academia.status,
+            tbl_endereco.logradouro, tbl_endereco.numero, tbl_endereco.bairro, tbl_endereco.complemento,
+            tbl_endereco.cep, tbl_cidade.nome as cidade,
+            tbl_estado.nome as estado
+            
+        from tbl_academia
+            inner join tbl_endereco
+                on tbl_academia.id_endereco = tbl_endereco.id
+            inner join tbl_cidade
+                on tbl_endereco.id_cidade = tbl_cidade.id
+            inner join tbl_estado
+                on tbl_estado.id = tbl_cidade.id_estado
+                
+            where tbl_academia.nome like '%${nomeAcademia}%'`
 
     let resultadoAcademia = await prisma.$queryRawUnsafe(sql)
 
@@ -100,9 +124,9 @@ const insertAcademia = async function(dadosAcademia){
         '${dadosAcademia.cor_secundaria}',
         '${dadosAcademia.data_abertura}',
         '${dadosAcademia.razao_social}',
-        '${dadosAcademia.facebook}',
-        '${dadosAcademia.whatsapp}',
-        '${dadosAcademia.instagram}',
+        ${dadosAcademia.facebook},
+        ${dadosAcademia.whatsapp},
+        ${dadosAcademia.instagram},
         '${dadosAcademia.status}',
     );`
 
@@ -128,9 +152,9 @@ const updateAcademia = async function(dadosAcademia){
                 cor_secundaria = '${dadosAcademia.cor_secundaria}',
                 data_abertura = '${dadosAcademia.data_abertura}',
                 razao_social = '${dadosAcademia.razao_social}',
-                facebook = '${dadosAcademia.facebook}',
-                whatsapp = '${dadosAcademia.whatsapp}',
-                instagram = '${dadosAcademia.instagram}',
+                facebook = ${dadosAcademia.facebook},
+                whatsapp = ${dadosAcademia.whatsapp},
+                instagram = ${dadosAcademia.instagram},
                 status = '${dadosAcademia.status}'`
 
     let resultadoAcademia = await prisma.$executeRawUnsafe(sql)
