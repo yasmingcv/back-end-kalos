@@ -142,14 +142,14 @@ app.post('/kalos/academia/autenticar', cors(), bodyParserJSON, async function(re
 
 /******************************************* ENDPOINTs ALUNO ********************************************/
 
-app.get('/kalos/aluno', cors(), verifyJWTAluno, async function (request, response){
+app.get('/kalos/aluno', cors(), async function (request, response){
     let dadosAlunos = await controllerAluno.getAlunos()
 
     response.json(dadosAlunos)
     response.status(dadosAlunos.status)
 })
 
-app.get('/kalos/academia', cors(), verifyJWTAcademia, async function (request, response){
+app.get('/kalos/academia', cors(), async function (request, response){
     let dadosAcademias = await controllerAcademia.getAcademias()
 
     response.json(dadosAcademias)
