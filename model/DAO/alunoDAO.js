@@ -90,7 +90,7 @@ const insertAluno = async function (dadosAluno){
         '${dadosAluno.data_nascimento}',
         '${dadosAluno.telefone}',
         '${dadosAluno.email}',
-        '${dadosAluno.foto}'
+        '${dadosAluno.foto}',
         '${dadosAluno.senha}',
         '${dadosAluno.cpf}',
         '${dadosAluno.questao_condicao_medica}',
