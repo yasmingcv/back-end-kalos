@@ -225,7 +225,7 @@ const deletarAcademia = async function (idAcademia){
 const autenticarAcademia = async function(dadosAcademia){
     const dados = await academiaDAO.selectAcademiaByPassword(dadosAcademia)
    
-    const jwt = require('../middleware/jwt.js')
+    const jwt = require('../middleware/jwtAcademia.js')
 
     if(dados){
         let tokenUser = await jwt.createJWT(dados.id)

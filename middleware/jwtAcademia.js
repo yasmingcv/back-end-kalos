@@ -6,7 +6,7 @@
  ****************************************************************************************************/
 
 const jwt = require("jsonwebtoken")
-const SECRET = "7a3c3a0v4n1y8k"
+const SECRET = "ac7a3c3a0v4n1y8k"
 const EXPIRES = 36000
 
 
