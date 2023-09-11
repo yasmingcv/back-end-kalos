@@ -128,7 +128,7 @@ const updateAluno = async function(dadosAluno){
                 peso = '${dadosAluno.peso}',
                 altura = '${dadosAluno.altura}',
                 objetivo = '${dadosAluno.objetivo}',
-                id_genero = ${dadosAluno.id_genero}`
+                id_genero = ${dadosAluno.id_genero} where id = ${dadosAluno.id}`
 
 
     let resultadoAluno = await prisma.$executeRawUnsafe(sql)
