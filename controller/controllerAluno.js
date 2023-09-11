@@ -81,8 +81,8 @@ const inserirAluno = async function(dadosAluno){
     // Validação para tratar campos obrigatórios e caracteres
 
     if( dadosAluno.nome == '' || dadosAluno.nome == undefined || !isNaN(dadosAluno) || dadosAluno.nome.length > 100 ||
-        dadosAluno.data_nascimento == '' || dadosAluno.data_nascimento == undefined || dadosAluno.data_nascimento.length > 10 ||
-        dadosAluno.cpf == '' || dadosAluno.cpf == undefined || dadosAluno.cpf.length > 9 || isNaN(dadosAluno.cpf) ||
+        dadosAluno.data_nascimento == '' || dadosAluno.data_nascimento == undefined || dadosAluno.data_nascimento.length > 12 ||
+        dadosAluno.cpf == '' || dadosAluno.cpf == undefined || dadosAluno.cpf.length > 18 || isNaN(dadosAluno.cpf) ||
         dadosAluno.telefone == '' || dadosAluno.telefone == undefined || isNaN(dadosAluno.telefone) || dadosAluno.telefone.length > 12 ||
         dadosAluno.email == '' || dadosAluno.email == undefined || dadosAluno.email.length > 250 ||
         dadosAluno.senha == '' || dadosAluno.senha == undefined || dadosAluno.senha < 12 ||
@@ -119,7 +119,7 @@ const atualizarAluno = async function(dadosAluno, idAluno){
 
     if( dadosAluno.nome == '' || dadosAluno.nome == undefined || !isNaN(dadosAluno) || dadosAluno.nome.length > 100 ||
         dadosAluno.data_nascimento == '' || dadosAluno.data_nascimento == undefined || dadosAluno.data_nascimento.length > 10 ||
-        dadosAluno.cpf == '' || dadosAluno.cpf == undefined || dadosAluno.cpf.length > 9 || isNaN(dadosAluno.cpf) ||
+        dadosAluno.cpf == '' || dadosAluno.cpf == undefined || dadosAluno.cpf.length > 16 || isNaN(dadosAluno.cpf) ||
         dadosAluno.telefone == '' || dadosAluno.telefone == undefined || isNaN(dadosAluno.telefone) || dadosAluno.telefone.length > 12 ||
         dadosAluno.email == '' || dadosAluno.email == undefined || dadosAluno.email.length > 250 ||
         dadosAluno.senha == '' || dadosAluno.senha == undefined || dadosAluno.senha < 12 ||

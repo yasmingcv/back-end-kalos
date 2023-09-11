@@ -121,6 +121,12 @@ const verifyJWTAluno = async function (request, response, next) {
     }
 }
 
+app.get('/kalos/academia', cors(), async function (request, response){
+    let dadosAcademias = await controllerAcademia.getAcademias()
+
+    response.json(dadosAcademias)
+    response.status(dadosAcademias.status)
+})
 
 app.post('/kalos/academia/autenticar', cors(), bodyParserJSON, async function(request, response){
     let contentType = request.headers['content-type']
@@ -142,6 +148,7 @@ app.post('/kalos/academia/autenticar', cors(), bodyParserJSON, async function(re
 
 /******************************************* ENDPOINTs ALUNO ********************************************/
 
+// retorna todos os alunos existentes
 app.get('/kalos/aluno', cors(), async function (request, response){
     let dadosAlunos = await controllerAluno.getAlunos()
 
@@ -149,11 +156,88 @@ app.get('/kalos/aluno', cors(), async function (request, response){
     response.status(dadosAlunos.status)
 })
 
-app.get('/kalos/academia', cors(), async function (request, response){
-    let dadosAcademias = await controllerAcademia.getAcademias()
+// retorna um aluno pelo ID
+app.get('/kalos/aluno/id/:id', cors(), async function(request, response){
 
-    response.json(dadosAcademias)
-    response.status(dadosAcademias.status)
+    let idAluno = request.params.id
+
+    let dadosAluno = await controllerAluno.getAlunoById(idAluno)
+
+    response.status(dadosAluno.status)
+    response.json(dadosAluno)
+})
+
+// retorna um aluno pelo NOME
+app.get('/kalos/aluno/nome/:nome', cors(), async function(request, response){
+
+    let nomeAluno = request.params.nome
+
+    let dadosAluno = await controllerAluno.getAlunoByName(nomeAluno)
+
+    response.status(dadosAluno.status)
+    response.json(dadosAluno)
+})
+
+// insere um novo aluno
+app.post('/kalos/aluno', cors(), bodyParserJSON, async function(request, response){
+    let contentType = request.headers['content-type']
+
+    //Validação para receber em dados JSON
+    if(String(contentType).toLowerCase() == 'application/json'){
+
+        //recebe os dados do aluno encaminhado no corpo da requisição
+        let dadosBody = request.body
+
+        let resultadoDadosAluno = await controllerAluno.inserirAluno(dadosBody)
+
+        response.status(resultadoDadosAluno.status)
+        response.json(resultadoDadosAluno)
+    } else {
+
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
+
+    }
+
+})
+
+// atualiza um alno existente
+app.put('/kalos/aluno/id/:id', cors(), bodyParserJSON, async function(request, response){
+
+    let contentType = request.headers['content-type']
+
+    //Validação para receber dados apenas no formato JSON
+    if (String(contentType).toLowerCase() == 'application/json') {
+
+        //recebe os dados do aluno encaminhado no corpo da requisição
+        let dadosBody = request.body
+
+        //recebe o ID  do aluno pelo parametro
+        let idAluno = request.params.id
+
+        let resultadoDadosAluno = await controllerAluno.atualizarAluno(dadosBody, idAluno)
+
+        response.status(resultadoDadosAluno.status)
+        response.json(resultadoDadosAluno)
+
+    } else {
+
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
+
+    }
+})
+
+// deleta um aluno existente
+app.delete('/kalos/aluno/id/:id', cors(), async function(request, response){
+
+    //recebe o ID do aluno pelo parametro
+    let idAluno = request.params.id
+
+    let dadosAluno = await controllerAluno.deletarAluno(idAluno)
+
+    response.status(dadosAluno.status)
+    response.json(dadosAluno)
 })
 
 app.post('/kalos/aluno/autenticar', cors(), bodyParserJSON, async function(request, response){

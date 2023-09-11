@@ -16,7 +16,7 @@ var prisma = new PrismaClient()
 const selectAllAlunos = async function (){
 
     let sql = `
-    select  tbl_aluno.nome, tbl_aluno.data_nascimento, tbl_aluno.telefone,
+    select  tbl_aluno.id, tbl_aluno.nome, tbl_aluno.data_nascimento, tbl_aluno.telefone,
     tbl_aluno.email, tbl_aluno.foto, tbl_aluno.cpf, tbl_aluno.objetivo,
     tbl_aluno.questao_condicao_medica, tbl_aluno.questao_lesoes, tbl_aluno.questao_medicamento,
     tbl_aluno.peso, tbl_aluno.altura, tbl_genero.nome as genero
@@ -38,7 +38,7 @@ const selectAllAlunos = async function (){
 // Seleciona um aluno pelo seu id
 const selectAlunoById = async function(idAluno){
 
-    let sql = `select   tbl_aluno.nome, tbl_aluno.data_nascimento, tbl_aluno.telefone,
+    let sql = `select   tbl_aluno.id, tbl_aluno.nome, tbl_aluno.data_nascimento, tbl_aluno.telefone,
     tbl_aluno.email, tbl_aluno.foto, tbl_aluno.cpf, tbl_aluno.objetivo,
     tbl_aluno.questao_condicao_medica, tbl_aluno.questao_lesoes, tbl_aluno.questao_medicamento,
     tbl_aluno.peso, tbl_aluno.altura, tbl_genero.nome as genero
@@ -50,7 +50,7 @@ const selectAlunoById = async function(idAluno){
     let resultadoAluno = await prisma.$queryRawUnsafe(sql)
 
     if(resultadoAluno.length > 0)
-        return resultadoAluno
+        return resultadoAluno[0]
     else
         return false
 }
@@ -75,6 +75,7 @@ const insertAluno = async function (dadosAluno){
         data_nascimento,
         telefone,
         email,
+        foto,
         senha,
         cpf,
         questao_condicao_medica,
@@ -82,12 +83,14 @@ const insertAluno = async function (dadosAluno){
         questao_medicamento,
         peso,
         altura,
-        objetivo
+        objetivo,
+        id_genero
     ) values (
         '${dadosAluno.nome}',
         '${dadosAluno.data_nascimento}',
         '${dadosAluno.telefone}',
         '${dadosAluno.email}',
+        '${dadosAluno.foto}'
         '${dadosAluno.senha}',
         '${dadosAluno.cpf}',
         '${dadosAluno.questao_condicao_medica}',
@@ -96,6 +99,7 @@ const insertAluno = async function (dadosAluno){
         '${dadosAluno.peso}',
         '${dadosAluno.altura}',
         '${dadosAluno.objetivo}',
+        ${dadosAluno.id_genero}
 
     );`
 
@@ -115,6 +119,7 @@ const updateAluno = async function(dadosAluno){
                 data_nascimento = '${dadosAluno.data_nascimento}',
                 telefone = '${dadosAluno.telefone}',
                 email = '${dadosAluno.email}',
+                foto = '${dadosAluno.foto}',
                 senha = '${dadosAluno.senha}',
                 cpf = '${dadosAluno.cpf}',
                 questao_condicao_medica = '${dadosAluno.questao_condicao_medica}',
@@ -122,7 +127,8 @@ const updateAluno = async function(dadosAluno){
                 questao_medicamento = '${dadosAluno.questao_medicamento}',
                 peso = '${dadosAluno.peso}',
                 altura = '${dadosAluno.altura}',
-                objetivo = '${dadosAluno.objetivo}'`
+                objetivo = '${dadosAluno.objetivo}',
+                id_genero = ${dadosAluno.id_genero}`
 
 
     let resultadoAluno = await prisma.$executeRawUnsafe(sql)
