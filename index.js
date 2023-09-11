@@ -92,10 +92,10 @@ app.delete('/kalos/genero/id/:id', cors(), async function(request, response){
 
 /******************************************* ENDPOINTs ACADEMIA ********************************************/
 
-const verifyJWT = async function (request, response, next) {
+const verifyJWTAcademia = async function (request, response, next) {
     let token = request.headers['x-access-token']
 
-    const jwt = require('./middleware/jwt.js')
+    const jwt = require('./middleware/jwtAcademia.js')
 
     const autenticidadeToken = await jwt.validateJWT(token)
 
@@ -105,6 +105,22 @@ const verifyJWT = async function (request, response, next) {
         return response.status(401).end()
     }
 }
+
+const verifyJWTAluno = async function (request, response, next) {
+    let token = request.headers['x-access-token']
+
+    const jwt = require('./middleware/jwtAluno.js')
+
+    const autenticidadeToken = await jwt.validateJWT(token)
+
+    if(autenticidadeToken){
+        next()
+    } else{
+        return response.status(401).end()
+
+    }
+}
+
 
 app.post('/kalos/academia/autenticar', cors(), bodyParserJSON, async function(request, response){
     let contentType = request.headers['content-type']
@@ -126,11 +142,18 @@ app.post('/kalos/academia/autenticar', cors(), bodyParserJSON, async function(re
 
 /******************************************* ENDPOINTs ALUNO ********************************************/
 
-app.get('/kalos/aluno', cors(), verifyJWT, async function (request, response){
+app.get('/kalos/aluno', cors(), verifyJWTAluno, async function (request, response){
     let dadosAlunos = await controllerAluno.getAlunos()
 
     response.json(dadosAlunos)
     response.status(dadosAlunos.status)
+})
+
+app.get('/kalos/academia', cors(), verifyJWTAcademia, async function (request, response){
+    let dadosAcademias = await controllerAcademia.getAcademias()
+
+    response.json(dadosAcademias)
+    response.status(dadosAcademias.status)
 })
 
 app.post('/kalos/aluno/autenticar', cors(), bodyParserJSON, async function(request, response){

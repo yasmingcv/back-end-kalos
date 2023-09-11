@@ -186,7 +186,7 @@ const deletarAluno = async function(idAluno){
 const autenticarAluno = async function(dadosAluno){
     const dados = await alunoDAO.selectAlunoByPassword(dadosAluno)
    
-    const jwt = require('../middleware/jwt.js')
+    const jwt = require('../middleware/jwtAluno.js')
 
     if(dados){
         let tokenUser = await jwt.createJWT(dados.id)
@@ -195,7 +195,7 @@ const autenticarAluno = async function(dadosAluno){
         return dados[0]
 
     } else {
-        return message.ERROR_UNAUTHORIZED   
+        return message.ERROR_UNAUTHORIZED
     }
 }
 
