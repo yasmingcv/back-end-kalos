@@ -14,7 +14,7 @@ var prisma = new PrismaClient()
 // Seleciona todas as academias do banco
 const selectAllAcademias = async function(){
 
-    let sql = `select   tbl_academia.nome, tbl_academia.email, tbl_academia.senha,
+    let sql = `select   tbl_academia.id, tbl_academia.nome, tbl_academia.email, tbl_academia.senha,
     tbl_academia.telefone, tbl_academia.cnpj, tbl_academia.foto, tbl_academia.descricao,
     tbl_academia.cor_primaria, tbl_academia.cor_secundaria, tbl_academia.data_abertura,
     tbl_academia.razao_social, tbl_academia.facebook, tbl_academia.whatsapp, tbl_academia.instagram,

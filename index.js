@@ -128,6 +128,17 @@ app.get('/kalos/academia', cors(), async function (request, response){
     response.status(dadosAcademias.status)
 })
 
+app.get('/kalos/academia/id/:id', cors(), async function(request, response){
+
+    let idAcademia = request.params.id
+
+    let dadosAcademia = await controllerAcademia.getAcademiaById(idAcademia)
+
+    response.status(dadosAcademia.status)
+    response.json(dadosAcademia)
+
+})
+
 app.post('/kalos/academia/autenticar', cors(), bodyParserJSON, async function(request, response){
     let contentType = request.headers['content-type']
     
