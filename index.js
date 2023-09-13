@@ -254,7 +254,7 @@ app.post('/kalos/aluno/autenticar', cors(), bodyParserJSON, async function(reque
 
     } else {
         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
-        response.message(message.ERROR_INVALID_CONTENT_TYPE)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
 
     }
 
