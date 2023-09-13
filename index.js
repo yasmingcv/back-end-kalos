@@ -14,6 +14,8 @@ const bodyParser = require('body-parser')
 
 const app = express()
 
+//const passport = require('passport')
+
 //defini as permições do cors
 app.use((request, response, next) => {
 
@@ -254,18 +256,18 @@ app.delete('/kalos/aluno/id/:id', cors(), async function(request, response){
 app.post('/kalos/aluno/autenticar', cors(), bodyParserJSON, async function(request, response){
     let contentType = request.headers['content-type']
     
-    if(String(contentType).toLowerCase() == 'application/json'){
+    // if(String(contentType).toLowerCase() == 'application/json'){
         let dadosBody = request.body
         let resultDadosAluno = await controllerAluno.autenticarAluno(dadosBody)
 
         response.status(200)
         response.json(resultDadosAluno)
 
-    } else {
-        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
-        response.message(message.ERROR_INVALID_CONTENT_TYPE.message)
+    // } else {
+    //     response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+    //     response.json(message.ERROR_INVALID_CONTENT_TYPE)
 
-    }
+    // }
 
 })
 
