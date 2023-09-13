@@ -14,6 +14,8 @@ const bodyParser = require('body-parser')
 
 const app = express()
 
+//const passport = require('passport')
+
 //defini as permições do cors
 app.use((request, response, next) => {
 
