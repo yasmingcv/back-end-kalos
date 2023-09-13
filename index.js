@@ -130,6 +130,7 @@ app.get('/kalos/academia', cors(), async function (request, response){
     response.status(dadosAcademias.status)
 })
 
+// Retorna a academia pelo id
 app.get('/kalos/academia/id/:id', cors(), async function(request, response){
 
     let idAcademia = request.params.id
@@ -141,6 +142,61 @@ app.get('/kalos/academia/id/:id', cors(), async function(request, response){
 
 })
 
+// Insere uma nova academia
+app.post('/kalos/academia', cors(), bodyParserJSON, async function(request, response){
+
+    let contentType = request.headers['content-type']
+
+    //Validação para receber dados apenas no formato JSON
+    if (String(contentType).toLowerCase() == 'application/json'){
+
+        let dadosBody = request.body
+
+        let resultadoDadosAcademia = await controllerAcademia.inserirAcademia(dadosBody)
+
+        response.status(resultadoDadosAcademia.status)
+        response.json(resultadoDadosAcademia)
+
+    } else {
+
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
+    }
+})
+
+// Atualiza os dados de uma academia
+app.put('/kalos/academia/id/:id', cors(), bodyParserJSON, async function (request, response){
+    let contentType = request.headers['content-type']
+
+    //Validação para receber dados apenas no formato JSON
+    if (String(contentType).toLowerCase() == 'application/json'){
+
+        let dadosBody = request.body
+
+        let idAcademia = request.params.id
+
+        let dadosAcademia = await controllerAcademia.atualizarAcademia(dadosBody, idAcademia)
+
+        response.status(dadosAcademia.status)
+        response.json(dadosAcademia)
+    } else {
+
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
+})
+
+// Deleta uma academia
+app.delete('/kalos/academia/id/:id', cors(), async function(request, response){
+
+    let idAcademia = request.params.id
+
+    let dadosAcademia = await controllerAcademia.deletarAcademia(idAcademia)
+
+    response.status(dadosAcademia.status)
+    response.json(dadosAcademia)
+    
+})
 app.post('/kalos/academia/autenticar', cors(), bodyParserJSON, async function(request, response){
     let contentType = request.headers['content-type']
     

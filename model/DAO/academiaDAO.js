@@ -59,7 +59,7 @@ const selectAcademiaById = async function(idAcademia){
     let resultadoAcademia = await prisma.$queryRawUnsafe(sql)
 
     if(resultadoAcademia.length > 0)
-        return resultadoAcademia
+        return resultadoAcademia[0]
     else
         return false
 
@@ -155,7 +155,9 @@ const updateAcademia = async function(dadosAcademia){
                 facebook = ${dadosAcademia.facebook},
                 whatsapp = ${dadosAcademia.whatsapp},
                 instagram = ${dadosAcademia.instagram},
-                status = '${dadosAcademia.status}'`
+                status = ${dadosAcademia.status},
+                id_endereco = ${dadosAcademia.id_endereco}
+                where id = ${dadosAcademia.id}`
 
     let resultadoAcademia = await prisma.$executeRawUnsafe(sql)
 
