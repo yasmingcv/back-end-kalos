@@ -1,7 +1,7 @@
 /******
- * Objetivo: API para o projeto TCC
- * Data: 31/08/23
- * Autores: Todos do grupo
+ * Objetivo: EndPoints para o projeto TCC
+ * Data: 31/08/23 - ??/??/??
+ * Autores: Todos os integrantes do grupo
  * Versão: 1.0
  ******/
 
@@ -16,7 +16,7 @@ const app = express()
 
 //const passport = require('passport')
 
-//defini as permições do cors
+//define as permições do cors
 app.use((request, response, next) => {
 
     //defini quem poderá acessar a  API
@@ -33,6 +33,7 @@ var message = require('./controller/modulo/config.js')
 var controllerGenero = require('./controller/controllerGenero.js')
 var controllerAcademia = require('./controller/controllerAcademia.js')
 var controllerAluno = require('./controller/controllerAluno.js')
+var controllerTag = require('./controller/controllerTag.js')
 
 
 //Define que os dados que irao chegar na requisição será no padrão JSON
@@ -336,6 +337,18 @@ app.post('/kalos/aluno/autenticar', cors(), bodyParserJSON, async function(reque
     // }
 
 })
+
+
+/******************************************* ENDPOINTs TAGs ********************************************/
+
+//Retorna todas as tags existentes
+app.get('/kalos/tags', cors(), async function (request, response){
+    let dadosTags = await controllerTag.getTags()
+
+    response.json(dadosTags)
+    response.status(dadosTags.status)
+})
+
 
 app.listen(8080, function(){
     console.log('console rodando')
