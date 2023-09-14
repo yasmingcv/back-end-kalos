@@ -142,6 +142,16 @@ app.get('/kalos/academia/id/:id', cors(), async function(request, response){
 
 })
 
+// Retorna a academia pelo nome
+app.get('/kalos/academia/nome/:nome', cors(), async function(request, response){
+
+    let nomeAcademia = request.params.nome
+
+    let dadosAcademia = await controllerAcademia.getAcademiaByName(nomeAcademia)
+
+    response.status(dadosAcademia.status)
+    response.json(dadosAcademia)
+})
 // Insere uma nova academia
 app.post('/kalos/academia', cors(), bodyParserJSON, async function(request, response){
 
