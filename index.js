@@ -41,13 +41,6 @@ const bodyParserJSON = bodyParser.json()
 
 /******************************************* ENDPOINTs GENERO ********************************************/
 
-
-app.get('/kalos/genero', cors(), bodyParserJSON, async function(request, response){
-    let dadosGenero = await controllerGenero.getGeneros()
-
-    response.json(dadosGenero)
-    response.status(dadosGenero.status)
-})
 app.post('/kalos/genero', cors(), bodyParserJSON, async function (request, response){
 
     let contentType = request.headers['content-type']
@@ -270,13 +263,8 @@ app.post('/kalos/aluno', cors(), bodyParserJSON, async function(request, respons
     let contentType = request.headers['content-type']
 
     //Validação para receber em dados JSON
-    if(String(contentType).toLowerCase() != 'application/json'){
+    // if(String(contentType).toLowerCase() == 'application/json'){
 
-        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
-        response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
-
-    } else {
-        
         //recebe os dados do aluno encaminhado no corpo da requisição
         let dadosBody = request.body
 
@@ -284,8 +272,12 @@ app.post('/kalos/aluno', cors(), bodyParserJSON, async function(request, respons
 
         response.status(resultadoDadosAluno.status)
         response.json(resultadoDadosAluno)
-        
-    }
+    // } else {
+
+    //     response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+    //     response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
+
+    // }
 
 })
 
@@ -357,66 +349,7 @@ app.get('/kalos/tags', cors(), async function (request, response){
     response.status(dadosTags.status)
 })
 
-/******************************************* ENDPOINTs ALUNO-ACADEMIA ********************************************/
 
-// Retorna um aluno específico de uma academia específica
-app.get('/kalos/alunoAcademia/id/:id', cors(), async function(request, response){
-
-    let idAlunoAcademia = request.params.id
-
-    let dadosAlunoAcademia = await controllerAlunoAcademia.getAlunoAcademiaById(idAlunoAcademia)
-
-    response.status(dadosAlunoAcademia.status)
-    response.json(dadosAlunoAcademia)
-})
-
-// Insere um aluno na academia
-app.post('/kalos/alunoAcademia', cors(), bodyParserJSON, async function(request, response){
-    let contentType = request.headers['content-type']
-
-    //Validação para receber em dados JSON
-    if(String(contentType).toLowerCase() == 'application/json'){
-
-        //recebe os dados do aluno encaminhado no corpo da requisição
-        let dadosBody = request.body
-
-        let resultadoDadosAlunoAcademia = await controllerAlunoAcademia.inserirAlunoAcademia(dadosBody)
-
-        response.status(resultadoDadosAlunoAcademia.status)
-        response.json(resultadoDadosAlunoAcademia)
-    } else {
-
-        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
-        response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
-
-    }
-
-    
-})
-
-app.put('/kalos/alunoAcademia/id/:id', cors(), async function(request, response){
-    let contentType = request.headers['content-type']
-
-    //Validação para receber dados apenas no formato JSON
-    if (String(contentType).toLowerCase() == 'application/json'){
-
-        //recebe os dados do aluno encaminhado no corpo da requisição
-        let dadosBody = request.body
-
-        //recebe o ID  do aluno pelo parametro
-        let idAlunoAcademia = request.params.id
-
-        let resultadoDadosAlunoAcademia = await controllerAlunoAcademia.atualizarAlunoAcademia(dadosBody, idAlunoAcademia)
-
-        response.status(resultadoDadosAlunoAcademia.status)
-        response.json(resultadoDadosAlunoAcademia)
-    }else {
-
-        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
-        response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
-
-    }
-})
 app.listen(8080, function(){
     console.log('console rodando')
 })

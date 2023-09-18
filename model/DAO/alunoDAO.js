@@ -103,7 +103,7 @@ const insertAluno = async function (dadosAluno){
 
     );`
 
-    let resultadoAluno = await prisma.$executeRawUnsafe(sql)
+    let resultadoAluno = await prisma.$queryRawUnsafe(sql)
 
     if(resultadoAluno)
         return true

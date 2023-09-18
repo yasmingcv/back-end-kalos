@@ -78,23 +78,23 @@ const inserirAcademia = async function(dadosAcademia){
 
     //Verifica se o atributo veio undefined ou se não foi digitado, se sim, define como "null",
     //se não, adiciona aspas. No DAO, o atributo não contém aspas ao ser inserido, pois pode ser nulo, e se for nulo, não vai aspas.
-    if(dadosAcademia.facebook == undefined || dadosAcademia.facebook == ''){
-        dadosAcademia.facebook = null
-    } else {
-        dadosAcademia.facebook = "'" + dadosAcademia.facebook + "'"
-    }
+    // if(dadosAcademia.facebook == undefined || dadosAcademia.facebook == ''){
+    //     dadosAcademia.facebook = null
+    // } else {
+    //     dadosAcademia.facebook = "'" + dadosAcademia.facebook + "'"
+    // }
 
-    if(dadosAcademia.whatsapp == undefined || dadosAcademia.whatsapp == ''){
-        dadosAcademia.whatsapp = null
-    } else {
-        dadosAcademia.whatsapp = "'" + dadosAcademia.whatsapp + "'"
-    }
+    // if(dadosAcademia.whatsapp == undefined || dadosAcademia.whatsapp == ''){
+    //     dadosAcademia.whatsapp = null
+    // } else {
+    //     dadosAcademia.whatsapp = "'" + dadosAcademia.whatsapp + "'"
+    // }
 
-    if(dadosAcademia.instagram == undefined || dadosAcademia.instagram == ''){
-        dadosAcademia.instagram = null
-    } else {
-        dadosAcademia.instagram = "'" + dadosAcademia.instagram + "'"
-    }
+    // if(dadosAcademia.instagram == undefined || dadosAcademia.instagram == ''){
+    //     dadosAcademia.instagram = null
+    // } else {
+    //     dadosAcademia.instagram = "'" + dadosAcademia.instagram + "'"
+    // }
 
     // Validação para tratar campos obrigatórios e caracteres
 
@@ -115,8 +115,8 @@ const inserirAcademia = async function(dadosAcademia){
 
             let resultadoDadosAcademia = await academiaDAO.insertAcademia(dadosAcademia)
 
-            if(resultadoDadosAcademia){
 
+            if(resultadoDadosAcademia){
                 let novaAcademia = await academiaDAO.selectLastId()
 
                 let dadosAcademiaJSON = {}
