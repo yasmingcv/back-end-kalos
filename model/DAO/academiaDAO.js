@@ -109,7 +109,7 @@ const insertAcademia = async function(dadosAcademia){
     await prisma.$executeRawUnsafe(sqlCriaTempTable)
 
     for (const tag of dadosAcademia.tags) {
-        await inserirTag(tag);
+        await inserirTag(tag)
     }
 
     let sql = `call procInsertAcademiaEnderecoCategoriaTags(
@@ -138,8 +138,6 @@ const insertAcademia = async function(dadosAcademia){
         '${dadosAcademia.status}');`
 
     let resultadoAcademia = await prisma.$queryRawUnsafe(sql)
-
-    console.log(resultadoAcademia);
 
     if(resultadoAcademia.length == 0)
         return true
