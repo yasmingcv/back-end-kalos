@@ -75,6 +75,29 @@ const getAlunoByName = async function(nomeAluno){
     }
 }
 
+// Retorna um aluno específico de acordo com o email
+const getAlunoByEmail = async function(emailAluno){
+    let dadosAlunoJSON = {}
+
+    if(emailAluno == '' || emailAluno == undefined || emailAluno.length > 250){
+        return message.ERROR_INVALID_EMAIL
+    } else {
+
+        let dadosAluno = await alunoDAO.selectAlunoByEmail(emailAluno)
+
+        if(dadosAluno){
+
+            dadosAlunoJSON.status = message.SUCCESS_REQUEST.status
+            dadosAlunoJSON.message = message.SUCCESS_REQUEST.message
+            dadosAlunoJSON.aluno = dadosAluno
+
+            return dadosAlunoJSON
+        } else {
+            return message.ERROR_NOT_FOUND
+        }
+    }
+}
+
 // Insere um novo aluno
 const inserirAluno = async function(dadosAluno){
 
@@ -203,6 +226,7 @@ module.exports = {
     getAlunos,
     getAlunoById,
     getAlunoByName,
+    getAlunoByEmail,
     inserirAluno,
     atualizarAluno,
     deletarAluno,

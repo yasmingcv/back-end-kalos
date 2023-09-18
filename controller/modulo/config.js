@@ -23,6 +23,12 @@ const ERROR_INVALID_NAME = {
     "O nome informado na requisição não é válido ou não foi encaminhado.",
 };
 
+const ERROR_INVALID_EMAIL = {
+  status: 400,
+  message:
+    "O email informado na requisição não é válido ou não foi encaminhado.",
+};
+
 const ERROR_ID_NOT_FOUND = {
   status: 404,
   message: "O ID informado é válido, mas não existe.",
@@ -93,5 +99,6 @@ module.exports = {
     SUCCESS_UPDATE_ITEM,
     SUCCESS_DELETE_ITEM,
     SUCCESS_REQUEST,
-    ERROR_UNAUTHORIZED
+    ERROR_UNAUTHORIZED,
+    ERROR_INVALID_EMAIL
 }
