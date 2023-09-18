@@ -140,7 +140,7 @@ const insertAcademia = async function(dadosAcademia){
         ${dadosAcademia.id_categoria},
         '${dadosAcademia.status}');`
 
-    let resultadoAcademia = await prisma.$executeRawUnsafe(sql)
+    let resultadoAcademia = await prisma.$queryRawUnsafe(sql)
 
     console.log(resultadoAcademia);
 
