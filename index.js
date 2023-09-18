@@ -267,6 +267,18 @@ app.get('/kalos/aluno/nome/:nome', cors(), async function(request, response){
     response.json(dadosAluno)
 })
 
+// retorna um aluno pelo EMAIL
+app.get('/kalos/aluno/email/:email', cors(), async function(request, response){
+
+    let emailAluno = request.params.email
+
+    let dadosAluno = await controllerAluno.getAlunoByEmail(emailAluno)
+
+    response.status(dadosAluno.status)
+    response.json(dadosAluno)
+
+})
+
 // insere um novo aluno
 app.post('/kalos/aluno', cors(), bodyParserJSON, async function(request, response){
     let contentType = request.headers['content-type']

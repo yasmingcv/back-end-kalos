@@ -68,6 +68,19 @@ const selectAlunoByName = async function(nomeAluno){
         return false
 }
 
+// Seleciona um aluno pelo email
+const selectAlunoByEmail = async function(emailAluno){
+
+    let sql = `select * from tbl_aluno where email = "${emailAluno}"`
+
+    let resultadoAluno = await prisma.$queryRawUnsafe(sql)
+
+    if(resultadoAluno.length > 0)
+        return resultadoAluno[0]
+    else
+        return false
+}
+
 // Insert de dados do aluno
 const insertAluno = async function (dadosAluno){
     let sql = `insert into tbl_aluno (
@@ -184,6 +197,7 @@ module.exports = {
     selectAllAlunos,
     selectAlunoById,
     selectAlunoByName,
+    selectAlunoByEmail,
     insertAluno,
     deleteAluno,
     updateAluno,
