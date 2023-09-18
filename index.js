@@ -167,11 +167,13 @@ app.post('/kalos/academia', cors(), bodyParserJSON, async function(request, resp
 
     let contentType = request.headers['content-type']
 
+    
+
     //Validação para receber dados apenas no formato JSON
     if (String(contentType).toLowerCase() == 'application/json'){
 
         let dadosBody = request.body
-
+        console.log(dadosBody);
         let resultadoDadosAcademia = await controllerAcademia.inserirAcademia(dadosBody)
 
         response.status(resultadoDadosAcademia.status)
