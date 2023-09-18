@@ -12,7 +12,18 @@ var { PrismaClient } = require('@prisma/client')
 var prisma = new PrismaClient()
 
 
+const selectAllGeneros = async function(){
 
+    let sql = `select * from tbl_genero;`
+
+    let resultadoGenero = await prisma.$queryRawUnsafe(sql)
+
+    if(resultadoGenero.length > 0){
+        return resultadoGenero
+    } else{
+        return false
+    }
+}
 // Seleciona o gênero pelo id
 const selectGeneroById = async function(idGenero){
     console.log(idGenero)
@@ -75,5 +86,6 @@ module.exports = {
     insertGenero,
     selectGeneroById,
     updateGenero,
-    deleteGenero
+    deleteGenero,
+    selectAllGeneros
 }

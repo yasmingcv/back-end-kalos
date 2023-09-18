@@ -41,6 +41,13 @@ const bodyParserJSON = bodyParser.json()
 
 /******************************************* ENDPOINTs GENERO ********************************************/
 
+
+app.get('/kalos/genero', cors(), bodyParserJSON, async function(request, response){
+    let dadosGenero = await controllerGenero.getGeneros()
+
+    response.json(dadosGenero)
+    response.status(dadosGenero.status)
+})
 app.post('/kalos/genero', cors(), bodyParserJSON, async function (request, response){
 
     let contentType = request.headers['content-type']
