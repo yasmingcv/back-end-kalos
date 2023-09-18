@@ -34,6 +34,7 @@ var controllerGenero = require('./controller/controllerGenero.js')
 var controllerAcademia = require('./controller/controllerAcademia.js')
 var controllerAluno = require('./controller/controllerAluno.js')
 var controllerTag = require('./controller/controllerTag.js')
+var controllerFuncionamento = require('./controller/controllerFuncionamento.js')
 
 
 //Define que os dados que irao chegar na requisição será no padrão JSON
@@ -436,6 +437,24 @@ app.delete('/kalos/treino/id/:id', cors(), async function(request, response){
     response.json(dadosTreino)
 })
 
+/******************************************* ENDPOINTs FUNCIONAMENTO ********************************************/
+
+app.get('/kalos/funcionamento', cors(), async function(request, response){
+    let dadosFuncionamentos = await controllerFuncionamento.getFuncionamentos()
+
+    response.json(dadosFuncionamentos)
+    response.status(dadosFuncionamentos.status)
+})
+
+app.get('/kalos/funcionamento/id_academia/:id', cors(), async function(request, response){
+
+    let id = request.params.id
+
+    let dadosFuncionamento = await controllerFuncionamento.getFuncionamentoById(id)
+
+    response.status(dadosFuncionamento.status)
+    response.json(dadosFuncionamento)
+})
 
 app.listen(8080, function(){
     console.log('console rodando')

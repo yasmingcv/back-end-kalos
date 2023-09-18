@@ -61,8 +61,6 @@ const selectFuncionamentoByIdAcademia = async function (idAcademia) {
                         on tbl_dia_semana.id = tbl_funcionamento.id_dia_semana
                     inner join tbl_academia
                         on tbl_academia.id = tbl_funcionamento.id_academia
-                        
-                        order by tbl_academia.nome asc
                     
                     where tbl_academia.id = ${idAcademia}
                         `
