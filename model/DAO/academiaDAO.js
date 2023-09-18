@@ -11,6 +11,10 @@ var { PrismaClient } = require('@prisma/client')
 // Criando instância do prisma
 var prisma = new PrismaClient()
 
+
+const crypto = require('crypto')
+const mailer = require('../nodemailer/mailer.js')
+
 // Seleciona todas as academias do banco
 const selectAllAcademias = async function(){
 
@@ -214,6 +218,53 @@ const selectAcademiaByPassword = async function (dadosAcademia){
     }
 }
 
+const selectAcademiaByEmail = async function (email){
+    let sql = `select * from tbl_academia where email = '${email}'`
+
+    let resultadoDadosAcademia = await prisma.$queryRawUnsafe(sql)
+
+    if(resultadoDadosAcademia.length > 0){
+        return resultadoDadosAcademia
+    } else {
+        return false
+    }
+}
+
+const esqueciASenha = async function(dadosBody){
+    let user = await academiaDAO.selectAcademiaByEmail(dadosBody.email)
+
+    if(!user){
+        return message.ERROR_NOT_FOUND
+    } else {
+        const token = crypto.randomBytes(20).toString('hex')
+        const now = new Date()
+        now.setHours(now.getHours() + 1)
+
+        console.log(token, now);
+
+
+        mailer.sendMail({
+            to: dadosBody.email,
+            from: 'kaloscorporation@gmail.com',
+            template: '../nodemailer/mail/auth/forgot_password',
+            context: { token },
+        }, (err) => {
+            if(err){
+                return {
+                    status: 400,
+                    message: "Não foi possível enviar o código de recuperação",
+                }
+            } else{
+                return res.send()
+            }
+        })
+
+        //let dadosAcademiaJSON = user
+
+        return message.SUCCESS_REQUEST
+    }
+}
+
 module.exports = {
     selectAcademiaByPassword,
     selectAcademiaById,
@@ -222,5 +273,7 @@ module.exports = {
     updateAcademia,
     deleteAcademia,
     selectLastId,
-    selectAcademiaByName
+    selectAcademiaByName,
+    selectAcademiaByEmail,
+    esqueciASenha
 }

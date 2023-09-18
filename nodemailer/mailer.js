@@ -5,7 +5,9 @@
  * Versão: 1.0
  ****************************************************************************************************/
 
+const path = require('path')
 const nodemailer = require('nodemailer')
+const hbs = require('nodemailer-express-handlebars')
 
 var transport = nodemailer.createTransport({
     host: "sandbox.smtp.mailtrap.io",
@@ -15,6 +17,12 @@ var transport = nodemailer.createTransport({
       pass: "47fa56504b3ef8"
     }
   })
+
+  transport.use('compile', hbs({
+    viewEngine: 'handlebars',
+    viewPath: path.resolve('./mail/'),
+    extName: '.html'
+  }))
 
   module.exports = {
     transport
