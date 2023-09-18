@@ -11,20 +11,25 @@ var { PrismaClient } = require('@prisma/client')
 // Criando instância do prisma
 var prisma = new PrismaClient()
 
+
+const crypto = require('crypto')
+const mailer = require('../../nodemailer/mailer.js')
+
 // Seleciona todas as academias do banco
 const selectAllAcademias = async function(){
 
-    let sql = `select   tbl_academia.id, tbl_academia.nome, tbl_academia.email, tbl_academia.senha,
-    tbl_academia.telefone, tbl_academia.cnpj, tbl_academia.foto, tbl_academia.descricao,
-    tbl_academia.cor_primaria, tbl_academia.cor_secundaria, tbl_academia.data_abertura,
-    tbl_academia.razao_social, tbl_academia.facebook, tbl_academia.whatsapp, tbl_academia.instagram,
-    tbl_academia.status,
-    tbl_endereco.logradouro as logradouro, tbl_endereco.numero as numero, tbl_endereco.bairro as bairro, tbl_endereco.complemento as complemento,
-    tbl_endereco.cep as cep
+    let sql = `select tbl_academia.*, tbl_academia_categoria.id_categoria,
+    tbl_categoria.nome as categoria, tbl_endereco.id as id_endereco,
+    tbl_endereco.logradouro, tbl_endereco.numero as numero_endereco, tbl_endereco.complemento,
+    tbl_endereco.cep, tbl_endereco.cidade, tbl_endereco.estado
     
     from tbl_academia
+        inner join tbl_academia_categoria
+            on tbl_academia_categoria.id_academia = tbl_academia.id
+        inner join tbl_categoria
+            on tbl_categoria.id = tbl_academia_categoria.id_categoria
         inner join tbl_endereco
-            on tbl_endereco.id = tbl_academia.id_endereco;`
+            on tbl_endereco.id = tbl_academia.id_endereco`
 
     let resultadoAcademia = await prisma.$queryRawUnsafe(sql)
 
@@ -37,24 +42,20 @@ const selectAllAcademias = async function(){
 // Seleciona uma academia pelo seu id
 const selectAcademiaById = async function(idAcademia){
 
-    let sql = ` select tbl_academia.id, tbl_academia.nome, tbl_academia.email, tbl_academia.senha, tbl_academia.telefone, 
-                tbl_academia.cnpj, tbl_academia.foto, tbl_academia.descricao, 
-                tbl_academia.cor_primaria, tbl_academia.cor_secundaria, tbl_academia.data_abertura,
-                tbl_academia.razao_social, tbl_academia.facebook, tbl_academia.whatsapp,
-                tbl_academia.instagram, tbl_academia.status,
-                tbl_endereco.logradouro, tbl_endereco.numero, tbl_endereco.bairro, tbl_endereco.complemento,
-                tbl_endereco.cep, tbl_cidade.nome as cidade,
-                tbl_estado.nome as estado
-                
-            from tbl_academia
-                inner join tbl_endereco
-                    on tbl_academia.id_endereco = tbl_endereco.id
-                inner join tbl_cidade
-                    on tbl_endereco.id_cidade = tbl_cidade.id
-                inner join tbl_estado
-                    on tbl_estado.id = tbl_cidade.id_estado
-                    
-                where tbl_academia.id = ${idAcademia}`
+    let sql = ` select tbl_academia.*, tbl_academia_categoria.id_categoria,
+    tbl_categoria.nome as categoria, tbl_endereco.id as id_endereco,
+    tbl_endereco.logradouro, tbl_endereco.numero as numero_endereco, tbl_endereco.complemento,
+    tbl_endereco.cep, tbl_endereco.cidade, tbl_endereco.estado
+    
+    from tbl_academia
+        inner join tbl_academia_categoria
+            on tbl_academia_categoria.id_academia = tbl_academia.id
+        inner join tbl_categoria
+            on tbl_categoria.id = tbl_academia_categoria.id_categoria
+        inner join tbl_endereco
+            on tbl_endereco.id = tbl_academia.id_endereco
+              
+              where tbl_academia.id = ${idAcademia}`
 
     let resultadoAcademia = await prisma.$queryRawUnsafe(sql)
 
@@ -67,22 +68,18 @@ const selectAcademiaById = async function(idAcademia){
 
 // Seleciona uma academia pelo seu nome
 const selectAcademiaByName = async function(nomeAcademia){
-    let sql = ` select tbl_academia.id, tbl_academia.nome, tbl_academia.email, tbl_academia.senha, tbl_academia.telefone, 
-            tbl_academia.cnpj, tbl_academia.foto, tbl_academia.descricao, 
-            tbl_academia.cor_primaria, tbl_academia.cor_secundaria, tbl_academia.data_abertura,
-            tbl_academia.razao_social, tbl_academia.facebook, tbl_academia.whatsapp,
-            tbl_academia.instagram, tbl_academia.status,
-            tbl_endereco.logradouro, tbl_endereco.numero, tbl_endereco.bairro, tbl_endereco.complemento,
-            tbl_endereco.cep, tbl_cidade.nome as cidade,
-            tbl_estado.nome as estado
-            
-        from tbl_academia
-            inner join tbl_endereco
-                on tbl_academia.id_endereco = tbl_endereco.id
-            inner join tbl_cidade
-                on tbl_endereco.id_cidade = tbl_cidade.id
-            inner join tbl_estado
-                on tbl_estado.id = tbl_cidade.id_estado
+    let sql = ` select tbl_academia.*, tbl_academia_categoria.id_categoria,
+    tbl_categoria.nome as categoria, tbl_endereco.id as id_endereco,
+    tbl_endereco.logradouro, tbl_endereco.numero as numero_endereco, tbl_endereco.complemento,
+    tbl_endereco.cep, tbl_endereco.cidade, tbl_endereco.estado
+    
+    from tbl_academia
+        inner join tbl_academia_categoria
+            on tbl_academia_categoria.id_academia = tbl_academia.id
+        inner join tbl_categoria
+            on tbl_categoria.id = tbl_academia_categoria.id_categoria
+        inner join tbl_endereco
+            on tbl_endereco.id = tbl_academia.id_endereco
                 
             where tbl_academia.nome like '%${nomeAcademia}%'`
 
@@ -140,7 +137,7 @@ const insertAcademia = async function(dadosAcademia){
         ${dadosAcademia.id_categoria},
         '${dadosAcademia.status}');`
 
-    let resultadoAcademia = await prisma.$executeRawUnsafe(sql)
+    let resultadoAcademia = await prisma.$queryRawUnsafe(sql)
 
     console.log(resultadoAcademia);
 
@@ -221,6 +218,53 @@ const selectAcademiaByPassword = async function (dadosAcademia){
     }
 }
 
+const selectAcademiaByEmail = async function (email){
+    let sql = `select * from tbl_academia where email = '${email}'`
+
+    let resultadoDadosAcademia = await prisma.$queryRawUnsafe(sql)
+
+    if(resultadoDadosAcademia.length > 0){
+        return resultadoDadosAcademia
+    } else {
+        return false
+    }
+}
+
+const esqueciASenha = async function(dadosBody){
+    let user = await academiaDAO.selectAcademiaByEmail(dadosBody.email)
+
+    if(!user){
+        return message.ERROR_NOT_FOUND
+    } else {
+        const token = crypto.randomBytes(20).toString('hex')
+        const now = new Date()
+        now.setHours(now.getHours() + 1)
+
+        console.log(token, now);
+
+
+        mailer.sendMail({
+            to: dadosBody.email,
+            from: 'kaloscorporation@gmail.com',
+            template: '../nodemailer/mail/auth/forgot_password',
+            context: { token },
+        }, (err) => {
+            if(err){
+                return {
+                    status: 400,
+                    message: "Não foi possível enviar o código de recuperação",
+                }
+            } else{
+                return res.send()
+            }
+        })
+
+        //let dadosAcademiaJSON = user
+
+        return message.SUCCESS_REQUEST
+    }
+}
+
 module.exports = {
     selectAcademiaByPassword,
     selectAcademiaById,
@@ -229,5 +273,7 @@ module.exports = {
     updateAcademia,
     deleteAcademia,
     selectLastId,
-    selectAcademiaByName
+    selectAcademiaByName,
+    selectAcademiaByEmail,
+    esqueciASenha
 }

@@ -124,6 +124,15 @@ const verifyJWTAluno = async function (request, response, next) {
     }
 }
 
+app.post('/kalos/esqueci_senha/academia', bodyParserJSON, cors(), async function(request, response){
+    const body = request.body
+
+    const resposta = await controllerAcademia.esqueciASenha(body)
+
+    response.json(resposta)
+    response.status(resposta.status)
+})
+
 app.get('/kalos/academia', cors(), async function (request, response){
     let dadosAcademias = await controllerAcademia.getAcademias()
 
