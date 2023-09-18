@@ -152,6 +152,18 @@ app.get('/kalos/academia/id/:id', cors(), async function(request, response){
 
 })
 
+// retorna uma academia pelo EMAIL
+app.get('/kalos/academia/email/:email', cors(), async function(request, response){
+
+    let emailAcademia = request.params.email
+
+    let dadosAcademia = await controllerAcademia.getAcademiaByEmail(emailAcademia)
+
+    response.status(dadosAcademia.status)
+    response.json(dadosAcademia)
+
+})
+
 // Retorna a academia pelo nome
 app.get('/kalos/academia/nome/:nome', cors(), async function(request, response){
 
@@ -269,6 +281,18 @@ app.get('/kalos/aluno/nome/:nome', cors(), async function(request, response){
     response.json(dadosAluno)
 })
 
+// retorna um aluno pelo EMAIL
+app.get('/kalos/aluno/email/:email', cors(), async function(request, response){
+
+    let emailAluno = request.params.email
+
+    let dadosAluno = await controllerAluno.getAlunoByEmail(emailAluno)
+
+    response.status(dadosAluno.status)
+    response.json(dadosAluno)
+
+})
+
 // insere um novo aluno
 app.post('/kalos/aluno', cors(), bodyParserJSON, async function(request, response){
     let contentType = request.headers['content-type']
@@ -358,6 +382,58 @@ app.get('/kalos/tags', cors(), async function (request, response){
 
     response.json(dadosTags)
     response.status(dadosTags.status)
+})
+
+/******************************************* ENDPOINTs TREINOS ********************************************/
+
+app.get('/kalos/treino', cors(), async function(request, response){
+    let dadosTreino = await controllerTreino.getTreinos()
+
+    response.json(dadosTreino)
+    response.status(dadosTreino.status)
+})
+
+app.get('/kalos/treino/id/:id', cors(), async function(request, response){
+
+    let idTreino = request.params.id
+
+    let dadosTreino = await controllerTreino.getTreinoByID(idTreino)
+
+    response.status(dadosTreino.status)
+    response.json(dadosTreino)
+})
+
+app.post('/kalos/treino', cors(), bodyParserJSON, async function(request, response){
+
+    let dadosBody = request.body
+
+    let resultadoDadosTreino = await controllerTreino.inserirTreino(dadosBody)
+
+    response.status(resultadoDadosTreino.status)
+    response.json(resultadoDadosTreino)
+
+})
+
+app.put('/kalos/treino/id/:id', cors(), bodyParserJSON, async function(request, response){
+    
+    let dadosBody = request.body
+
+    let idTreino = request.params.id
+
+    let resultadoDadosTreino = await controllerTreino.atualizarTreino(dadosBody, idTreino)
+
+    response.status(resultadoDadosTreino.status)
+    response.json(resultadoDadosTreino)
+})
+
+app.delete('/kalos/treino/id/:id', cors(), async function(request, response){
+
+    let idTreino = request.params.id
+
+    let dadosTreino = await controllerTreino.deletarTreino(idTreino)
+
+    response.status(dadosTreino.status)
+    response.json(dadosTreino)
 })
 
 
