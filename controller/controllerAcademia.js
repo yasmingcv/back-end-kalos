@@ -98,20 +98,20 @@ const inserirAcademia = async function(dadosAcademia){
 
     // Validação para tratar campos obrigatórios e caracteres
 
-    if( dadosAcademia.nome == '' || dadosAcademia == undefined || !isNaN(dadosAcademia.nome ||
-        dadosAcademia.email == '' || dadosAcademia.email == undefined || dadosAcademia.email.length > 250 ||
-        dadosAcademia.senha == '' || dadosAcademia.senha == undefined || dadosAcademia.senha.length < 12 ||
-        dadosAcademia.telefone == '' || dadosAcademia.telefone == undefined || dadosAcademia.telefone.length > 11 ||
-        dadosAcademia.cpnj == '' || dadosAcademia.cpnj == undefined || dadosAcademia.cpnj.length > 14 ||
-        dadosAcademia.foto == '' || dadosAcademia.foto == undefined ||
-        dadosAcademia.descricao == '' || dadosAcademia.descricao == undefined ||
-        dadosAcademia.cor_primaria == '' || dadosAcademia.cor_primaria == undefined ||
-        dadosAcademia.cor_secundaria == '' || dadosAcademia.cor_secundaria == undefined ||
-        dadosAcademia.data_abertura == '' || dadosAcademia.data_abertura == undefined ||
-        dadosAcademia.razao_social == '' || dadosAcademia.razao_social == undefined || !isNaN(dadosAcademia.razao_social)
-        )){
+    //if( dadosAcademia.nome == '' || dadosAcademia == undefined || !isNaN(dadosAcademia.nome ||
+    //    dadosAcademia.email == '' || dadosAcademia.email == undefined || dadosAcademia.email.length > 250 ||
+    //    dadosAcademia.senha == '' || dadosAcademia.senha == undefined || dadosAcademia.senha.length < 12 ||
+    //    dadosAcademia.telefone == '' || dadosAcademia.telefone == undefined || dadosAcademia.telefone.length > 11 ||
+    //    dadosAcademia.cpnj == '' || dadosAcademia.cpnj == undefined || dadosAcademia.cpnj.length > 14 ||
+    //    dadosAcademia.foto == '' || dadosAcademia.foto == undefined ||
+    //    dadosAcademia.descricao == '' || dadosAcademia.descricao == undefined ||
+    //    dadosAcademia.cor_primaria == '' || dadosAcademia.cor_primaria == undefined ||
+    //    dadosAcademia.cor_secundaria == '' || dadosAcademia.cor_secundaria == undefined ||
+    //    dadosAcademia.data_abertura == '' || dadosAcademia.data_abertura == undefined ||
+    //    dadosAcademia.razao_social == '' || dadosAcademia.razao_social == undefined || !isNaN(dadosAcademia.razao_social)
+    //    )){
             return message.ERROR_REQUIRED_FIELDS
-        } else {
+    //    } else {
 
             let resultadoDadosAcademia = await academiaDAO.insertAcademia(dadosAcademia)
 
@@ -129,7 +129,7 @@ const inserirAcademia = async function(dadosAcademia){
             } else {
                 return message.ERROR_INTERNAL_SERVER
             }
-        }
+       // }
 }
 
 const atualizarAcademia = async function (dadosAcademia, idAcademia){
