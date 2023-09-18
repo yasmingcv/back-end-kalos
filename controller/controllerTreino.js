@@ -9,6 +9,46 @@ var treinoDAO = require('../model/DAO/treinoDAO.js')
 
 var message = require('./modulo/config.js')
 
+const getTreinos = async function(){
+    
+    let dadosTreinoJSON = {}
+
+    let dadosTreino = await treinoDAO.selectAllTreinos()
+
+    if(dadosTreino){
+        dadosTreinoJSON.status = message.SUCCESS_REQUEST.status
+        dadosTreinoJSON.message = message.SUCCESS_REQUEST.message
+        dadosTreinoJSON.quantidade = dadosTreino.length
+        dadosTreinoJSON.treinos = dadosTreino
+
+        return dadosTreinoJSON
+    } else {
+        return message.ERROR_NOT_FOUND
+    }
+}
+const getTreinoByID = async function(idTreino){
+    
+    let dadosTreinoJSON = {}
+
+    if(idTreino == '' || idTreino == undefined || isNaN(idTreino)){
+        return message.ERROR_INVALID_ID
+    } else {
+
+        let dadosTreino = await treinoDAO.selectTreinoById(idTreino)
+
+        if(dadosTreino){
+
+            dadosTreinoJSON.status = message.SUCCESS_REQUEST.status
+            dadosTreinoJSON.message = message.SUCCESS_REQUEST.message
+            dadosTreinoJSON.treino = dadosTreino
+
+            return dadosTreinoJSON
+        } else {
+            return message.ERROR_NOT_FOUND
+        }
+    }
+
+}
 const inserirTreino = async function (dadosTreino) {
 
     // Validação de campos
@@ -91,5 +131,7 @@ const deletarTreino = async function (idTreino){
 module.exports = {
     inserirTreino,
     atualizarTreino,
-    deletarTreino
+    deletarTreino,
+    getTreinoByID,
+    getTreinos
 }

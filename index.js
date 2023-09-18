@@ -382,6 +382,58 @@ app.get('/kalos/tags', cors(), async function (request, response){
     response.status(dadosTags.status)
 })
 
+/******************************************* ENDPOINTs TREINOS ********************************************/
+
+app.get('/kalos/treino', cors(), async function(request, response){
+    let dadosTreino = await controllerTreino.getTreinos()
+
+    response.json(dadosTreino)
+    response.status(dadosTreino.status)
+})
+
+app.get('/kalos/treino/id/:id', cors(), async function(request, response){
+
+    let idTreino = request.params.id
+
+    let dadosTreino = await controllerTreino.getTreinoByID(idTreino)
+
+    response.status(dadosTreino.status)
+    response.json(dadosTreino)
+})
+
+app.post('/kalos/treino', cors(), bodyParserJSON, async function(request, response){
+
+    let dadosBody = request.body
+
+    let resultadoDadosTreino = await controllerTreino.inserirTreino(dadosBody)
+
+    response.status(resultadoDadosTreino.status)
+    response.json(resultadoDadosTreino)
+
+})
+
+app.put('/kalos/treino/id/:id', cors(), bodyParserJSON, async function(request, response){
+    
+    let dadosBody = request.body
+
+    let idTreino = request.params.id
+
+    let resultadoDadosTreino = await controllerTreino.atualizarTreino(dadosBody, idTreino)
+
+    response.status(resultadoDadosTreino.status)
+    response.json(resultadoDadosTreino)
+})
+
+app.delete('/kalos/treino/id/:id', cors(), async function(request, response){
+
+    let idTreino = request.params.id
+
+    let dadosTreino = await controllerTreino.deletarTreino(idTreino)
+
+    response.status(dadosTreino.status)
+    response.json(dadosTreino)
+})
+
 
 app.listen(8080, function(){
     console.log('console rodando')

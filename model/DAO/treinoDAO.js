@@ -11,14 +11,26 @@ var { PrismaClient } = require('@prisma/client')
 // Criando instância do prisma
 var prisma = new PrismaClient()
 
+const selectAllTreinos = async function(){
+
+    let sql = `select * from tbl_treino`
+
+    let resultadoTreino = await prisma.$queryRawUnsafe(sql)
+
+    if(resultadoTreino.length > 0){
+        return resultadoTreino
+    } else {
+        return false
+    }
+}
 // Seleciona o treino pelo id
 const selectTreinoById = async function(idTreino){
     let sql = `select * from tbl_treino where id = ${idTreino}`
 
-    let resultadoTreino = await prisma.$executeRawUnsafe(sql)
+    let resultadoTreino = await prisma.$queryRawUnsafe(sql)
 
     if(resultadoTreino.length > 0)
-        return resultadoTreino
+        return resultadoTreino[0]
     else
         return false
 }
@@ -34,7 +46,7 @@ const insertTreino = async function(dadosTreino){
         '${dadosTreino.nome}',
         '${dadosTreino.descricao}',
         '${dadosTreino.foto}',
-        '${dadosTreino.data_criacao}',
+        CURDATE()
     );`
 
     let resultadoTreino = await prisma.$executeRawUnsafe(sql)
@@ -48,10 +60,14 @@ const insertTreino = async function(dadosTreino){
 // Atualiza um treino
 const updateTreino = async function(dadosTreino){
     let sql = `update tbl_treino set
-                nome = '${dadosTreino.id}'`
+                nome = '${dadosTreino.nome}',
+                descricao = '${dadosTreino.descricao}',
+                foto = '${dadosTreino.foto}'
+                where id = ${dadosTreino.id};`
+
 
     let resultadoTreino = await prisma.$executeRawUnsafe(sql)
-
+    
     if (resultadoTreino)
         return true
     else
@@ -74,5 +90,6 @@ module.exports = {
     insertTreino,
     selectTreinoById,
     updateTreino,
-    deleteTreino
+    deleteTreino,
+    selectAllTreinos
 }
