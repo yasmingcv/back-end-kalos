@@ -94,25 +94,28 @@ const selectAcademiaByName = async function(nomeAcademia){
         return false
 }
 
+const inserirTag = async function(tag){
+    let sql = `insert into tmp_tbl_tags (id_tag) values (${tag})`
+
+    let rsTempTag = await prisma.$executeRawUnsafe(sql)
+
+    if(rsTempTag)
+        return true
+    else
+        return false
+}
+
 // Insere uma nova academia
 const insertAcademia = async function(dadosAcademia){
-    let sql = `insert into tbl_academia (
-        nome,
-        email,
-        senha,
-        telefone,
-        cnpj,
-        foto,
-        descricao,
-        cor_primaria,
-        cor_secundaria,
-        data_abertura,
-        razao_social,
-        facebook,
-        whatsapp,
-        instagram,
-        status
-    ) values (
+    let sqlCriaTempTable = 'create temporary table tmp_tbl_tags (id_tag int)'
+
+    await prisma.$executeRawUnsafe(sqlCriaTempTable)
+
+    for (const tag of dadosAcademia.tags) {
+        await inserirTag(tag);
+    }
+
+    let sql = `call procInsertAcademiaEnderecoCategoriaTags(
         '${dadosAcademia.nome}',
         '${dadosAcademia.email}',
         '${dadosAcademia.senha}',
@@ -124,16 +127,25 @@ const insertAcademia = async function(dadosAcademia){
         '${dadosAcademia.cor_secundaria}',
         '${dadosAcademia.data_abertura}',
         '${dadosAcademia.razao_social}',
-        ${dadosAcademia.facebook},
-        ${dadosAcademia.whatsapp},
-        ${dadosAcademia.instagram},
-        '${dadosAcademia.status}',
-    );`
+        '${dadosAcademia.facebook}',
+        '${dadosAcademia.whatsapp}',
+        '${dadosAcademia.instagram}',
+        '${dadosAcademia.logradouro}',
+        '${dadosAcademia.numero}',
+        '${dadosAcademia.bairro}',
+        '${dadosAcademia.complemento}',
+        '${dadosAcademia.cep}',
+        '${dadosAcademia.cidade}',
+        '${dadosAcademia.estado}',
+        ${dadosAcademia.id_categoria},
+        '${dadosAcademia.status}');`
 
     let resultadoAcademia = await prisma.$executeRawUnsafe(sql)
 
-    if(resultadoAcademia)
-        return
+    console.log(resultadoAcademia);
+
+    if(resultadoAcademia.length == 0)
+        return true
     else
         return false
 }
@@ -161,10 +173,11 @@ const updateAcademia = async function(dadosAcademia){
 
     let resultadoAcademia = await prisma.$executeRawUnsafe(sql)
 
-    if(resultadoAcademia)
-        return true
-    else
+    if(!resultadoAcademia){
         return false
+    }else{
+        return true
+    }
 }
 // Deleta uma academia do banco
 const deleteAcademia = async function(idAcademia){
