@@ -152,6 +152,18 @@ app.get('/kalos/academia/id/:id', cors(), async function(request, response){
 
 })
 
+// retorna uma academia pelo EMAIL
+app.get('/kalos/academia/email/:email', cors(), async function(request, response){
+
+    let emailAcademia = request.params.email
+
+    let dadosAcademia = await controllerAcademia.getAcademiaByEmail(emailAcademia)
+
+    response.status(dadosAcademia.status)
+    response.json(dadosAcademia)
+
+})
+
 // Retorna a academia pelo nome
 app.get('/kalos/academia/nome/:nome', cors(), async function(request, response){
 

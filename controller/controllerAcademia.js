@@ -73,7 +73,27 @@ const getAcademiaByName = async function(nomeAcademia){
 
     }
 }
+const getAcademiaByEmail = async function(emailAcademia){
+    let dadosAcademiaJSON = {}
 
+    if(emailAcademia == '' || emailAcademia == undefined || emailAcademia.length > 250){
+        return message.ERROR_INVALID_EMAIL
+    } else {
+
+        let dadosAcademia = await academiaDAO.selectAcademiaByEmail(emailAcademia)
+
+        if(dadosAcademia){
+
+            dadosAcademiaJSON.status = message.SUCCESS_REQUEST.status
+            dadosAcademiaJSON.message = message.SUCCESS_REQUEST.message
+            dadosAcademiaJSON.aluno = dadosAcademia
+
+            return dadosAcademiaJSON
+        } else {
+            return message.ERROR_NOT_FOUND
+        }
+    }
+}
 const inserirAcademia = async function(dadosAcademia){
 
     //Verifica se o atributo veio undefined ou se não foi digitado, se sim, define como "null",
@@ -246,5 +266,6 @@ module.exports = {
     getAcademiaByName,
     inserirAcademia,
     atualizarAcademia,
-    deletarAcademia
+    deletarAcademia,
+    getAcademiaByEmail
 }

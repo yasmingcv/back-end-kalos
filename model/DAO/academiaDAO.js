@@ -224,7 +224,7 @@ const selectAcademiaByEmail = async function (email){
     let resultadoDadosAcademia = await prisma.$queryRawUnsafe(sql)
 
     if(resultadoDadosAcademia.length > 0){
-        return resultadoDadosAcademia
+        return resultadoDadosAcademia[0]
     } else {
         return false
     }
