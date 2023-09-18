@@ -13,7 +13,7 @@ var prisma = new PrismaClient()
 
 
 const crypto = require('crypto')
-const mailer = require('../nodemailer/mailer.js')
+const mailer = require('../../nodemailer/mailer.js')
 
 // Seleciona todas as academias do banco
 const selectAllAcademias = async function(){

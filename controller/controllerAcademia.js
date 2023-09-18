@@ -110,7 +110,7 @@ const inserirAcademia = async function(dadosAcademia){
     //    dadosAcademia.data_abertura == '' || dadosAcademia.data_abertura == undefined ||
     //    dadosAcademia.razao_social == '' || dadosAcademia.razao_social == undefined || !isNaN(dadosAcademia.razao_social)
     //    )){
-            return message.ERROR_REQUIRED_FIELDS
+    //        return message.ERROR_REQUIRED_FIELDS
     //    } else {
 
             let resultadoDadosAcademia = await academiaDAO.insertAcademia(dadosAcademia)
