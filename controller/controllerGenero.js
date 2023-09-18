@@ -9,6 +9,25 @@ var generoDAO = require('../model/DAO/generoDAO.js')
 
 var message = require('./modulo/config.js')
 
+
+const getGeneros = async function(){
+
+    let dadosGeneroJSON = {}
+
+    let dadosGenero = await generoDAO.selectAllGeneros()
+
+    if(dadosGenero){
+        dadosGeneroJSON.status = message.SUCCESS_REQUEST.status
+        dadosGeneroJSON.message = message.SUCCESS_REQUEST.message
+        dadosGeneroJSON.quantidade = dadosGenero.length
+        dadosGeneroJSON.generos = dadosGenero
+
+        return dadosGeneroJSON
+
+    } else {
+        return message.ERROR_NOT_FOUND
+    }
+}
 const inserirGenero = async function (dadosGenero){
 
     // Validação para tratar campos obrigatórios
@@ -91,5 +110,6 @@ const deletarGenero = async function (idGenero){
 module.exports = {
     inserirGenero,
     atualizarGenero,
-    deletarGenero
+    deletarGenero,
+    getGeneros
 }

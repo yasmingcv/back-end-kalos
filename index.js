@@ -263,7 +263,7 @@ app.post('/kalos/aluno', cors(), bodyParserJSON, async function(request, respons
     let contentType = request.headers['content-type']
 
     //Validação para receber em dados JSON
-    // if(String(contentType).toLowerCase() == 'application/json'){
+    if(String(contentType).toLowerCase() == 'application/json'){
 
         //recebe os dados do aluno encaminhado no corpo da requisição
         let dadosBody = request.body
@@ -272,12 +272,12 @@ app.post('/kalos/aluno', cors(), bodyParserJSON, async function(request, respons
 
         response.status(resultadoDadosAluno.status)
         response.json(resultadoDadosAluno)
-    // } else {
+    } else {
 
-    //     response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
-    //     response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
 
-    // }
+    }
 
 })
 
