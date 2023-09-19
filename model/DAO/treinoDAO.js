@@ -11,6 +11,8 @@ var { PrismaClient } = require('@prisma/client')
 // Criando instância do prisma
 var prisma = new PrismaClient()
 
+
+
 const selectAllTreinos = async function(){
 
     let sql = `select * from tbl_treino`
@@ -85,11 +87,22 @@ const deleteTreino = async function(idTreino){
     else
         return false
 }
+const selectLastId = async function(){
+    let sql = `select * from tbl_treino order by id desc limit 1;`
 
+    let resultadoNivel = await prisma.$queryRawUnsafe(sql)
+
+    if(resultadoNivel.length > 0){
+        return resultadoNivel
+    } else
+        return false
+
+}
 module.exports = {
     insertTreino,
     selectTreinoById,
     updateTreino,
     deleteTreino,
-    selectAllTreinos
+    selectAllTreinos,
+    selectLastId
 }

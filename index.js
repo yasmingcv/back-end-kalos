@@ -476,7 +476,58 @@ app.get('/kalos/funcionamento/id_academia/:id', cors(), async function(request, 
     response.status(dadosFuncionamento.status)
     response.json(dadosFuncionamento)
 })
+/******************************************* ENDPOINTs CATEGORIA TREINO ********************************************/
 
+app.get('/kalos/categoriaTreino', cors(), async function(request, response){
+
+    let dadosCategoriaTreino = await controllerCategoriaTreino.getCategoriasTreino()
+
+    response.status(dadosCategoriaTreino.status)
+    response.json(dadosCategoriaTreino)
+})
+
+app.get('/kalos/categoriaTreino/id/:id', cors(), async function(request, response){
+
+    let idCategoriaTreino = request.params.id
+
+    let dadosCategoriaTreino = await controllerCategoriaTreino.getCategoriaTreinoByID(idCategoriaTreino)
+
+    response.status(dadosCategoriaTreino.status)
+    response.json(dadosCategoriaTreino)
+
+})
+
+app.post('/kalos/categoriaTreino', cors(), bodyParserJSON, async function(request, response){
+
+    let dadosBody = request.body
+
+    let resultadoDadosCategoria = await controllerCategoriaTreino.inserirCategoriaTreino(dadosBody)
+
+    response.status(resultadoDadosCategoria.status)
+    response.json(resultadoDadosCategoria)
+})
+
+app.put('/kalos/categoriaTreino/id/:id', cors(), bodyParserJSON, async function(request, response){
+
+    let dadosBody = request.body
+
+    let idCategoriaTreino = request.params.id
+
+    let resultadoDadosCategoria = await controllerCategoriaTreino.atualizarCategoriaTreino(dadosBody, idCategoriaTreino)
+
+    response.status(resultadoDadosCategoria.status)
+    response.json(resultadoDadosCategoria)
+})
+
+app.delete('/kalos/categoriaTreino/id/:id', cors(), async function(request, response){
+
+    let idCategoriaTreino = request.params.id
+
+    let resultadoDadosCategoria = await controllerCategoriaTreino.deletarCategoriaTreino(idCategoriaTreino)
+
+    response.status(resultadoDadosCategoria.status)
+    response.json(resultadoDadosCategoria)
+})
 app.listen(8080, function(){
     console.log('console rodando')
 })

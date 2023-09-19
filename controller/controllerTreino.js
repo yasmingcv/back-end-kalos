@@ -54,8 +54,7 @@ const inserirTreino = async function (dadosTreino) {
     // Validação de campos
     if (
         dadosTreino.nome == '' || dadosTreino.nome == undefined || !isNaN(dadosTreino.nome) ||
-        dadosTreino.foto == '' || dadosTreino.foto == undefined ||
-        dadosTreino.data_criacao == '' || dadosTreino.data_criacao == undefined) {
+        dadosTreino.foto == '' || dadosTreino.foto == undefined) {
         return message.ERROR_REQUIRED_FIELDS
     } else {
 
@@ -63,10 +62,12 @@ const inserirTreino = async function (dadosTreino) {
 
         if (resultadoDadosTreino) {
 
+            let novoTreino = await treinoDAO.selectLastId()
             let dadosTreinoJSON = {}
 
             dadosTreinoJSON.status = message.SUCCESS_CREATE_ITEM.status
             dadosTreinoJSON.message = message.SUCCESS_CREATE_ITEM.message
+            dadosTreinoJSON.treino = novoTreino
 
             return dadosTreinoJSON
         } else {
@@ -76,9 +77,9 @@ const inserirTreino = async function (dadosTreino) {
 }
 const atualizarTreino = async function (dadosTreino, idTreino) {
     if (
-        dadosTreino.nome == '' || dadosTreino.nome == undefined || !isNaN(dadosTreino.nome) ||
-        dadosTreino.foto == '' || dadosTreino.foto == undefined ||
-        dadosTreino.data_criacao == '' || dadosTreino.data_criacao == undefined) {
+        dadosTreino.nome == '' || dadosTreino.nome == undefined ||
+        dadosTreino.foto == '' || dadosTreino.foto == undefined)
+        {
         return message.ERROR_REQUIRED_FIELDS
 
     } else if (idTreino == '' || idTreino == undefined || isNaN(idTreino)) {
