@@ -10,19 +10,40 @@ const { PrismaClient } = require("@prisma/client");
 var prisma = new PrismaClient
 
 const insertFuncionamento = async function (dadosFuncionamento) {
-    let sql = `insert into tbl_funcionamento (
-        status, 
-        horario_inicio, 
-        horario_fim, 
-        id_academia, 
-        id_dia_semana) 
-            values (
-        ${dadosFuncionamento.status},
-        ${dadosFuncionamento.horario_inicio},
-        ${dadosFuncionamento.horario_fim},
+    let sql = `call procInsertFuncionamentoAcademia(
         ${dadosFuncionamento.id_academia},
-        ${dadosFuncionamento.id_dia_semana})`
+        
+        ${dadosFuncionamento.segunda.status},
+        ${dadosFuncionamento.segunda.horario_inicio},
+        ${dadosFuncionamento.segunda.horario_fim},
+        
+        ${dadosFuncionamento.terca.status},
+        ${dadosFuncionamento.terca.horario_inicio},
+        ${dadosFuncionamento.terca.horario_fim},
+        
+        ${dadosFuncionamento.quarta.status},
+        ${dadosFuncionamento.quarta.horario_inicio},
+        ${dadosFuncionamento.quarta.horario_fim},
+        
+        ${dadosFuncionamento.quinta.status},
+        ${dadosFuncionamento.quinta.horario_inicio},
+        ${dadosFuncionamento.quinta.horario_fim},
+        
+        ${dadosFuncionamento.sexta.status},
+        ${dadosFuncionamento.sexta.horario_inicio},
+        ${dadosFuncionamento.sexta.horario_fim},
+        
+        ${dadosFuncionamento.sabado.status},
+        ${dadosFuncionamento.sabado.horario_inicio},
+        ${dadosFuncionamento.sabado.horario_fim},
+        
+        ${dadosFuncionamento.domingo.status},
+        ${dadosFuncionamento.domingo.horario_inicio},
+        ${dadosFuncionamento.domingo.horario_fim}
+    
+    )`
 
+    console.log(sql);
 
     let rsFuncionamento = await prisma.$queryRawUnsafe(sql)
 
@@ -73,8 +94,21 @@ const selectFuncionamentoByIdAcademia = async function (idAcademia) {
         return false
 }
 
+const selectLastId = async function(){
+    let sql = `select * from tbl_funcionamento order by id desc limit 1;`
+
+    let resultadoAluno = await prisma.$queryRawUnsafe(sql)
+
+    if(resultadoAluno.length > 0){
+        return resultadoAluno
+    } else
+        return false
+
+}
+
 module.exports = {
     insertFuncionamento,
     selectAllFuncionamentos,
-    selectFuncionamentoByIdAcademia
+    selectFuncionamentoByIdAcademia,
+    selectLastId
 }

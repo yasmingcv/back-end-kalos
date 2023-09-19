@@ -25,7 +25,7 @@ const getFuncionamentos = async function (){
     }
 }
 
-const getFuncionamentoById = async function (id){
+const getFuncionamentoByIdAcademia = async function (id){
     let dadosFuncionamentoJSON = {}
 
     if(id == '' || id == undefined || isNaN(id)){
@@ -48,19 +48,37 @@ const getFuncionamentoById = async function (id){
 }
 
 const insertFuncionamento = async function (dadosFuncionamento){
-    if( dadosFuncionamento.status == '' || dadosFuncionamento.status == undefined || isNaN(dadosFuncionamento.status) || dadosFuncionamento.status >= 3 ||
-        dadosFuncionamento.horario_inicio == '' ||
-        dadosFuncionamento.horario_fim == '' ||
-        dadosFuncionamento.id_academia == '' || dadosFuncionamento.id_academia == undefined || isNaN(dadosFuncionamento.id_academia) ||
-        dadosFuncionamento.id_dia_semana == '' || dadosFuncionamento.id_dia_semana == undefined || isNaN(dadosFuncionamento.id_dia_semana)
-    ){
-        return message.ERROR_REQUIRED_FIELDS
-    } else{
+
+    //Controla o uso de aspas, se chegar null não usa aspas, mas se chegar diferente de null adiciona aspas,
+    //pois quando não é null precisa de aspas no SQL
+    let diasSemana = ['segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado', 'domingo']
+
+    diasSemana.forEach(dia => {
+        if(dadosFuncionamento[dia].horario_inicio != null){
+            dadosFuncionamento[dia].horario_inicio = "'" + dadosFuncionamento[dia].horario_inicio + "'"
+        } 
+        
+        if (dadosFuncionamento[dia].horario_fim != null) {
+            dadosFuncionamento[dia].horario_fim = "'" + dadosFuncionamento[dia].horario_fim + "'"
+        }
+
+
+    })
+
+    // if( dadosFuncionamento.status == '' || dadosFuncionamento.status == undefined || isNaN(dadosFuncionamento.status) || dadosFuncionamento.status >= 3 ||
+    //     dadosFuncionamento.horario_inicio == '' ||
+    //     dadosFuncionamento.horario_fim == '' ||
+    //     dadosFuncionamento.id_academia == '' || dadosFuncionamento.id_academia == undefined || isNaN(dadosFuncionamento.id_academia) ||
+    //     dadosFuncionamento.id_dia_semana == '' || dadosFuncionamento.id_dia_semana == undefined || isNaN(dadosFuncionamento.id_dia_semana)
+    // ){
+    //     return message.ERROR_REQUIRED_FIELDS
+
+    // } else{
         let resultDadosFuncionamento = await funcionamentoDAO.insertFuncionamento(dadosFuncionamento)
 
         if(resultDadosFuncionamento){
 
-            let novoFuncionamento = await funcionamentoDAO.selectLastId()
+            let novoFuncionamento = await funcionamentoDAO.selectFuncionamentoByIdAcademia(dadosFuncionamento.id_academia)
 
             let dadosFuncionamentoJSON = {}
 
@@ -72,11 +90,11 @@ const insertFuncionamento = async function (dadosFuncionamento){
         } else {
             return message.ERROR_INTERNAL_SERVER //500
         }
-    }
+   // }
 }
 
 module.exports = {
     getFuncionamentos,
-    getFuncionamentoById,
+    getFuncionamentoByIdAcademia,
     insertFuncionamento
 }
