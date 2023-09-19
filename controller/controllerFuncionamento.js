@@ -48,7 +48,6 @@ const getFuncionamentoByIdAcademia = async function (id) {
 }
 
 const insertFuncionamento = async function (dadosFuncionamento) {
-    console.log(dadosFuncionamento);
 
     //Controla o uso de aspas, se chegar null não usa aspas, mas se chegar diferente de null adiciona aspas,
     //pois quando não é null precisa de aspas no SQL
@@ -56,46 +55,42 @@ const insertFuncionamento = async function (dadosFuncionamento) {
 
     for (const dia of diasSemana) {
         if (dadosFuncionamento[dia].horario_inicio != null) {
-            dadosFuncionamento[dia].horario_inicio = "'" + dadosFuncionamento[dia].horario_inicio + "'"
+            dadosFuncionamento[dia].horario_inicio = "'" + dadosFuncionamento[dia].horario_inicio + ":00'"
         }
 
         if (dadosFuncionamento[dia].horario_fim != null) {
-            dadosFuncionamento[dia].horario_fim = "'" + dadosFuncionamento[dia].horario_fim + "'"
+            dadosFuncionamento[dia].horario_fim = "'" + dadosFuncionamento[dia].horario_fim + ":00'"
         }
     }
 
-        for (const dia of diasSemana) {
-            if (dadosFuncionamento[dia].status == '' || dadosFuncionamento[dia].status == undefined || isNaN(dadosFuncionamento[dia].status) || dadosFuncionamento[dia].status >= 3 ||
-                dadosFuncionamento[dia].horario_inicio == '' || dadosFuncionamento[dia].horario_inicio == undefined ||
-                dadosFuncionamento[dia].horario_fim == '' || dadosFuncionamento[dia].horario_fim == undefined ||
-                dadosFuncionamento.id_academia == '' || dadosFuncionamento.id_academia == undefined || isNaN(dadosFuncionamento.id_academia)
-            ) {
-                return message.ERROR_REQUIRED_FIELDS
 
+    for (const dia of diasSemana) {
+        if (dadosFuncionamento[dia].status == '' || dadosFuncionamento[dia].status == undefined || isNaN(dadosFuncionamento[dia].status) || dadosFuncionamento[dia].status >= 3 ||
+            dadosFuncionamento[dia].horario_inicio == '' || dadosFuncionamento[dia].horario_inicio == undefined ||
+            dadosFuncionamento[dia].horario_fim == '' || dadosFuncionamento[dia].horario_fim == undefined ||
+            dadosFuncionamento.id_academia == '' || dadosFuncionamento.id_academia == undefined || isNaN(dadosFuncionamento.id_academia)
+        ) {
+            return message.ERROR_REQUIRED_FIELDS
+
+        } else {
+            let resultDadosFuncionamento = await funcionamentoDAO.insertFuncionamento(dadosFuncionamento)
+
+            if (resultDadosFuncionamento) {
+
+                let novoFuncionamento = await funcionamentoDAO.selectFuncionamentoByIdAcademia(dadosFuncionamento.id_academia)
+
+                let dadosFuncionamentoJSON = {}
+
+                dadosFuncionamentoJSON.status = message.SUCCESS_CREATE_ITEM.status
+                dadosFuncionamentoJSON.message = message.SUCCESS_CREATE_ITEM.message
+                dadosFuncionamentoJSON.funcionamento = novoFuncionamento
+
+                return dadosFuncionamentoJSON
             } else {
-                let resultDadosFuncionamento = await funcionamentoDAO.insertFuncionamento(dadosFuncionamento)
-
-                if (resultDadosFuncionamento) {
-
-                    let novoFuncionamento = await funcionamentoDAO.selectFuncionamentoByIdAcademia(dadosFuncionamento.id_academia)
-
-                    let dadosFuncionamentoJSON = {}
-
-                    dadosFuncionamentoJSON.status = message.SUCCESS_CREATE_ITEM.status
-                    dadosFuncionamentoJSON.message = message.SUCCESS_CREATE_ITEM.message
-                    dadosFuncionamentoJSON.funcionamento = novoFuncionamento
-
-                    return dadosFuncionamentoJSON
-                } else {
-                    return message.ERROR_INTERNAL_SERVER //500
-                }
+                return message.ERROR_INTERNAL_SERVER //500
             }
-
         }
-    
-
-
-
+    }
 }
 
 module.exports = {

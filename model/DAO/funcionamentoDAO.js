@@ -43,8 +43,6 @@ const insertFuncionamento = async function (dadosFuncionamento) {
     
     )`
 
-    console.log(sql);
-
     let rsFuncionamento = await prisma.$queryRawUnsafe(sql)
 
     if (rsFuncionamento)
@@ -74,14 +72,15 @@ const selectAllFuncionamentos = async function () {
 }
 
 const selectFuncionamentoByIdAcademia = async function (idAcademia) {
-    let sql = `select tbl_funcionamento.*, tbl_dia_semana.dia,
-                    tbl_academia.nome as nome_academia
+    let sql = `select tbl_funcionamento.id, tbl_funcionamento.status, time_format(tbl_funcionamento.horario_inicio, "%H:%i") as horario_inicio, time_format(tbl_funcionamento.horario_fim, "%H:%i") as horario_fim, tbl_funcionamento.id_academia, tbl_funcionamento.id_dia_semana,
+                        tbl_dia_semana.dia,
+                        tbl_academia.nome as nome_academia
 
-                from tbl_funcionamento
-                    inner join tbl_dia_semana
-                        on tbl_dia_semana.id = tbl_funcionamento.id_dia_semana
-                    inner join tbl_academia
-                        on tbl_academia.id = tbl_funcionamento.id_academia
+                    from tbl_funcionamento
+                        inner join tbl_dia_semana
+                            on tbl_dia_semana.id = tbl_funcionamento.id_dia_semana
+                        inner join tbl_academia
+                            on tbl_academia.id = tbl_funcionamento.id_academia
                     
                     where tbl_academia.id = ${idAcademia}
                         `
