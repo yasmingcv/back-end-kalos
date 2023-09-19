@@ -299,7 +299,7 @@ app.post('/kalos/aluno', cors(), bodyParserJSON, async function(request, respons
     let contentType = request.headers['content-type']
 
     //Validação para receber em dados JSON
-    // if(String(contentType).toLowerCase() == 'application/json'){
+    if(String(contentType).toLowerCase() == 'application/json'){
 
         //recebe os dados do aluno encaminhado no corpo da requisição
         let dadosBody = request.body
@@ -308,12 +308,12 @@ app.post('/kalos/aluno', cors(), bodyParserJSON, async function(request, respons
 
         response.status(resultadoDadosAluno.status)
         response.json(resultadoDadosAluno)
-    // } else {
+    } else {
 
-    //     response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
-    //     response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
 
-    // }
+    }
 
 })
 
@@ -357,20 +357,22 @@ app.delete('/kalos/aluno/id/:id', cors(), async function(request, response){
 })
 
 app.post('/kalos/aluno/autenticar', cors(), bodyParserJSON, async function(request, response){
+
+    console.log('autenticar');
     let contentType = request.headers['content-type']
     
-    // if(String(contentType).toLowerCase() == 'application/json'){
+    if(String(contentType).toLowerCase() == 'application/json'){
         let dadosBody = request.body
         let resultDadosAluno = await controllerAluno.autenticarAluno(dadosBody)
 
         response.status(200)
         response.json(resultDadosAluno)
 
-    // } else {
-    //     response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
-    //     response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
 
-    // }
+    }
 
 })
 
@@ -439,6 +441,27 @@ app.delete('/kalos/treino/id/:id', cors(), async function(request, response){
 
 /******************************************* ENDPOINTs FUNCIONAMENTO ********************************************/
 
+app.post('/kalos/funcionamento', cors(), bodyParserJSON, async function(request, response){
+    let contentType = request.headers['content-type']
+
+    //Validação para receber em dados JSON
+    if(String(contentType).toLowerCase() == 'application/json'){
+
+        //recebe os dados do aluno encaminhado no corpo da requisição
+        let dadosBody = request.body
+
+        let resultDadosFuncionamento = await controllerFuncionamento.insertFuncionamento(dadosBody)
+
+        response.status(resultDadosFuncionamento.status)
+        response.json(resultDadosFuncionamento)
+    } else {
+
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+
+    }
+})
+
 app.get('/kalos/funcionamento', cors(), async function(request, response){
     let dadosFuncionamentos = await controllerFuncionamento.getFuncionamentos()
 
@@ -450,7 +473,7 @@ app.get('/kalos/funcionamento/id_academia/:id', cors(), async function(request, 
 
     let id = request.params.id
 
-    let dadosFuncionamento = await controllerFuncionamento.getFuncionamentoById(id)
+    let dadosFuncionamento = await controllerFuncionamento.getFuncionamentoByIdAcademia(id)
 
     response.status(dadosFuncionamento.status)
     response.json(dadosFuncionamento)
