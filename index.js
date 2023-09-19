@@ -446,7 +446,6 @@ app.post('/kalos/funcionamento', cors(), bodyParserJSON, async function(request,
 
     //Validação para receber em dados JSON
     if(String(contentType).toLowerCase() == 'application/json'){
-
         //recebe os dados do aluno encaminhado no corpo da requisição
         let dadosBody = request.body
 
@@ -455,7 +454,6 @@ app.post('/kalos/funcionamento', cors(), bodyParserJSON, async function(request,
         response.status(resultDadosFuncionamento.status)
         response.json(resultDadosFuncionamento)
     } else {
-
         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
         response.json(message.ERROR_INVALID_CONTENT_TYPE)
 
