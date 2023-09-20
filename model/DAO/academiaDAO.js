@@ -228,6 +228,18 @@ const selectAcademiaByEmail = async function (email){
     }
 }
 
+const updatePassword = async function(idAcademia, novaSenha){
+    let sql = `update tbl_academia set senha = '${novaSenha}' where id = ${idAcademia}`
+
+    let rsAcademia = await prisma.$queryRawUnsafe(sql)
+
+    if(rsAcademia){
+        return true
+    } else {
+        return false
+    }
+}
+
 
 
 module.exports = {
@@ -239,5 +251,6 @@ module.exports = {
     deleteAcademia,
     selectLastId,
     selectAcademiaByName,
-    selectAcademiaByEmail
+    selectAcademiaByEmail,
+    updatePassword
 }
