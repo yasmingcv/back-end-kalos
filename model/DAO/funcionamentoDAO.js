@@ -51,6 +51,48 @@ const insertFuncionamento = async function (dadosFuncionamento) {
         return false
 }
 
+const updateFuncionamento = async function (dadosFuncionamento){
+    let sql = `call procUpdateFuncionamentoAcademia(
+        ${dadosFuncionamento.id_academia},
+        
+        ${dadosFuncionamento.segunda.status},
+        ${dadosFuncionamento.segunda.horario_inicio},
+        ${dadosFuncionamento.segunda.horario_fim},
+        
+        ${dadosFuncionamento.terca.status},
+        ${dadosFuncionamento.terca.horario_inicio},
+        ${dadosFuncionamento.terca.horario_fim},
+        
+        ${dadosFuncionamento.quarta.status},
+        ${dadosFuncionamento.quarta.horario_inicio},
+        ${dadosFuncionamento.quarta.horario_fim},
+        
+        ${dadosFuncionamento.quinta.status},
+        ${dadosFuncionamento.quinta.horario_inicio},
+        ${dadosFuncionamento.quinta.horario_fim},
+        
+        ${dadosFuncionamento.sexta.status},
+        ${dadosFuncionamento.sexta.horario_inicio},
+        ${dadosFuncionamento.sexta.horario_fim},
+        
+        ${dadosFuncionamento.sabado.status},
+        ${dadosFuncionamento.sabado.horario_inicio},
+        ${dadosFuncionamento.sabado.horario_fim},
+        
+        ${dadosFuncionamento.domingo.status},
+        ${dadosFuncionamento.domingo.horario_inicio},
+        ${dadosFuncionamento.domingo.horario_fim}
+    
+    )`
+
+    let rsFuncionamento = await prisma.$queryRawUnsafe(sql)
+
+    if (rsFuncionamento)
+        return rsFuncionamento
+    else
+        return false
+}
+
 const selectAllFuncionamentos = async function () {
     let sql = `select tbl_funcionamento.*, tbl_dia_semana.dia,
                     tbl_academia.nome as nome_academia
@@ -87,19 +129,32 @@ const selectFuncionamentoByIdAcademia = async function (idAcademia) {
 
     let rsFuncionamento = await prisma.$queryRawUnsafe(sql)
 
-    if (rsFuncionamento.length > 0)
+    if (rsFuncionamento.length >= 1)
         return rsFuncionamento
     else
         return false
 }
 
+const deleteFuncionamentoByIdAcademia = async function(id_academia){
+    let sql = `delete from tbl_funcionamento where tbl_funcionamento.id_academia = ${id_academia}`
+
+    let rsFuncionamento = await prisma.$queryRawUnsafe(sql)
+
+    if(rsFuncionamento){
+        return rsFuncionamento
+    } else
+        return false
+
+}
+
+
 const selectLastId = async function(){
     let sql = `select * from tbl_funcionamento order by id desc limit 1;`
 
-    let resultadoAluno = await prisma.$queryRawUnsafe(sql)
+    let rsFuncionamento = await prisma.$queryRawUnsafe(sql)
 
-    if(resultadoAluno.length > 0){
-        return resultadoAluno
+    if(rsFuncionamento.length > 0){
+        return rsFuncionamento
     } else
         return false
 
@@ -109,5 +164,7 @@ module.exports = {
     insertFuncionamento,
     selectAllFuncionamentos,
     selectFuncionamentoByIdAcademia,
-    selectLastId
+    selectLastId,
+    updateFuncionamento,
+    deleteFuncionamentoByIdAcademia
 }

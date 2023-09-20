@@ -23,6 +23,12 @@ const ERROR_INVALID_NAME = {
     "O nome informado na requisição não é válido ou não foi encaminhado.",
 };
 
+const ERROR_EXISTING_REGISTER = {
+  status: 409,
+  message:
+    "Já existe um registro com o id informado.",
+};
+
 const ERROR_INVALID_EMAIL = {
   status: 400,
   message:
@@ -100,5 +106,6 @@ module.exports = {
     SUCCESS_DELETE_ITEM,
     SUCCESS_REQUEST,
     ERROR_UNAUTHORIZED,
-    ERROR_INVALID_EMAIL
+    ERROR_INVALID_EMAIL,
+    ERROR_EXISTING_REGISTER
 }

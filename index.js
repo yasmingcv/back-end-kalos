@@ -460,6 +460,37 @@ app.post('/kalos/funcionamento', cors(), bodyParserJSON, async function(request,
     }
 })
 
+app.put('/kalos/funcionamento/id_academia/:id', cors(), bodyParserJSON, async function(request, response){
+    let id = request.params.id
+    let contentType = request.headers['content-type']
+
+    //Validação para receber em dados JSON
+    if(String(contentType).toLowerCase() == 'application/json'){
+        //recebe os dados do aluno encaminhado no corpo da requisição
+        let dadosBody = request.body
+
+        let resultDadosFuncionamento = await controllerFuncionamento.updateFuncionamento(dadosBody, id)
+
+        response.status(resultDadosFuncionamento.status)
+        response.json(resultDadosFuncionamento)
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+
+    }
+})
+
+app.delete('/kalos/funcionamento/id_academia/:id', cors(), async function(request, response){
+
+    //recebe o ID do aluno pelo parametro
+    let idAcademia = request.params.id
+
+    let dadosFuncionamento = await controllerFuncionamento.deletarFuncionamento(idAcademia)
+
+    response.status(dadosFuncionamento.status)
+    response.json(dadosFuncionamento)
+})
+
 app.get('/kalos/funcionamento', cors(), async function(request, response){
     let dadosFuncionamentos = await controllerFuncionamento.getFuncionamentos()
 
@@ -476,6 +507,7 @@ app.get('/kalos/funcionamento/id_academia/:id', cors(), async function(request, 
     response.status(dadosFuncionamento.status)
     response.json(dadosFuncionamento)
 })
+
 /******************************************* ENDPOINTs CATEGORIA TREINO ********************************************/
 
 app.get('/kalos/categoriaTreino', cors(), async function(request, response){
@@ -528,6 +560,15 @@ app.delete('/kalos/categoriaTreino/id/:id', cors(), async function(request, resp
     response.status(resultadoDadosCategoria.status)
     response.json(resultadoDadosCategoria)
 })
+
+
+
+
+
+
+
+
+
 app.listen(8080, function(){
     console.log('console rodando')
 })
