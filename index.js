@@ -566,6 +566,110 @@ app.delete('/kalos/categoriaTreino/id/:id', cors(), async function(request, resp
     response.json(resultadoDadosCategoria)
 })
 
+/******************************************* ENDPOINTs REPETICAO ********************************************/
+
+app.get('/kalos/repeticao', cors(), async function(request, response){
+    let dadosRepeticao = await controllerRepeticao.getRepeticoes()
+
+    response.status(dadosRepeticao.status)
+    response.json(dadosRepeticao)
+})
+
+app.get('/kalos/repeticao/id/:id', cors(), async function(request, response){
+
+    let idRepeticao = request.params.id
+
+    let dadosRepeticao = await controllerRepeticao.getRepeticaoByID(idRepeticao)
+
+    response.status(dadosRepeticao.status)
+    response.json(dadosRepeticao)
+})
+
+app.post('/kalos/repeticao', cors(), bodyParserJSON, async function(request, response){
+
+    let dadosBody = request.body
+
+    let resultadoRepeticao = await controllerRepeticao.inserirRepeticao(dadosBody)
+
+    response.status(resultadoRepeticao.status)
+    response.json(resultadoRepeticao)
+
+})
+
+app.put('/kalos/repeticao/id/:id', cors(), bodyParserJSON, async function(request, response){
+
+    let dadosBody = request.body
+
+    let idRepeticao = request.params.id
+
+    let resultadoRepeticao = await controllerRepeticao.atualizarRepeticao(dadosBody, idRepeticao)
+
+    response.status(resultadoRepeticao.status)
+    response.json(resultadoRepeticao)
+})
+
+app.delete('/kalos/repeticao/id/:id', cors(), async function(request, response){
+
+    let idRepeticao = request.params.id
+
+    let dadosRepeticao = await controllerRepeticao.deletarRepeticao(idRepeticao)
+
+    response.status(dadosRepeticao.status)
+    response.json(dadosRepeticao)
+
+})
+
+/******************************************* ENDPOINTs SERIE ********************************************/
+
+app.get('/kalos/serie', cors(), async function(request, response){
+
+    let dadosSerie = await controllerSerie.getSeries()
+
+    response.status(dadosSerie.status)
+    response.json(dadosSerie)
+})
+
+app.get('/kalos/serie/id/:id', cors(), async function(request, response){
+
+    let idSerie = request.params.id
+
+    let dadosSerie = await controllerSerie.getSerieByID(idSerie)
+
+    response.status(dadosSerie.status)
+    response.json(dadosSerie)
+})
+
+app.post('/kalos/serie', cors(), bodyParserJSON, async function(request, response){
+
+    let dadosBody = request.body
+
+    let dadosSerie = await controllerSerie.inserirSerie(dadosBody)
+
+    response.status(dadosSerie.status)
+    response.json(dadosSerie)
+})
+
+app.put('/kalos/serie/id/:id', cors(), bodyParserJSON, async function(request, response){
+
+    let dadosBody = request.body
+
+    let idSerie = request.params.id
+
+    let dadosSerie = await controllerSerie.atualizarSerie(dadosBody, idSerie)
+
+    response.status(dadosSerie.status)
+    response.json(dadosSerie)
+})
+
+app.delete('/kalos/serie/id/:id', cors(),async function(request, response){
+
+    let idSerie = request.params.id
+
+    let dadosSerie = await controllerSerie.deletarSerie(idSerie)
+
+    response.status(dadosSerie.status)
+    response.json(dadosSerie)
+})
 
 
 
