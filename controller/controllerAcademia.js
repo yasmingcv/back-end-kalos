@@ -10,13 +10,35 @@ var message = require('./modulo/config.js')
 
 var academiaDAO = require('../model/DAO/academiaDAO.js')
 
-const getAcademias = async function(){
+const crypto = require('crypto')
+const mailer = require('../nodemailer/mailer.js')
+
+//-----
+const SMTP_CONFIG = require('../nodemailer2.0/smtp.js')
+const nodemailer = require('nodemailer')
+const { text } = require('body-parser')
+const { log } = require('console')
+
+const transporter = nodemailer.createTransport({
+    host: SMTP_CONFIG.host,
+    port: SMTP_CONFIG.port,
+    secure: false,
+    auth: {
+        user: SMTP_CONFIG.user,
+        pass: SMTP_CONFIG.pass
+    },
+    tls: {
+        rejectUnauthorized: false
+    },
+})
+
+const getAcademias = async function () {
 
     let dadosAcademiasJSON = {}
 
     let dadosAcademia = await academiaDAO.selectAllAcademias()
 
-    if(dadosAcademia){
+    if (dadosAcademia) {
         dadosAcademiasJSON.status = message.SUCCESS_REQUEST.status
         dadosAcademiasJSON.message = message.SUCCESS_REQUEST.message
         dadosAcademiasJSON.quantidade = dadosAcademia.length
@@ -28,17 +50,17 @@ const getAcademias = async function(){
     }
 }
 
-const getAcademiaById = async function (idAcademia){
+const getAcademiaById = async function (idAcademia) {
 
     let dadosAcademiasJSON = {}
 
-    if(idAcademia == '' || idAcademia == undefined || isNaN(idAcademia)){
+    if (idAcademia == '' || idAcademia == undefined || isNaN(idAcademia)) {
         return message.ERROR_INVALID_ID
     } else {
 
         let dadosAcademia = await academiaDAO.selectAcademiaById(idAcademia)
 
-        if(dadosAcademia){
+        if (dadosAcademia) {
 
             dadosAcademiasJSON.status = message.SUCCESS_REQUEST.status
             dadosAcademiasJSON.message = message.SUCCESS_REQUEST.message
@@ -51,16 +73,16 @@ const getAcademiaById = async function (idAcademia){
     }
 }
 
-const getAcademiaByName = async function(nomeAcademia){
+const getAcademiaByName = async function (nomeAcademia) {
     let dadosAcademiasJSON = {}
 
-    if(nomeAcademia == '' || nomeAcademia == undefined || !isNaN(nomeAcademia)){
+    if (nomeAcademia == '' || nomeAcademia == undefined || !isNaN(nomeAcademia)) {
         return message.ERROR_INVALID_NAME
     } else {
 
         let dadosAcademia = await academiaDAO.selectAcademiaByName(nomeAcademia)
 
-        if(dadosAcademia){
+        if (dadosAcademia) {
 
             dadosAcademiasJSON.status = message.SUCCESS_REQUEST.status
             dadosAcademiasJSON.message = message.SUCCESS_REQUEST.message
@@ -73,16 +95,16 @@ const getAcademiaByName = async function(nomeAcademia){
 
     }
 }
-const getAcademiaByEmail = async function(emailAcademia){
+const getAcademiaByEmail = async function (emailAcademia) {
     let dadosAcademiaJSON = {}
 
-    if(emailAcademia == '' || emailAcademia == undefined || emailAcademia.length > 250){
+    if (emailAcademia == '' || emailAcademia == undefined || emailAcademia.length > 250) {
         return message.ERROR_INVALID_EMAIL
     } else {
 
         let dadosAcademia = await academiaDAO.selectAcademiaByEmail(emailAcademia)
 
-        if(dadosAcademia){
+        if (dadosAcademia) {
 
             dadosAcademiaJSON.status = message.SUCCESS_REQUEST.status
             dadosAcademiaJSON.message = message.SUCCESS_REQUEST.message
@@ -94,7 +116,7 @@ const getAcademiaByEmail = async function(emailAcademia){
         }
     }
 }
-const inserirAcademia = async function(dadosAcademia){
+const inserirAcademia = async function (dadosAcademia) {
 
     //Verifica se o atributo veio undefined ou se não foi digitado, se sim, define como "null",
     //se não, adiciona aspas. No DAO, o atributo não contém aspas ao ser inserido, pois pode ser nulo, e se for nulo, não vai aspas.
@@ -133,42 +155,42 @@ const inserirAcademia = async function(dadosAcademia){
     //        return message.ERROR_REQUIRED_FIELDS
     //    } else {
 
-            let resultadoDadosAcademia = await academiaDAO.insertAcademia(dadosAcademia)
+    let resultadoDadosAcademia = await academiaDAO.insertAcademia(dadosAcademia)
 
 
-            if(resultadoDadosAcademia){
-                let novaAcademia = await academiaDAO.selectLastId()
+    if (resultadoDadosAcademia) {
+        let novaAcademia = await academiaDAO.selectLastId()
 
-                let dadosAcademiaJSON = {}
+        let dadosAcademiaJSON = {}
 
-                dadosAcademiaJSON.status = message.SUCCESS_CREATE_ITEM.status
-                dadosAcademiaJSON.message = message.SUCCESS_CREATE_ITEM.message
-                dadosAcademiaJSON.academia = novaAcademia
+        dadosAcademiaJSON.status = message.SUCCESS_CREATE_ITEM.status
+        dadosAcademiaJSON.message = message.SUCCESS_CREATE_ITEM.message
+        dadosAcademiaJSON.academia = novaAcademia
 
-                return dadosAcademiaJSON
-            } else {
-                return message.ERROR_INTERNAL_SERVER
-            }
-       // }
+        return dadosAcademiaJSON
+    } else {
+        return message.ERROR_INTERNAL_SERVER
+    }
+    // }
 }
 
-const atualizarAcademia = async function (dadosAcademia, idAcademia){
+const atualizarAcademia = async function (dadosAcademia, idAcademia) {
 
     //Verifica se o atributo veio undefined ou se não foi digitado, se sim, define como "null",
     //se não, adiciona aspas. No DAO, o atributo não contém aspas ao ser inserido, pois pode ser nulo, e se for nulo, não vai aspas.
-    if(dadosAcademia.facebook == undefined || dadosAcademia.facebook == ''){
+    if (dadosAcademia.facebook == undefined || dadosAcademia.facebook == '') {
         dadosAcademia.facebook = null
     } else {
         dadosAcademia.facebook = "'" + dadosAcademia.facebook + "'"
     }
 
-    if(dadosAcademia.whatsapp == undefined || dadosAcademia.whatsapp == ''){
+    if (dadosAcademia.whatsapp == undefined || dadosAcademia.whatsapp == '') {
         dadosAcademia.whatsapp = null
     } else {
         dadosAcademia.whatsapp = "'" + dadosAcademia.whatsapp + "'"
     }
 
-    if(dadosAcademia.instagram == undefined || dadosAcademia.instagram == ''){
+    if (dadosAcademia.instagram == undefined || dadosAcademia.instagram == '') {
         dadosAcademia.instagram = null
     } else {
         dadosAcademia.instagram = "'" + dadosAcademia.instagram + "'"
@@ -176,7 +198,7 @@ const atualizarAcademia = async function (dadosAcademia, idAcademia){
 
     // Validação para tratar campos obrigatórios e caracteres
 
-    if( dadosAcademia.nome == '' || dadosAcademia == undefined || !isNaN(dadosAcademia.nome ||
+    if (dadosAcademia.nome == '' || dadosAcademia == undefined || !isNaN(dadosAcademia.nome ||
         dadosAcademia.email == '' || dadosAcademia.email == undefined || dadosAcademia.email.length > 250 ||
         dadosAcademia.senha == '' || dadosAcademia.senha == undefined || dadosAcademia.senha.length < 12 ||
         dadosAcademia.telefone == '' || dadosAcademia.telefone == undefined || dadosAcademia.telefone.length > 11 ||
@@ -187,52 +209,52 @@ const atualizarAcademia = async function (dadosAcademia, idAcademia){
         dadosAcademia.cor_secundaria == '' || dadosAcademia.cor_secundaria == undefined ||
         dadosAcademia.data_abertura == '' || dadosAcademia.data_abertura == undefined ||
         dadosAcademia.razao_social == '' || dadosAcademia.razao_social == undefined || !isNaN(dadosAcademia.razao_social)
-        )){
+    )) {
 
-            return message.ERROR_REQUIRED_FIELDS
+        return message.ERROR_REQUIRED_FIELDS
 
-        } else if (idAcademia == '' || idAcademia == undefined || isNaN(idAcademia)){
+    } else if (idAcademia == '' || idAcademia == undefined || isNaN(idAcademia)) {
 
-            return message.ERROR_INVALID_ID
+        return message.ERROR_INVALID_ID
 
-        } else {
-            dadosAcademia.id = idAcademia
+    } else {
+        dadosAcademia.id = idAcademia
 
-            let statusId = await academiaDAO.selectAcademiaById(idAcademia)
+        let statusId = await academiaDAO.selectAcademiaById(idAcademia)
 
-            if(statusId){
-                let resultadoDadosAcademia = await academiaDAO.updateAcademia(dadosAcademia)
+        if (statusId) {
+            let resultadoDadosAcademia = await academiaDAO.updateAcademia(dadosAcademia)
 
-                if(resultadoDadosAcademia){
-                    let dadosAcademiaJSON = {}
+            if (resultadoDadosAcademia) {
+                let dadosAcademiaJSON = {}
 
-                    dadosAcademiaJSON.status = message.SUCCESS_UPDATE_ITEM.status
-                    dadosAcademiaJSON.message = message.SUCCESS_UPDATE_ITEM.message
-                    dadosAcademiaJSON.academia = dadosAcademia
+                dadosAcademiaJSON.status = message.SUCCESS_UPDATE_ITEM.status
+                dadosAcademiaJSON.message = message.SUCCESS_UPDATE_ITEM.message
+                dadosAcademiaJSON.academia = dadosAcademia
 
-                    return dadosAcademiaJSON
-                } else {
-                    return message.ERROR_INTERNAL_SERVER
-                }
+                return dadosAcademiaJSON
             } else {
-                return message.ERROR_ID_NOT_FOUND
+                return message.ERROR_INTERNAL_SERVER
             }
+        } else {
+            return message.ERROR_ID_NOT_FOUND
         }
+    }
 }
 
-const deletarAcademia = async function (idAcademia){
+const deletarAcademia = async function (idAcademia) {
 
-    if(idAcademia == '' || idAcademia == undefined || isNaN(idAcademia)){
+    if (idAcademia == '' || idAcademia == undefined || isNaN(idAcademia)) {
         return message.ERROR_INVALID_ID
     } else {
 
         let statusId = await academiaDAO.selectAcademiaById(idAcademia)
 
-        if(statusId){
+        if (statusId) {
 
             let resultadoDadosAcademia = await academiaDAO.deleteAcademia(idAcademia)
 
-            if(resultadoDadosAcademia){
+            if (resultadoDadosAcademia) {
                 return message.SUCCESS_DELETE_ITEM
             } else {
                 return message.ERROR_INTERNAL_SERVER
@@ -242,22 +264,79 @@ const deletarAcademia = async function (idAcademia){
         }
     }
 }
-const autenticarAcademia = async function(dadosAcademia){
+const autenticarAcademia = async function (dadosAcademia) {
     const dados = await academiaDAO.selectAcademiaByPassword(dadosAcademia)
-   
+
     const jwt = require('../middleware/jwtAcademia.js')
 
-    if(dados){
+    if (dados) {
         let tokenUser = await jwt.createJWT(dados.id)
         dados[0].token = tokenUser
 
         return dados[0]
 
     } else {
-        return message.ERROR_UNAUTHORIZED   
+        return message.ERROR_UNAUTHORIZED
     }
 }
 
+// const esqueciASenha = async function(dadosAcademia){
+//     let academia = await academiaDAO.selectAcademiaByEmail(dadosAcademia.email)
+//     const token = crypto.randomBytes(20).toString('hex')
+
+//     const now = new Date()
+//     now.setHours(now.getHours() + 1)
+
+//     console.log(now, token);
+
+//     mailer.sendMail({
+//         to: dadosAcademia.email,
+//         from: 'kaloscorporation@gmail.com',
+//         template: 'auth/forgot_password',
+//         context: { token }
+//     }, (err) => {
+//        if(err){
+//             return message.ERROR_INTERNAL_SERVER
+//        } else {
+//             return message.SUCCESS_REQUEST
+//        }
+//     })
+// }
+
+const esqueciASenha = async function (dadosAcademia) {
+    var academia = await academiaDAO.selectAcademiaByEmail(dadosAcademia.email)
+
+    if (academia != false) {
+        const token = crypto.randomInt(10000, 99999)
+
+        const mailSent = transporter.sendMail({
+            text: `Aqui está seu token de recuperação de senha: ${token}`,
+            subject: 'Recuperação de conta.',
+            from: 'Kalos Corporation <kaloscorporation@gmail.com>',
+            to: dadosAcademia.email
+        })
+
+        if (mailSent) {
+            return message.SUCCESS_REQUEST
+        } else {
+            return message.ERROR_INTERNAL_SERVER
+        }
+
+        
+    } else {
+        return message.ERROR_NOT_FOUND
+    }
+
+
+}
+
+const redefinirSenha = async function (dadosAcademia){
+    var academia = await academiaDAO.selectAcademiaByEmail(dadosAcademia.email)
+
+    if (academia != false){
+
+    }
+}
 
 module.exports = {
     autenticarAcademia,
@@ -267,5 +346,6 @@ module.exports = {
     inserirAcademia,
     atualizarAcademia,
     deletarAcademia,
-    getAcademiaByEmail
+    getAcademiaByEmail,
+    esqueciASenha
 }

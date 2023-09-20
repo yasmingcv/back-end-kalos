@@ -125,14 +125,19 @@ const verifyJWTAluno = async function (request, response, next) {
     }
 }
 
-//app.post('/kalos/esqueci_senha/academia', bodyParserJSON, cors(), async function(request, response){
- //   const body = request.body
-//
- //   const resposta = await controllerAcademia.esqueciASenha(body)
+app.post('/kalos/academia/esqueci_senha', bodyParserJSON, cors(), async function(request, response){
+   const body = request.body
 
-   // response.json(resposta)
-  //  response.status(resposta.status)
-//})
+   var resposta = await controllerAcademia.esqueciASenha(body)
+   console.log(resposta);
+
+   response.json(resposta)
+   response.status(resposta.status)
+})
+
+app.post('/kalos/academia/redefinir_senha', bodyParserJSON, cors(), async function(request, response){
+    const body = request.body
+})
 
 app.get('/kalos/academia', cors(), async function (request, response){
     let dadosAcademias = await controllerAcademia.getAcademias()
