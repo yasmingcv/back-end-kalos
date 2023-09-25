@@ -44,6 +44,7 @@ const getAlunoById = async function(idAluno){
             dadosAlunosJSON.status = message.SUCCESS_REQUEST.status
             dadosAlunosJSON.message = message.SUCCESS_REQUEST.message
             dadosAlunosJSON.aluno = dadosAluno
+            dadosAlunosJSON.codigo = idAluno + 10000
 
             return dadosAlunosJSON
         } else{
