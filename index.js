@@ -135,7 +135,7 @@ app.post('/kalos/academia/esqueci_senha', bodyParserJSON, cors(), async function
    response.status(resposta.status)
 })
 
-app.post('/kalos/academia/redefinir_senha', bodyParserJSON, cors(), async function(request, response){
+app.post('/kalos/academia/validar_senha', bodyParserJSON, cors(), async function(request, response){
     const body = request.body
 })
 
