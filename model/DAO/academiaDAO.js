@@ -228,8 +228,36 @@ const selectAcademiaByEmail = async function (email){
     }
 }
 
-const updatePassword = async function(idAcademia, novaSenha){
-    let sql = `update tbl_academia set senha = '${novaSenha}' where id = ${idAcademia}`
+const updateTokenAndExpiresByEmail = async function (email, token, expires){
+    let sql = `update tbl_academia set 
+        token = '${token}',
+        expiracao_token = '${expires}'
+        
+        where tbl_academia.email = '${email}'`
+
+    let resultStatus = await prisma.$queryRawUnsafe(sql)
+
+    if(resultStatus){
+        return true
+    } else {
+        return false
+    }
+}
+
+const selectAcademiaByTokenAndEmail = async function (email, token){
+    let sql = `select * from tbl_academia where email = '${email}' and token = '${token}'`
+
+    let rsAcademia = await prisma.$queryRawUnsafe(sql)
+
+    if(rsAcademia){
+        return rsAcademia
+    } else {
+        return false
+    }
+}
+
+const updatePassword = async function(emailAcademia, novaSenha){
+    let sql = `update tbl_academia set senha = '${novaSenha}' where id = ${emailAcademia}`
 
     let rsAcademia = await prisma.$queryRawUnsafe(sql)
 
@@ -252,5 +280,7 @@ module.exports = {
     selectLastId,
     selectAcademiaByName,
     selectAcademiaByEmail,
-    updatePassword
+    updatePassword,
+    updateTokenAndExpiresByEmail,
+    selectAcademiaByTokenAndEmail
 }

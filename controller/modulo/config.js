@@ -26,7 +26,7 @@ const ERROR_INVALID_NAME = {
 const ERROR_EXISTING_REGISTER = {
   status: 409,
   message:
-    "Já existe um registro com o id informado.",
+    "Já existe um registro com os dados informados.",
 };
 
 const ERROR_INVALID_EMAIL = {
@@ -75,6 +75,12 @@ const ERROR_UNAUTHORIZED = {
     "Não autorizado",
 };
 
+const ERROR_INVALID_TOKEN = {
+  status: 401,
+  message:
+    "A stoken informado não é válido ou atingiu o tempo de expiração. Tente novamente.",
+};
+
 /********************* MENSAGENS DE SUCESSO ********************/
 const SUCCESS_CREATE_ITEM   = {status:201, message: 'Item criado com sucesso.'}
 
@@ -107,5 +113,6 @@ module.exports = {
     SUCCESS_REQUEST,
     ERROR_UNAUTHORIZED,
     ERROR_INVALID_EMAIL,
-    ERROR_EXISTING_REGISTER
+    ERROR_EXISTING_REGISTER,
+    ERROR_INVALID_TOKEN
 }
