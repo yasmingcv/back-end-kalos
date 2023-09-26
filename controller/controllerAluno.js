@@ -30,8 +30,7 @@ const getAlunos = async function(){
 
 // Retorna um aluno específico de acordo com o ID
 const getAlunoById = async function(idAluno){
-    
-    idAluno = Number
+
     let dadosAlunosJSON = {}
     
 
@@ -45,7 +44,6 @@ const getAlunoById = async function(idAluno){
 
             dadosAlunosJSON.status = message.SUCCESS_REQUEST.status
             dadosAlunosJSON.message = message.SUCCESS_REQUEST.message
-            dadosAlunosJSON.codigo = idAluno + 10000
             dadosAlunosJSON.aluno = dadosAluno
             
 
