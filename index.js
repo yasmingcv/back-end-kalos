@@ -125,18 +125,24 @@ const verifyJWTAluno = async function (request, response, next) {
     }
 }
 
+// Envia o e-mail com código de redefinição de senha
 app.post('/kalos/academia/esqueci_senha', bodyParserJSON, cors(), async function(request, response){
    const body = request.body
 
    var resposta = await controllerAcademia.esqueciASenha(body)
-   console.log(resposta);
 
    response.json(resposta)
    response.status(resposta.status)
 })
 
-app.post('/kalos/academia/validar_senha', bodyParserJSON, cors(), async function(request, response){
+// Valida o código de recuperação do usuário (que foi enviado)
+app.post('/kalos/academia/validar_token', bodyParserJSON, cors(), async function(request, response){
     const body = request.body
+
+    var rsAcademia = await controllerAcademia.verificarToken(body)
+
+    response.json(rsAcademia)
+    response.status(rsAcademia.status)
 })
 
 app.get('/kalos/academia', cors(), async function (request, response){
@@ -237,6 +243,8 @@ app.delete('/kalos/academia/id/:id', cors(), async function(request, response){
     response.json(dadosAcademia)
     
 })
+
+// Autentica uma academia por email e senha
 app.post('/kalos/academia/autenticar', cors(), bodyParserJSON, async function(request, response){
     let contentType = request.headers['content-type']
     

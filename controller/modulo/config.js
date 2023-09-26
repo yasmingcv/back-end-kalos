@@ -78,7 +78,7 @@ const ERROR_UNAUTHORIZED = {
 const ERROR_INVALID_TOKEN = {
   status: 401,
   message:
-    "A stoken informado não é válido ou atingiu o tempo de expiração. Tente novamente.",
+    "O token informado não é válido ou atingiu o tempo de expiração.",
 };
 
 /********************* MENSAGENS DE SUCESSO ********************/

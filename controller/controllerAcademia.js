@@ -313,11 +313,13 @@ const autenticarAcademia = async function (dadosAcademia) {
 const esqueciASenha = async function (dadosAcademia) {
     var academia = await academiaDAO.selectAcademiaByEmail(dadosAcademia.email)
 
+    //Verifica se o email é cadastrado na tabela de academias
     if (academia != false) {
         const timeZone = 'America/Sao_Paulo'
         const now = DateTime.now().setZone(timeZone)
 
-        const expires = now.plus({minutes:30}).toFormat('yyyy-MM-dd HH:mm:ss')
+        //Adiciona meia hora ao tempo atual para definir o tempo de expiração no banco
+        const expires = now.plus({ minutes: 30 }).toFormat('yyyy-MM-dd HH:mm:ss')
         const token = crypto.randomInt(10000, 99999)
 
         const mailSent = transporter.sendMail({
@@ -329,9 +331,6 @@ const esqueciASenha = async function (dadosAcademia) {
 
         if (mailSent) {
             await academiaDAO.updateTokenAndExpiresByEmail(dadosAcademia.email, token, expires)
-
-            dadosAcademia.token = token
-            verificarToken(dadosAcademia)
 
             return message.SUCCESS_REQUEST
         } else {
@@ -346,24 +345,33 @@ const esqueciASenha = async function (dadosAcademia) {
 
 }
 
-const verificarToken = async function (dadosAcademia) { // PAREI NA FORMATACAO DA DATA, NO IF PRA COMPARAR . LEMBRE DE TIRAR O CHAMADO DESSA FUNCAO DA FUNCAO DE CIMA ˆ
-    if (dadosAcademia.token == undefined || dadosAcademia.token == null  ||
+const verificarToken = async function (dadosAcademia) {
+    if (dadosAcademia.token == undefined || dadosAcademia.token == null ||
         dadosAcademia.email == undefined || dadosAcademia.email == null || !isNaN(dadosAcademia.email)) {
         return message.ERROR_REQUIRED_FIELDS
+
     } else {
-        let academia = await academiaDAO.selectAcademiaByTokenAndEmail(dadosAcademia.email, dadosAcademia.token)
-        const timeZone = 'America/Sao_Paulo'
-        const now = DateTime.now().setZone(timeZone)
-        const nowFormatted = now.toFormat('yyyy-MM-dd HH:mm:ss')
+        let rsAcademia = await academiaDAO.selectAcademiaByTokenAndEmail(dadosAcademia.email, dadosAcademia.token)
 
-        const dataExpiracaoFormatada = new Date(academia[0].expiracao_token).toISOString().replace('T', ' ').replace(/\.\d{3}Z$/, '')
+        if (rsAcademia) {
+            const timeZone = 'America/Sao_Paulo'
+            const dataAtual = DateTime.now().setZone(timeZone).toFormat('yyyy-MM-dd HH:mm:ss')
+    
+            const dataExpiracao = new Date(rsAcademia[0].expiracao_token).toISOString().replace('T', ' ').replace(/\.\d{3}Z$/, '')
 
-        if (dataExpiracaoFormatada < nowFormatted) {
-            console.log('tudo errado smt');
-            return message.ERROR_INVALID_TOKEN
+            //Verifica se a data de expiração é maior que a data atual. Se for, o token ainda é válido, se não, o token é invalido
+            if (dataExpiracao > dataAtual) {
+                return message.SUCCESS_REQUEST
+
+            } else {
+                return message.ERROR_INVALID_TOKEN
+
+            }
         } else {
-            console.log('tudo certo tmjt');
+            return message.ERROR_INVALID_TOKEN
+
         }
+        
     }
 }
 
@@ -384,5 +392,6 @@ module.exports = {
     atualizarAcademia,
     deletarAcademia,
     getAcademiaByEmail,
-    esqueciASenha
+    esqueciASenha,
+    verificarToken
 }
