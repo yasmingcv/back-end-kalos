@@ -30,8 +30,10 @@ const getAlunos = async function(){
 
 // Retorna um aluno específico de acordo com o ID
 const getAlunoById = async function(idAluno){
-
+    
+    idAluno = Number
     let dadosAlunosJSON = {}
+    
 
     if(idAluno == '' || idAluno == undefined || isNaN(idAluno)){
         return message.ERROR_INVALID_ID
@@ -43,8 +45,9 @@ const getAlunoById = async function(idAluno){
 
             dadosAlunosJSON.status = message.SUCCESS_REQUEST.status
             dadosAlunosJSON.message = message.SUCCESS_REQUEST.message
-            dadosAlunosJSON.aluno = dadosAluno
             dadosAlunosJSON.codigo = idAluno + 10000
+            dadosAlunosJSON.aluno = dadosAluno
+            
 
             return dadosAlunosJSON
         } else{

@@ -733,7 +733,70 @@ app.put('/kalos/alunoAcademia/id/:id', cors(), async function(request, response)
 })
 
 
+/******************************************* ENDPOINTs EXERCICIO ********************************************/
 
+app.get('/kalos/exercicio/idAcademia/:idAcademia', cors(), async function(request, response){
+
+    let idAcademia = request.params.idAcademia
+
+    let dadosExercicio = await controllerExercicio.getExercicios(idAcademia)
+
+    response.status(dadosExercicio.status)
+    response.json(dadosExercicio)
+})
+
+app.get('/kalos/exercicio/id/:id', cors(), async function(request, response){
+
+    let idExercicio = request.params.id
+
+    let dadosExercicio = await controllerExercicio.getExercicioByID(idExercicio)
+
+    response.status(dadosExercicio.status)
+    response.json(dadosExercicio)
+
+})
+
+app.post('/kalos/exercicio', cors(), bodyParserJSON, async function(request, response){
+
+    let contentType = request.headers['content-type']
+
+    // validacao para receber em formato json
+    if(String(contentType).toLowerCase() == 'application/json'){
+
+        let dadosBody = request.body
+
+        let resultadoDadosExercicio = await controllerExercicio.inserirExercicio(dadosBody)
+
+        response.status(resultadoDadosExercicio.status)
+        response.json(resultadoDadosExercicio)
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
+    }
+})
+
+app.put('/kalos/exercicio/id/:id', cors(), bodyParserJSON, async function(request, response){
+
+     let dadosBody = request.body
+
+    let idExercicio = request.params.id
+
+    let resultadoExercicio = await controllerExercicio.atualizarExercicio(dadosBody, idExercicio)
+
+    response.status(resultadoExercicio.status)
+    response.json(resultadoExercicio)
+    
+})
+
+app.delete('/kalos/exercicio/id/:id', cors(), async function(request, response){
+
+    let idExercicio = request.params.id
+
+    let dadosExercicio = await controllerExercicio.deletarExercicio(idExercicio)
+
+    response.status(dadosExercicio.status)
+    response.json(dadosExercicio)
+})
 
 
 
