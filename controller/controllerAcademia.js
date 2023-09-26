@@ -317,7 +317,7 @@ const esqueciASenha = async function (dadosAcademia) {
         const timeZone = 'America/Sao_Paulo'
         const now = DateTime.now().setZone(timeZone)
 
-        const expires = now.toFormat('yyyy-MM-dd HH:mm:ss')
+        const expires = now.plus({minutes:30}).toFormat('yyyy-MM-dd HH:mm:ss')
         const token = crypto.randomInt(10000, 99999)
 
         const mailSent = transporter.sendMail({
@@ -357,8 +357,6 @@ const verificarToken = async function (dadosAcademia) { // PAREI NA FORMATACAO D
         const nowFormatted = now.toFormat('yyyy-MM-dd HH:mm:ss')
 
         const dataExpiracaoFormatada = new Date(academia[0].expiracao_token).toISOString().replace('T', ' ').replace(/\.\d{3}Z$/, '')
-
-        console.log(dataExpiracaoFormatada, nowFormatted, academia)
 
         if (dataExpiracaoFormatada < nowFormatted) {
             console.log('tudo errado smt');
