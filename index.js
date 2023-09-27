@@ -145,6 +145,17 @@ app.post('/kalos/academia/validar_token', bodyParserJSON, cors(), async function
     response.status(rsAcademia.status)
 })
 
+// Atualiza a senha
+app.post('/kalos/academia/redefinir_senha', bodyParserJSON, cors(), async function(request, response){
+    const body = request.body
+
+    var rsAcademia = await controllerAcademia.redefinirSenha(body)
+
+    response.json(rsAcademia)
+    response.status(rsAcademia.status)
+})
+
+// Retorna todas as academia existentes
 app.get('/kalos/academia', cors(), async function (request, response){
     let dadosAcademias = await controllerAcademia.getAcademias()
 
@@ -163,6 +174,7 @@ app.get('/kalos/academia/id/:id', cors(), async function(request, response){
     response.json(dadosAcademia)
 
 })
+
 
 // retorna uma academia pelo EMAIL
 app.get('/kalos/academia/email/:email', cors(), async function(request, response){

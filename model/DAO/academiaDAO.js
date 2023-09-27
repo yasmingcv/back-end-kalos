@@ -257,7 +257,7 @@ const selectAcademiaByTokenAndEmail = async function (email, token){
 }
 
 const updatePassword = async function(emailAcademia, novaSenha){
-    let sql = `update tbl_academia set senha = '${novaSenha}' where email = ${emailAcademia}`
+    let sql = `update tbl_academia set senha = '${novaSenha}' where email = '${emailAcademia}'`
 
     let rsAcademia = await prisma.$queryRawUnsafe(sql)
 
