@@ -271,6 +271,7 @@ const deletarAcademia = async function (idAcademia) {
         }
     }
 }
+
 const autenticarAcademia = async function (dadosAcademia) {
     const dados = await academiaDAO.selectAcademiaByPassword(dadosAcademia)
 
@@ -278,60 +279,50 @@ const autenticarAcademia = async function (dadosAcademia) {
 
     if (dados) {
         let tokenUser = await jwt.createJWT(dados.id)
-        dados[0].token = tokenUser
+        dados[0].token_jwt = tokenUser
 
-        return dados[0]
+        let dadosAcademiaJSON = {}
+        dadosAcademiaJSON.status = message.SUCCESS_REQUEST.status
+        dadosAcademiaJSON.message = message.SUCCESS_REQUEST.message
+        dadosAcademiaJSON.academia = dados[0]
+
+        return dadosAcademiaJSON
 
     } else {
         return message.ERROR_UNAUTHORIZED
     }
 }
 
-// const esqueciASenha = async function(dadosAcademia){
-//     let academia = await academiaDAO.selectAcademiaByEmail(dadosAcademia.email)
-//     const token = crypto.randomBytes(20).toString('hex')
-
-//     const now = new Date()
-//     now.setHours(now.getHours() + 1)
-
-//     console.log(now, token);
-
-//     mailer.sendMail({
-//         to: dadosAcademia.email,
-//         from: 'kaloscorporation@gmail.com',
-//         template: 'auth/forgot_password',
-//         context: { token }
-//     }, (err) => {
-//        if(err){
-//             return message.ERROR_INTERNAL_SERVER
-//        } else {
-//             return message.SUCCESS_REQUEST
-//        }
-//     })
-// }
-
+//Envia para o email informado o token para redefinição de senha
 const esqueciASenha = async function (dadosAcademia) {
     var academia = await academiaDAO.selectAcademiaByEmail(dadosAcademia.email)
 
+    //Verifica se o email é cadastrado na tabela de academias
     if (academia != false) {
         const timeZone = 'America/Sao_Paulo'
         const now = DateTime.now().setZone(timeZone)
 
-        const expires = now.plus({minutes:30}).toFormat('yyyy-MM-dd HH:mm:ss')
+        //Adiciona meia hora ao tempo atual para definir o tempo de expiração no banco
+        const expires = now.plus({ minutes: 30 }).toFormat('yyyy-MM-dd HH:mm:ss')
         const token = crypto.randomInt(10000, 99999)
 
         const mailSent = transporter.sendMail({
-            text: `Aqui está seu token de recuperação de senha: ${token}`,
-            subject: 'Recuperação de conta.',
+            html: `
+                <p>Olá,</p>
+                <p>Recebemos uma solicitação para redefinir a senha da sua conta na Kalos Corporation. Para concluir o processo de recuperação de senha, utilize o código de verificação abaixo:</p>
+                <p><strong>Código de Verificação: ${token}</strong></p>
+                <p>Este código é válido por 30 minutos. Por favor, não compartilhe com ninguém por motivos de segurança.</p>
+                <p>Se você não solicitou esta recuperação de senha, ignore este e-mail.</p>
+                <p>Caso tenha alguma dúvida ou precise de assistência, não hesite em nos contatar através deste e-mail.</p>
+                <p>Atenciosamente,<br>Equipe de Suporte Kalos Corporation</p>
+            `,
+            subject: 'Recuperação de conta - Kalos Corporation',
             from: 'Kalos Corporation <kaloscorporation@gmail.com>',
             to: dadosAcademia.email
         })
 
         if (mailSent) {
             await academiaDAO.updateTokenAndExpiresByEmail(dadosAcademia.email, token, expires)
-
-            dadosAcademia.token = token
-            verificarToken(dadosAcademia)
 
             return message.SUCCESS_REQUEST
         } else {
@@ -346,33 +337,64 @@ const esqueciASenha = async function (dadosAcademia) {
 
 }
 
-const verificarToken = async function (dadosAcademia) { // PAREI NA FORMATACAO DA DATA, NO IF PRA COMPARAR . LEMBRE DE TIRAR O CHAMADO DESSA FUNCAO DA FUNCAO DE CIMA ˆ
-    if (dadosAcademia.token == undefined || dadosAcademia.token == null  ||
+//Verifica se o token informado é válido
+const verificarToken = async function (dadosAcademia) {
+    if (dadosAcademia.token == undefined || dadosAcademia.token == null ||
         dadosAcademia.email == undefined || dadosAcademia.email == null || !isNaN(dadosAcademia.email)) {
         return message.ERROR_REQUIRED_FIELDS
+
     } else {
-        let academia = await academiaDAO.selectAcademiaByTokenAndEmail(dadosAcademia.email, dadosAcademia.token)
-        const timeZone = 'America/Sao_Paulo'
-        const now = DateTime.now().setZone(timeZone)
-        const nowFormatted = now.toFormat('yyyy-MM-dd HH:mm:ss')
+        let rsAcademia = await academiaDAO.selectAcademiaByTokenAndEmail(dadosAcademia.email, dadosAcademia.token)
 
-        const dataExpiracaoFormatada = new Date(academia[0].expiracao_token).toISOString().replace('T', ' ').replace(/\.\d{3}Z$/, '')
+        if (rsAcademia) {
+            const timeZone = 'America/Sao_Paulo'
+            const dataAtual = DateTime.now().setZone(timeZone).toFormat('yyyy-MM-dd HH:mm:ss')
 
-        if (dataExpiracaoFormatada < nowFormatted) {
-            console.log('tudo errado smt');
-            return message.ERROR_INVALID_TOKEN
+            const dataExpiracao = new Date(rsAcademia[0].expiracao_token).toISOString().replace('T', ' ').replace(/\.\d{3}Z$/, '')
+
+            //Verifica se a data de expiração é maior que a data atual. Se for, o token ainda é válido, se não, o token é invalido
+            if (dataExpiracao > dataAtual) {
+                return message.SUCCESS_REQUEST
+
+            } else {
+                return message.ERROR_INVALID_TOKEN
+
+            }
         } else {
-            console.log('tudo certo tmjt');
+            return message.ERROR_INVALID_TOKEN
+
         }
+
     }
 }
 
+//Redefine a senha
 const redefinirSenha = async function (dadosAcademia) {
-    var academia = await academiaDAO.selectAcademiaByEmail(dadosAcademia.email)
 
-    if (academia != false) {
+    if (dadosAcademia.senha == undefined || dadosAcademia.senha == null ||
+        dadosAcademia.email == undefined || dadosAcademia.email == null || !isNaN(dadosAcademia.email)
+    ) {
+        return message.ERROR_REQUIRED_FIELDS
 
+    } else {
+        var academia = await academiaDAO.selectAcademiaByEmail(dadosAcademia.email)
+
+        //Verifica se o e-mail informado está cadastrado no banco
+        if (academia) {
+            var rsAtualizarSenha = await academiaDAO.updatePassword(dadosAcademia.email, dadosAcademia.senha)
+
+            if(rsAtualizarSenha){
+                return message.SUCCESS_UPDATE_ITEM
+            } else {
+                return message.ERROR_INTERNAL_SERVER
+            }
+
+        } else {
+            return message.ERROR_INVALID_EMAIL
+        }
     }
+
+
 }
 
 module.exports = {
@@ -384,5 +406,7 @@ module.exports = {
     atualizarAcademia,
     deletarAcademia,
     getAcademiaByEmail,
-    esqueciASenha
+    esqueciASenha,
+    verificarToken,
+    redefinirSenha
 }
