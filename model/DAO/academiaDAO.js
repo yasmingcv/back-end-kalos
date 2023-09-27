@@ -91,6 +91,52 @@ const selectAcademiaByName = async function(nomeAcademia){
         return false
 }
 
+const insertExercicio = async function(dadosExercicio){
+    let sql = `insert into tmp_tbl_exercicios_series_repeticoes (id_exercicio, id_serie, id_repeticao, duracao) values (${dadosExercicio.id_exercicio}, ${dadosExercicio.id_serie}, ${dadosExercicio.id_repeticao}, ${dadosExercicio.duracao})`
+
+
+    let rsTempExercicios = await prisma.$executeRawUnsafe(sql)
+
+    if(rsTempExercicios)
+        return rsTempExercicios
+    else
+        return false
+}
+
+const insertTreino = async function(dadosTreino){
+    let sqlCriaTempTable = `
+    create temporary table tmp_tbl_exercicios_series_repeticoes (
+        id_exercicio int,
+        id_serie int,
+        id_repeticao int,
+        duracao time
+    )`
+
+    await prisma.$executeRawUnsafe(sqlCriaTempTable)
+
+    for(const exercicio of dadosTreino.exercicios){
+        await insertExercicio(exercicio)
+    }
+
+    let sql = `call procInsertTreinoNivelCategoriaExercicios (
+                '${dadosTreino.nome}', 
+                '${dadosTreino.descricao}', 
+                '${dadosTreino.foto}', 
+                '${dadosTreino.data_criacao}', 
+                ${dadosTreino.id_nivel}, 
+                ${dadosTreino.id_categoria_treino}, 
+                ${dadosTreino.id_academia}
+            )`
+
+    let rsTreino = await prisma.$executeRawUnsafe(sql)
+
+    if(rsTreino){
+        return rsTreino
+    } else {
+        return false
+    }
+}
+
 const inserirTag = async function(tag){
     let sql = `insert into tmp_tbl_tags (id_tag) values (${tag})`
 
@@ -282,5 +328,6 @@ module.exports = {
     selectAcademiaByEmail,
     updatePassword,
     updateTokenAndExpiresByEmail,
-    selectAcademiaByTokenAndEmail
+    selectAcademiaByTokenAndEmail,
+    insertTreino
 }
