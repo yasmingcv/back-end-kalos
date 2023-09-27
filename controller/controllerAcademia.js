@@ -271,6 +271,7 @@ const deletarAcademia = async function (idAcademia) {
         }
     }
 }
+
 const autenticarAcademia = async function (dadosAcademia) {
     const dados = await academiaDAO.selectAcademiaByPassword(dadosAcademia)
 
@@ -278,38 +279,21 @@ const autenticarAcademia = async function (dadosAcademia) {
 
     if (dados) {
         let tokenUser = await jwt.createJWT(dados.id)
-        dados[0].token = tokenUser
+        dados[0].token_jwt = tokenUser
 
-        return dados[0]
+        let dadosAcademiaJSON = {}
+        dadosAcademiaJSON.status = message.SUCCESS_REQUEST.status
+        dadosAcademiaJSON.message = message.SUCCESS_REQUEST.message
+        dadosAcademiaJSON.academia = dados[0]
+
+        return dadosAcademiaJSON
 
     } else {
         return message.ERROR_UNAUTHORIZED
     }
 }
 
-// const esqueciASenha = async function(dadosAcademia){
-//     let academia = await academiaDAO.selectAcademiaByEmail(dadosAcademia.email)
-//     const token = crypto.randomBytes(20).toString('hex')
-
-//     const now = new Date()
-//     now.setHours(now.getHours() + 1)
-
-//     console.log(now, token);
-
-//     mailer.sendMail({
-//         to: dadosAcademia.email,
-//         from: 'kaloscorporation@gmail.com',
-//         template: 'auth/forgot_password',
-//         context: { token }
-//     }, (err) => {
-//        if(err){
-//             return message.ERROR_INTERNAL_SERVER
-//        } else {
-//             return message.SUCCESS_REQUEST
-//        }
-//     })
-// }
-
+//Envia para o email informado o token para redefinição de senha
 const esqueciASenha = async function (dadosAcademia) {
     var academia = await academiaDAO.selectAcademiaByEmail(dadosAcademia.email)
 
@@ -353,6 +337,7 @@ const esqueciASenha = async function (dadosAcademia) {
 
 }
 
+//Verifica se o token informado é válido
 const verificarToken = async function (dadosAcademia) {
     if (dadosAcademia.token == undefined || dadosAcademia.token == null ||
         dadosAcademia.email == undefined || dadosAcademia.email == null || !isNaN(dadosAcademia.email)) {
@@ -383,6 +368,7 @@ const verificarToken = async function (dadosAcademia) {
     }
 }
 
+//Redefine a senha
 const redefinirSenha = async function (dadosAcademia) {
 
     if (dadosAcademia.senha == undefined || dadosAcademia.senha == null ||

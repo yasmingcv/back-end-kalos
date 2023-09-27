@@ -264,7 +264,7 @@ app.post('/kalos/academia/autenticar', cors(), bodyParserJSON, async function(re
         let dadosBody = request.body
         let resultDadosAcademia = await controllerAcademia.autenticarAcademia(dadosBody)
 
-        response.status(200)
+        response.status(resultDadosAcademia.status)
         response.json(resultDadosAcademia)
 
     } else {
@@ -822,5 +822,5 @@ app.delete('/kalos/exercicio/id/:id', cors(), async function(request, response){
 
 
 app.listen(8080, function(){
-    console.log('console rodando')
+    console.log('Aguardando requisições na porta 8080')
 })
