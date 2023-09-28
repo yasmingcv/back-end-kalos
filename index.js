@@ -38,6 +38,7 @@ var controllerFuncionamento = require('./controller/controllerFuncionamento.js')
 var funcoesNodemailerAcademia = require('./nodemailer2.0/funcoes/academia.js')
 var funcoesNodemailerAluno = require('./nodemailer2.0/funcoes/aluno.js')
 var controllerTreino = require('./controller/controllerTreino.js')
+var controllerAlunoAcademia = require('./controller/controllerAlunoAcademia.js')
 
 
 //Define que os dados que irao chegar na requisição será no padrão JSON
@@ -762,7 +763,7 @@ app.post('/kalos/alunoAcademia', cors(), bodyParserJSON, async function(request,
     } else {
 
         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
-        response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
+        response.json(message.ERROR_INVALID_CONTENT_TYPEs)
 
     }
 
