@@ -22,6 +22,13 @@ const getAcademias = async function () {
         dadosAcademiasJSON.status = message.SUCCESS_REQUEST.status
         dadosAcademiasJSON.message = message.SUCCESS_REQUEST.message
         dadosAcademiasJSON.quantidade = dadosAcademia.length
+
+        for (const academia of dadosAcademia){
+            let tagsDasAcademias = await academiaDAO.selectAcademiaTags(academia.id)
+
+            academia.tags = tagsDasAcademias
+        }
+
         dadosAcademiasJSON.academias = dadosAcademia
 
         return dadosAcademiasJSON
@@ -42,13 +49,13 @@ const getAcademiaById = async function (idAcademia) {
 
         let tagsAcademia = await academiaDAO.selectAcademiaTags(idAcademia)
 
+        dadosAcademia.tags = tagsAcademia
+
         if (dadosAcademia) {
 
             dadosAcademiasJSON.status = message.SUCCESS_REQUEST.status
             dadosAcademiasJSON.message = message.SUCCESS_REQUEST.message
             dadosAcademiasJSON.academia = dadosAcademia
-            dadosAcademiasJSON.tags = tagsAcademia
-
             return dadosAcademiasJSON
         } else {
             return message.ERROR_NOT_FOUND
