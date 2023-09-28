@@ -37,26 +37,59 @@ const selectTreinoById = async function(idTreino){
         return false
 }
 
-// Insere um novo treino
-const insertTreino = async function(dadosTreino){
-    let sql = `insert into tbl_treino (
-        nome,
-        descricao,
-        foto,
-        data_criacao
-    ) values (
-        '${dadosTreino.nome}',
-        '${dadosTreino.descricao}',
-        '${dadosTreino.foto}',
-        CURDATE()
-    );`
+const insertExercicio = async function(dadosExercicio){
+    let sql = `insert into tmp_tbl_exercicios_series_repeticoes (id_exercicio, id_serie, id_repeticao, duracao) values 
+            (
+                ${dadosExercicio.id_exercicio}, 
+                ${dadosExercicio.id_serie}, 
+                ${dadosExercicio.id_repeticao}, 
+                ${dadosExercicio.duracao}
+                
+                )
+                `
 
-    let resultadoTreino = await prisma.$executeRawUnsafe(sql)
+    let rsTempExercicios = await prisma.$executeRawUnsafe(sql)
 
-    if(resultadoTreino)
-        return true
+    if(rsTempExercicios)
+        return rsTempExercicios
     else
         return false
+}
+
+const insertTreino = async function(dadosTreino){
+    let sqlCriaTempTable = `
+    create temporary table tmp_tbl_exercicios_series_repeticoes (
+        id_exercicio int,
+        id_serie int,
+        id_repeticao int,
+        duracao time
+    )`
+
+    await prisma.$executeRawUnsafe(sqlCriaTempTable)
+
+    for(const exercicio of dadosTreino.exercicios){
+        await insertExercicio(exercicio)
+    }
+
+    let sql = `call procInsertTreinoNivelCategoriaExercicios (
+                '${dadosTreino.nome}', 
+                '${dadosTreino.descricao}', 
+                '${dadosTreino.foto}', 
+                '${dadosTreino.data_criacao}', 
+                ${dadosTreino.id_nivel}, 
+                ${dadosTreino.id_categoria_treino}, 
+                ${dadosTreino.id_academia}
+            )`
+
+    let rsTreino = await prisma.$queryRawUnsafe(sql)
+
+    console.warn("rstreino",rsTreino);
+
+    if(rsTreino){
+        return rsTreino
+    } else {
+        return false
+    }
 }
 
 // Atualiza um treino

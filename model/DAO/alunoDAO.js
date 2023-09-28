@@ -16,10 +16,7 @@ var prisma = new PrismaClient()
 const selectAllAlunos = async function (){
 
     let sql = `
-    select  tbl_aluno.id, tbl_aluno.nome, tbl_aluno.data_nascimento, tbl_aluno.telefone,
-    tbl_aluno.email, tbl_aluno.foto, tbl_aluno.cpf, tbl_aluno.objetivo,
-    tbl_aluno.questao_condicao_medica, tbl_aluno.questao_lesoes, tbl_aluno.questao_medicamento,
-    tbl_aluno.peso, tbl_aluno.altura, tbl_genero.nome as genero
+    select  tbl_aluno.*, tbl_genero.nome as genero
 
     from tbl_aluno
         inner join tbl_genero
@@ -38,10 +35,7 @@ const selectAllAlunos = async function (){
 // Seleciona um aluno pelo seu id
 const selectAlunoById = async function(idAluno){
 
-    let sql = `select   tbl_aluno.id, tbl_aluno.nome, tbl_aluno.data_nascimento, tbl_aluno.telefone,
-    tbl_aluno.email, tbl_aluno.foto, tbl_aluno.cpf, tbl_aluno.objetivo,
-    tbl_aluno.questao_condicao_medica, tbl_aluno.questao_lesoes, tbl_aluno.questao_medicamento,
-    tbl_aluno.peso, tbl_aluno.altura, tbl_genero.nome as genero
+    let sql = `select   tbl_aluno.*, tbl_genero.nome as genero
     
     from tbl_aluno
         inner join tbl_genero
@@ -79,6 +73,34 @@ const selectAlunoByEmail = async function(emailAluno){
         return resultadoAluno[0]
     else
         return false
+}
+
+const updateTokenAndExpiresByEmail = async function (email, token, expires){
+    let sql = `update tbl_aluno set 
+        token = '${token}',
+        expiracao_token = '${expires}'
+        
+        where tbl_aluno.email = '${email}'`
+
+    let resultStatus = await prisma.$queryRawUnsafe(sql)
+
+    if(resultStatus){
+        return true
+    } else {
+        return false
+    }
+}
+
+const selectAlunoByTokenAndEmail = async function (email, token){
+    let sql = `select * from tbl_aluno where email = '${email}' and token = '${token}'`
+
+    let rsAluno = await prisma.$queryRawUnsafe(sql)
+
+    if(rsAluno.length > 0){
+        return rsAluno
+    } else {
+        return false
+    }
 }
 
 // Insert de dados do aluno
@@ -193,6 +215,18 @@ const selectAlunoByPassword = async function (dadosAluno){
     }
 }
 
+const updatePassword = async function(email, novaSenha){
+    let sql = `update tbl_aluno set senha = '${novaSenha}' where email = '${email}'`
+
+    let rsAluno = await prisma.$queryRawUnsafe(sql)
+
+    if(rsAluno){
+        return true
+    } else {
+        return false
+    }
+}
+
 module.exports = {
     selectAllAlunos,
     selectAlunoById,
@@ -202,5 +236,8 @@ module.exports = {
     deleteAluno,
     updateAluno,
     selectLastId,
-    selectAlunoByPassword
+    selectAlunoByPassword,
+    updateTokenAndExpiresByEmail,
+    selectAlunoByTokenAndEmail,
+    updatePassword
 }

@@ -10,28 +10,7 @@ var message = require('./modulo/config.js')
 
 var academiaDAO = require('../model/DAO/academiaDAO.js')
 
-const crypto = require('crypto')
-const { DateTime } = require('luxon');
 // const mailer = require('../nodemailer/mailer.js')
-
-//-----
-const SMTP_CONFIG = require('../nodemailer2.0/smtp.js')
-const nodemailer = require('nodemailer')
-const { text } = require('body-parser')
-const { log } = require('console')
-
-const transporter = nodemailer.createTransport({
-    host: SMTP_CONFIG.host,
-    port: SMTP_CONFIG.port,
-    secure: false,
-    auth: {
-        user: SMTP_CONFIG.user,
-        pass: SMTP_CONFIG.pass
-    },
-    tls: {
-        rejectUnauthorized: false
-    },
-})
 
 const getAcademias = async function () {
 
@@ -118,23 +97,6 @@ const getAcademiaByEmail = async function (emailAcademia) {
     }
 }
 
-const inserirTreino = async function (dadosTreino){
-    if(dadosTreino.nome == undefined || dadosTreino.nome == '' || dadosTreino.nome == null ||
-       dadosTreino.data_criacao == undefined || dadosTreino.data_criacao == null || dadosTreino.data_criacao == '' || 
-       isNaN(dadosTreino.id_nivel) || isNaN(dadosTreino.id_categoria_treino) || isNaN(dadosTreino.id_academia)
-    ) {
-        return message.ERROR_REQUIRED_FIELDS
-    } else {
-        dadosTreino.exercicios.forEach(exercicio => { //esse foreach ta no lugar errado
-            if(exercicio.id_exercicio == '' || isNaN(exercicio.id_exercicio) || exercicio.id_exercicio == undefined ||
-               exercicio.id_serie == '' || isNaN(exercicio.id_serie) || exercicio.id_serie == undefined ||           
-               exercicio.id_repeticao == '' || isNaN(exercicio.id_repeticao) || exercicio.id_repeticao == undefined            
-            ) {
-                return message.ERROR_REQUIRED_FIELDS
-            }
-        })
-    }
-}
 
 const inserirAcademia = async function (dadosAcademia) {
 
@@ -312,81 +274,6 @@ const autenticarAcademia = async function (dadosAcademia) {
     }
 }
 
-//Envia para o email informado o token para redefinição de senha
-const esqueciASenha = async function (dadosAcademia) {
-    var academia = await academiaDAO.selectAcademiaByEmail(dadosAcademia.email)
-
-    //Verifica se o email é cadastrado na tabela de academias
-    if (academia != false) {
-        const timeZone = 'America/Sao_Paulo'
-        const now = DateTime.now().setZone(timeZone)
-
-        //Adiciona meia hora ao tempo atual para definir o tempo de expiração no banco
-        const expires = now.plus({ minutes: 30 }).toFormat('yyyy-MM-dd HH:mm:ss')
-        const token = crypto.randomInt(10000, 99999)
-
-        const mailSent = transporter.sendMail({
-            html: `
-                <p>Olá,</p>
-                <p>Recebemos uma solicitação para redefinir a senha da sua conta na Kalos Corporation. Para concluir o processo de recuperação de senha, utilize o código de verificação abaixo:</p>
-                <p><strong>Código de Verificação: ${token}</strong></p>
-                <p>Este código é válido por 30 minutos. Por favor, não compartilhe com ninguém por motivos de segurança.</p>
-                <p>Se você não solicitou esta recuperação de senha, ignore este e-mail.</p>
-                <p>Caso tenha alguma dúvida ou precise de assistência, não hesite em nos contatar através deste e-mail.</p>
-                <p>Atenciosamente,<br>Equipe de Suporte Kalos Corporation</p>
-            `,
-            subject: 'Recuperação de conta - Kalos Corporation',
-            from: 'Kalos Corporation <kaloscorporation@gmail.com>',
-            to: dadosAcademia.email
-        })
-
-        if (mailSent) {
-            await academiaDAO.updateTokenAndExpiresByEmail(dadosAcademia.email, token, expires)
-
-            return message.SUCCESS_REQUEST
-        } else {
-            return message.ERROR_INTERNAL_SERVER
-        }
-
-
-
-    } else {
-        return message.ERROR_NOT_FOUND
-    }
-
-}
-
-//Verifica se o token informado é válido
-const verificarToken = async function (dadosAcademia) {
-    if (dadosAcademia.token == undefined || dadosAcademia.token == null ||
-        dadosAcademia.email == undefined || dadosAcademia.email == null || !isNaN(dadosAcademia.email)) {
-        return message.ERROR_REQUIRED_FIELDS
-
-    } else {
-        let rsAcademia = await academiaDAO.selectAcademiaByTokenAndEmail(dadosAcademia.email, dadosAcademia.token)
-
-        if (rsAcademia) {
-            const timeZone = 'America/Sao_Paulo'
-            const dataAtual = DateTime.now().setZone(timeZone).toFormat('yyyy-MM-dd HH:mm:ss')
-
-            const dataExpiracao = new Date(rsAcademia[0].expiracao_token).toISOString().replace('T', ' ').replace(/\.\d{3}Z$/, '')
-
-            //Verifica se a data de expiração é maior que a data atual. Se for, o token ainda é válido, se não, o token é invalido
-            if (dataExpiracao > dataAtual) {
-                return message.SUCCESS_REQUEST
-
-            } else {
-                return message.ERROR_INVALID_TOKEN
-
-            }
-        } else {
-            return message.ERROR_INVALID_TOKEN
-
-        }
-
-    }
-}
-
 //Redefine a senha
 const redefinirSenha = async function (dadosAcademia) {
 
@@ -402,7 +289,7 @@ const redefinirSenha = async function (dadosAcademia) {
         if (academia) {
             var rsAtualizarSenha = await academiaDAO.updatePassword(dadosAcademia.email, dadosAcademia.senha)
 
-            if(rsAtualizarSenha){
+            if (rsAtualizarSenha) {
                 return message.SUCCESS_UPDATE_ITEM
             } else {
                 return message.ERROR_INTERNAL_SERVER
@@ -425,7 +312,5 @@ module.exports = {
     atualizarAcademia,
     deletarAcademia,
     getAcademiaByEmail,
-    esqueciASenha,
-    verificarToken,
     redefinirSenha
 }
