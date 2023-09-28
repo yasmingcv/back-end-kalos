@@ -199,6 +199,18 @@ const selectLastId = async function(){
 
 }
 
+const selectLast5Alunos = async function(){
+    let sql = `select * from tbl_aluno order by id desc limit 5;`
+
+    let resultadoAluno = await prisma.$queryRawUnsafe(sql)
+
+    if(resultadoAluno.length > 0){
+        return resultadoAluno
+    } else {
+        return false
+    }
+}
+
 const selectAlunoByPassword = async function (dadosAluno){
     let sql  = `select * from tbl_aluno 
                     where email = '${dadosAluno.email}'
@@ -239,5 +251,6 @@ module.exports = {
     selectAlunoByPassword,
     updateTokenAndExpiresByEmail,
     selectAlunoByTokenAndEmail,
-    updatePassword
+    updatePassword,
+    selectLast5Alunos
 }

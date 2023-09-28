@@ -187,6 +187,25 @@ const deleteAcademia = async function(idAcademia){
         return false
 
 }
+
+const selectAcademiaTags = async function(idAcademia){
+    let sql = `select tbl_tags.id as id_tags, tbl_tags.nome as nome_tags
+    
+    from tbl_academia
+        inner join tbl_academia_tags
+            on tbl_academia.id = tbl_academia_tags.id_academia
+        inner join tbl_tags
+            on tbl_tags.id = tbl_academia_tags.id_tags
+    
+    where tbl_academia.id = ${idAcademia}`
+
+    let resultadoAcademia = await prisma.$queryRawUnsafe(sql)
+
+    if(resultadoAcademia.length > 0)
+        return resultadoAcademia
+    else
+        return false
+}
 // Seleciona o ultimo ID inserido no banco
 const selectLastId = async function(){
     let sql = `select * from tbl_academia order by id desc limit 1;`
@@ -284,4 +303,5 @@ module.exports = {
     updatePassword,
     updateTokenAndExpiresByEmail,
     selectAcademiaByTokenAndEmail,
+    selectAcademiaTags
 }

@@ -40,11 +40,14 @@ const getAcademiaById = async function (idAcademia) {
 
         let dadosAcademia = await academiaDAO.selectAcademiaById(idAcademia)
 
+        let tagsAcademia = await academiaDAO.selectAcademiaTags(idAcademia)
+
         if (dadosAcademia) {
 
             dadosAcademiasJSON.status = message.SUCCESS_REQUEST.status
             dadosAcademiasJSON.message = message.SUCCESS_REQUEST.message
             dadosAcademiasJSON.academia = dadosAcademia
+            dadosAcademiasJSON.tags = tagsAcademia
 
             return dadosAcademiasJSON
         } else {

@@ -54,6 +54,21 @@ const getAlunoById = async function (idAluno) {
     }
 }
 
+const getLastAlunos = async function(){
+    let dadosAlunoJSON = {}
+
+    let dadosAluno = await alunoDAO.selectLast5Alunos()
+
+    if(dadosAluno){
+        dadosAlunoJSON.status = message.SUCCESS_REQUEST.status
+        dadosAlunoJSON.message = message.SUCCESS_REQUEST.message
+        dadosAlunoJSON.ultimos_alunos = dadosAluno
+
+        return dadosAlunoJSON
+    } else 
+        return message.ERROR_NOT_FOUND
+}
+
 // Retorna alunos específicos de acordo com um filtro de nome
 const getAlunoByName = async function (nomeAluno) {
     let dadosAlunosJSON = {}
@@ -267,5 +282,6 @@ module.exports = {
     atualizarAluno,
     deletarAluno,
     autenticarAluno,
-    redefinirSenha
+    redefinirSenha,
+    getLastAlunos
 }

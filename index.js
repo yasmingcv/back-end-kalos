@@ -299,6 +299,14 @@ app.get('/kalos/aluno/id/:id', cors(), async function(request, response){
     response.json(dadosAluno)
 })
 
+// retorna os últimos cinco alunos inseridos
+app.get('/kalos/ultimosAlunos', cors(), async function(request, response){
+    let dadosAlunos = await controllerAluno.getLastAlunos()
+
+    response.json(dadosAlunos)
+    response.status(dadosAlunos.status)
+})
+
 // retorna um aluno pelo NOME
 app.get('/kalos/aluno/nome/:nome', cors(), async function(request, response){
 
