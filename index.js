@@ -37,6 +37,7 @@ var controllerTag = require('./controller/controllerTag.js')
 var controllerFuncionamento = require('./controller/controllerFuncionamento.js')
 var funcoesNodemailerAcademia = require('./nodemailer2.0/funcoes/academia.js')
 var funcoesNodemailerAluno = require('./nodemailer2.0/funcoes/aluno.js')
+var controllerTreino = require('./controller/controllerTreino.js')
 
 
 //Define que os dados que irao chegar na requisição será no padrão JSON

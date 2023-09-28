@@ -97,23 +97,6 @@ const getAcademiaByEmail = async function (emailAcademia) {
     }
 }
 
-const inserirTreino = async function (dadosTreino){
-    if(dadosTreino.nome == undefined || dadosTreino.nome == '' || dadosTreino.nome == null ||
-       dadosTreino.data_criacao == undefined || dadosTreino.data_criacao == null || dadosTreino.data_criacao == '' || 
-       isNaN(dadosTreino.id_nivel) || isNaN(dadosTreino.id_categoria_treino) || isNaN(dadosTreino.id_academia)
-    ) {
-        return message.ERROR_REQUIRED_FIELDS
-    } else {
-        dadosTreino.exercicios.forEach(exercicio => { //esse foreach ta no lugar errado
-            if(exercicio.id_exercicio == '' || isNaN(exercicio.id_exercicio) || exercicio.id_exercicio == undefined ||
-               exercicio.id_serie == '' || isNaN(exercicio.id_serie) || exercicio.id_serie == undefined ||           
-               exercicio.id_repeticao == '' || isNaN(exercicio.id_repeticao) || exercicio.id_repeticao == undefined            
-            ) {
-                return message.ERROR_REQUIRED_FIELDS
-            }
-        })
-    }
-}
 
 const inserirAcademia = async function (dadosAcademia) {
 
@@ -306,7 +289,7 @@ const redefinirSenha = async function (dadosAcademia) {
         if (academia) {
             var rsAtualizarSenha = await academiaDAO.updatePassword(dadosAcademia.email, dadosAcademia.senha)
 
-            if(rsAtualizarSenha){
+            if (rsAtualizarSenha) {
                 return message.SUCCESS_UPDATE_ITEM
             } else {
                 return message.ERROR_INTERNAL_SERVER

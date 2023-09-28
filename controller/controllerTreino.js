@@ -9,13 +9,13 @@ var treinoDAO = require('../model/DAO/treinoDAO.js')
 
 var message = require('./modulo/config.js')
 
-const getTreinos = async function(){
-    
+const getTreinos = async function () {
+
     let dadosTreinoJSON = {}
 
     let dadosTreino = await treinoDAO.selectAllTreinos()
 
-    if(dadosTreino){
+    if (dadosTreino) {
         dadosTreinoJSON.status = message.SUCCESS_REQUEST.status
         dadosTreinoJSON.message = message.SUCCESS_REQUEST.message
         dadosTreinoJSON.quantidade = dadosTreino.length
@@ -26,17 +26,17 @@ const getTreinos = async function(){
         return message.ERROR_NOT_FOUND
     }
 }
-const getTreinoByID = async function(idTreino){
-    
+const getTreinoByID = async function (idTreino) {
+
     let dadosTreinoJSON = {}
 
-    if(idTreino == '' || idTreino == undefined || isNaN(idTreino)){
+    if (idTreino == '' || idTreino == undefined || isNaN(idTreino)) {
         return message.ERROR_INVALID_ID
     } else {
 
         let dadosTreino = await treinoDAO.selectTreinoById(idTreino)
 
-        if(dadosTreino){
+        if (dadosTreino) {
 
             dadosTreinoJSON.status = message.SUCCESS_REQUEST.status
             dadosTreinoJSON.message = message.SUCCESS_REQUEST.message
@@ -49,37 +49,44 @@ const getTreinoByID = async function(idTreino){
     }
 
 }
+
 const inserirTreino = async function (dadosTreino) {
 
-    // Validação de campos
-    if (
-        dadosTreino.nome == '' || dadosTreino.nome == undefined || !isNaN(dadosTreino.nome) ||
-        dadosTreino.foto == '' || dadosTreino.foto == undefined) {
+
+    for (const exercicio of dadosTreino.exercicios) {
+        if (exercicio.duracao == undefined || exercicio.duracao == '') {
+            exercicio.duracao = null
+        } else {
+            exercicio.duracao = `'${exercicio.duracao}'`
+        }
+
+        if (exercicio.id_repeticao == undefined || exercicio.id_repeticao == '') {
+            exercicio.id_repeticao = null
+        }
+
+    }
+
+    if (dadosTreino.nome == undefined || dadosTreino.nome == '' || dadosTreino.nome == null ||
+        dadosTreino.data_criacao == undefined || dadosTreino.data_criacao == null || dadosTreino.data_criacao == '' ||
+        isNaN(dadosTreino.id_nivel) || isNaN(dadosTreino.id_categoria_treino) || isNaN(dadosTreino.id_academia)
+    ) {
         return message.ERROR_REQUIRED_FIELDS
     } else {
+        let rsTreino = await treinoDAO.insertTreino(dadosTreino)
 
-        let resultadoDadosTreino = await treinoDAO.insertTreino(dadosTreino)
-
-        if (resultadoDadosTreino) {
-
-            let novoTreino = await treinoDAO.selectLastId()
-            let dadosTreinoJSON = {}
-
-            dadosTreinoJSON.status = message.SUCCESS_CREATE_ITEM.status
-            dadosTreinoJSON.message = message.SUCCESS_CREATE_ITEM.message
-            dadosTreinoJSON.treino = novoTreino
-
-            return dadosTreinoJSON
+        if (rsTreino) {
+            return message.SUCCESS_CREATE_ITEM
         } else {
             return message.ERROR_INTERNAL_SERVER
         }
+
     }
 }
+
 const atualizarTreino = async function (dadosTreino, idTreino) {
     if (
         dadosTreino.nome == '' || dadosTreino.nome == undefined ||
-        dadosTreino.foto == '' || dadosTreino.foto == undefined)
-        {
+        dadosTreino.foto == '' || dadosTreino.foto == undefined) {
         return message.ERROR_REQUIRED_FIELDS
 
     } else if (idTreino == '' || idTreino == undefined || isNaN(idTreino)) {
@@ -101,29 +108,29 @@ const atualizarTreino = async function (dadosTreino, idTreino) {
                 dadosTreinoJSON.treino = dadosTreino
 
                 return dadosTreinoJSON
-            } else{
+            } else {
                 return message.ERROR_INTERNAL_SERVER
             }
-        } else{
+        } else {
             return message.ERROR_INVALID_ID
         }
     }
 }
-const deletarTreino = async function (idTreino){
-    if(idTreino == '' || idTreino == undefined || isNaN(idTreino)){
+const deletarTreino = async function (idTreino) {
+    if (idTreino == '' || idTreino == undefined || isNaN(idTreino)) {
         return message.ERROR_INVALID_ID
     } else {
         let statusId = treinoDAO.selectTreinoById(idTreino)
 
-        if(statusId){
+        if (statusId) {
             let resultadoDadosTreino = await treinoDAO.deleteTreino(idTreino)
 
-            if(resultadoDadosTreino){
+            if (resultadoDadosTreino) {
                 return message.SUCCESS_DELETE_ITEM
-            }else{
+            } else {
                 return message.ERROR_INTERNAL_SERVER
             }
-        } else{
+        } else {
             return message.ERROR_INVALID_ID
         }
     }
