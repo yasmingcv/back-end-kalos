@@ -35,6 +35,8 @@ var controllerAcademia = require('./controller/controllerAcademia.js')
 var controllerAluno = require('./controller/controllerAluno.js')
 var controllerTag = require('./controller/controllerTag.js')
 var controllerFuncionamento = require('./controller/controllerFuncionamento.js')
+var funcoesNodemailerAcademia = require('./nodemailer2.0/funcoes/academia.js')
+var funcoesNodemailerAluno = require('./nodemailer2.0/funcoes/aluno.js')
 
 
 //Define que os dados que irao chegar na requisição será no padrão JSON
@@ -129,7 +131,7 @@ const verifyJWTAluno = async function (request, response, next) {
 app.post('/kalos/academia/esqueci_senha', bodyParserJSON, cors(), async function(request, response){
    const body = request.body
 
-   var resposta = await controllerAcademia.esqueciASenha(body)
+   var resposta = await funcoesNodemailerAcademia.esqueciASenha(body)
 
    response.json(resposta)
    response.status(resposta.status)
@@ -139,7 +141,7 @@ app.post('/kalos/academia/esqueci_senha', bodyParserJSON, cors(), async function
 app.post('/kalos/academia/validar_token', bodyParserJSON, cors(), async function(request, response){
     const body = request.body
 
-    var rsAcademia = await controllerAcademia.verificarToken(body)
+    var rsAcademia = await funcoesNodemailerAcademia.verificarToken(body)
 
     response.json(rsAcademia)
     response.status(rsAcademia.status)
@@ -399,6 +401,36 @@ app.post('/kalos/aluno/autenticar', cors(), bodyParserJSON, async function(reque
 
     }
 
+})
+
+// Envia o e-mail com código de redefinição de senha
+app.post('/kalos/aluno/esqueci_senha', bodyParserJSON, cors(), async function(request, response){
+    const body = request.body
+ 
+    var resposta = await funcoesNodemailerAluno.esqueciASenha(body)
+ 
+    response.json(resposta)
+    response.status(resposta.status)
+ })
+ 
+ // Valida o código de recuperação do usuário (que foi enviado)
+ app.post('/kalos/aluno/validar_token', bodyParserJSON, cors(), async function(request, response){
+     const body = request.body
+ 
+     var rsAluno = await funcoesNodemailerAluno.verificarToken(body)
+ 
+     response.json(rsAluno)
+     response.status(rsAluno.status)
+ })
+
+ // Atualiza a senha
+app.post('/kalos/aluno/redefinir_senha', bodyParserJSON, cors(), async function(request, response){
+    const body = request.body
+
+    var rsAluno = await controllerAluno.redefinirSenha(body)
+
+    response.json(rsAluno)
+    response.status(rsAluno.status)
 })
 
 
