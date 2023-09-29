@@ -52,7 +52,7 @@ const inserirAlunoAcademia = async function(dadosAlunoAcademia){
             dadosAlunoAcademiaJSON.status = message.SUCCESS_CREATE_ITEM.status
             dadosAlunoAcademiaJSON.message = message.SUCCESS_CREATE_ITEM.message
             dadosAlunoAcademiaJSON = dadosAlunoAcademia
-            console.log(dadosAlunoAcademiaJSON)
+
             return dadosAlunoAcademiaJSON
             
         } else{

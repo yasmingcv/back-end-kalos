@@ -51,7 +51,7 @@ const insertAlunoAcademia = async function (dadosAlunoAcademia) {
                 );`
 
     let resultadoAlunoAcademia = await prisma.$executeRawUnsafe(sql)
-    console.log(resultadoAlunoAcademia)
+
     if (resultadoAlunoAcademia)
         return true
     else
@@ -69,7 +69,7 @@ const updateAlunoAcademia = async function (dadosAlunoAcademia) {
                 id_qualidade_do_sono = ${dadosAlunoAcademia.id_qualidade_do_sono}
                 where id = ${dadosAlunoAcademia.id_aluno};`
 
-    let resultadoAlunoAcademia = await prisma.$executeRawUnsafe(sql)
+    let resultadoAlunoAcademia = await prisma.$queryRawUnsafe(sql)
 
     if (resultadoAlunoAcademia)
         return true
