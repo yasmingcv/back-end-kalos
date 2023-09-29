@@ -14,23 +14,21 @@ var prisma = new PrismaClient()
 
 const selectAlunoAcademiaById = async function (idAlunoAcademia) {
 
-    let sql = `select   tbl_aluno.frequencia_cardiaca, tbl_aluno.tempo_em_pe,
-                        tbl_aluno.rotina_regular, tbl_aluno.frequencia_treino_semanal,
-                        tbl_nivel.nome as nivel_experiencia,
-                        tbl_qualidade_do_sono.qualidade,
-                        tbl_aluno_academia.id_aluno,
-                        tbl_academia.id as id_academia, tbl_academia.nome as nome_academia
-                        
-                        from tbl_aluno
-                        inner join tbl_nivel
-                            on tbl_aluno.id_nivel_experiencia = tbl_nivel.id
-                        inner join tbl_qualidade_do_sono
-                            on tbl_aluno.id_qualidade_do_sono = tbl_qualidade_do_sono.id
-                        inner join tbl_aluno_academia
-                            on tbl_aluno.id = tbl_aluno_academia.id_aluno
-                        inner join tbl_academia
-                            on tbl_academia.id = tbl_aluno_academia.id_academia
-                            where tbl_aluno.id = ${idAlunoAcademia};`
+    let sql = `select   tbl_aluno.*,
+    tbl_nivel.nome as nivel_experiencia,
+    tbl_qualidade_do_sono.qualidade,
+    tbl_academia.id as id_academia, tbl_academia.nome as nome_academia
+    
+    from tbl_aluno
+    inner join tbl_nivel
+        on tbl_aluno.id_nivel_experiencia = tbl_nivel.id
+    inner join tbl_qualidade_do_sono
+        on tbl_aluno.id_qualidade_do_sono = tbl_qualidade_do_sono.id
+    inner join tbl_aluno_academia
+        on tbl_aluno.id = tbl_aluno_academia.id_aluno
+    inner join tbl_academia
+        on tbl_academia.id = tbl_aluno_academia.id_academia
+        where tbl_aluno.id = ${idAlunoAcademia};`
 
     let resultadoAlunoAcademia = await prisma.$queryRawUnsafe(sql)
 
@@ -60,16 +58,16 @@ const insertAlunoAcademia = async function (dadosAlunoAcademia) {
 
 const updateAlunoAcademia = async function (dadosAlunoAcademia) {
 
-    let sql = ` update tbl_aluno set
-                frequencia_cardiaca = ${dadosAlunoAcademia.frequencia_cardiaca},
-                tempo_em_pe = ${dadosAlunoAcademia.tempo_em_pe},
-                rotina_regular = ${dadosAlunoAcademia.rotina_regular},
-                frequencia_treino_semanal = ${dadosAlunoAcademia.frequencia_treino_semanal},
-                id_nivel_experiencia = ${dadosAlunoAcademia.id_nivel_experiencia},
-                id_qualidade_do_sono = ${dadosAlunoAcademia.id_qualidade_do_sono}
-                where id = ${dadosAlunoAcademia.id_aluno};`
+    let sql = `  update tbl_aluno set
+                    frequencia_cardiaca = ${dadosAlunoAcademia.frequencia_cardiaca},
+                    tempo_em_pe = '${dadosAlunoAcademia.tempo_em_pe}',
+                    rotina_regular = '${dadosAlunoAcademia.rotina_regular}',
+                    frequencia_treino_semanal = ${dadosAlunoAcademia.frequencia_treino_semanal},
+                    id_nivel_experiencia = ${dadosAlunoAcademia.id_nivel_experiencia},
+                    id_qualidade_do_sono = ${dadosAlunoAcademia.id_qualidade_do_sono}
+                    where id = ${dadosAlunoAcademia.id_aluno};`
 
-    let resultadoAlunoAcademia = await prisma.$queryRawUnsafe(sql)
+    let resultadoAlunoAcademia = await prisma.$executeRawUnsafe(sql)
 
     if (resultadoAlunoAcademia)
         return true
@@ -78,8 +76,28 @@ const updateAlunoAcademia = async function (dadosAlunoAcademia) {
 
 }
 
+const selectLast5Alunos = async function(idAcademia){
+    let sql = `select tbl_aluno.*
+	    from tbl_aluno
+		    inner join tbl_aluno_academia
+			    on tbl_aluno.id = tbl_aluno_academia.id_aluno
+
+	    where tbl_aluno_academia.id_academia = ${idAcademia}
+
+	    order by tbl_aluno.id desc limit 5;`
+
+    let resultadoAlunos = await prisma.$queryRawUnsafe(sql)
+
+    if(resultadoAlunos.length > 0){
+        return resultadoAlunos
+    } else {
+        return false
+    }
+}
+
 module.exports = {
     insertAlunoAcademia,
     updateAlunoAcademia,
-    selectAlunoAcademiaById
+    selectAlunoAcademiaById,
+    selectLast5Alunos
 }

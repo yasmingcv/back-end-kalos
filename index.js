@@ -38,6 +38,7 @@ var controllerFuncionamento = require('./controller/controllerFuncionamento.js')
 var funcoesNodemailerAcademia = require('./nodemailer2.0/funcoes/academia.js')
 var funcoesNodemailerAluno = require('./nodemailer2.0/funcoes/aluno.js')
 var controllerTreino = require('./controller/controllerTreino.js')
+var controllerAlunoAcademia = require('./controller/controllerAlunoAcademia.js')
 
 
 //Define que os dados que irao chegar na requisição será no padrão JSON
@@ -160,7 +161,20 @@ app.post('/kalos/academia/redefinir_senha', bodyParserJSON, cors(), async functi
 
 // Retorna todas as academia existentes
 app.get('/kalos/academia', cors(), async function (request, response){
-    let dadosAcademias = await controllerAcademia.getAcademias()
+    let pageNum = request.query.page
+
+
+    let dadosAcademias = await controllerAcademia.getAcademias(pageNum)
+
+    response.json(dadosAcademias)
+    response.status(dadosAcademias.status)
+})
+
+app.get('/kalos/academia/teste', cors(), async function (request, response){
+    let pageNum = request.query.page
+
+
+    let dadosAcademias = await controllerAcademia.getAcademiasTestes(pageNum)
 
     response.json(dadosAcademias)
     response.status(dadosAcademias.status)
@@ -745,6 +759,16 @@ app.get('/kalos/alunoAcademia/id/:id', cors(), async function(request, response)
     response.json(dadosAlunoAcademia)
 })
 
+// Retorna os último cinco alunos cadastrados de uma academia específica
+app.get('/kalos/alunoAcademia/idAcademia/:idAcademia', cors(), async function(request, response){
+
+    let idAcademia = request.params.idAcademia
+
+    let dadosAlunoAcademia = await controllerAlunoAcademia.getLastAlunos(idAcademia)
+
+    response.status(dadosAlunoAcademia.status)
+    response.json(dadosAlunoAcademia)
+})
 // Insere um aluno na academia
 app.post('/kalos/alunoAcademia', cors(), bodyParserJSON, async function(request, response){
     let contentType = request.headers['content-type']
@@ -762,7 +786,7 @@ app.post('/kalos/alunoAcademia', cors(), bodyParserJSON, async function(request,
     } else {
 
         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
-        response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
+        response.json(message.ERROR_INVALID_CONTENT_TYPEs)
 
     }
 

@@ -51,7 +51,8 @@ const inserirAlunoAcademia = async function(dadosAlunoAcademia){
             
             dadosAlunoAcademiaJSON.status = message.SUCCESS_CREATE_ITEM.status
             dadosAlunoAcademiaJSON.message = message.SUCCESS_CREATE_ITEM.message
-            dadosAlunoAcademiaJSON = dadosAlunoAcademia
+            dadosAlunoAcademiaJSON.aluno_academia = dadosAlunoAcademia
+            
 
             return dadosAlunoAcademiaJSON
             
@@ -90,7 +91,7 @@ const atualizarAlunoAcademia = async function(dadosAlunoAcademia, idAluno){
                 dadosAlunoAcademiaJSON.message = message.SUCCESS_UPDATE_ITEM.message
                 dadosAlunoAcademiaJSON.aluno = dadosAlunoAcademia
 
-                return dadosAlunoAcademia
+                return dadosAlunoAcademiaJSON
             } else {
                 return message.ERROR_INTERNAL_SERVER
             }
@@ -100,8 +101,29 @@ const atualizarAlunoAcademia = async function(dadosAlunoAcademia, idAluno){
     }
 }
 
+const getLastAlunos = async function(idAcademia){
+    let dadosAlunosJSON = {}
+
+    let dadosAluno = await alunoAcademiaDAO.selectLast5Alunos(idAcademia)
+    if(idAcademia == '' || idAcademia == undefined || isNaN(idAcademia)){
+        return message.ERROR_INVALID_ID
+    } else {
+    if(dadosAluno){
+
+        dadosAlunosJSON.status = message.SUCCESS_REQUEST.status
+        dadosAlunosJSON.message = message.SUCCESS_REQUEST.message
+        dadosAlunosJSON.ultimos_alunos = dadosAluno
+
+        return dadosAlunosJSON
+    } else 
+        return message.ERROR_NOT_FOUND
+
+    }
+}
+
 module.exports = {
     inserirAlunoAcademia,
     atualizarAlunoAcademia,
-    getAlunoAcademiaById
+    getAlunoAcademiaById,
+    getLastAlunos
 }
