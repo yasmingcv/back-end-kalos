@@ -12,30 +12,74 @@ var academiaDAO = require('../model/DAO/academiaDAO.js')
 
 // const mailer = require('../nodemailer/mailer.js')
 
-const getAcademias = async function () {
+const getAcademias = async function (page) {
 
-    let dadosAcademiasJSON = {}
-
-    let dadosAcademia = await academiaDAO.selectAllAcademias()
-
-    if (dadosAcademia) {
-        dadosAcademiasJSON.status = message.SUCCESS_REQUEST.status
-        dadosAcademiasJSON.message = message.SUCCESS_REQUEST.message
-        dadosAcademiasJSON.quantidade = dadosAcademia.length
-
-        for (const academia of dadosAcademia){
-            let tagsDasAcademias = await academiaDAO.selectAcademiaTags(academia.id)
-
-            academia.tags = tagsDasAcademias
-        }
-
-        dadosAcademiasJSON.academias = dadosAcademia
-
-        return dadosAcademiasJSON
+    if (page == '' || page == undefined || isNaN(page)) {
+        return message.ERROR_REQUIRED_FIELDS
     } else {
-        return message.ERROR_NOT_FOUND
+        let dadosAcademiasJSON = {}
+
+        let dadosAcademia = await academiaDAO.selectAllAcademias(page)
+
+        if (dadosAcademia) {
+            dadosAcademiasJSON.pagina = page
+            dadosAcademiasJSON.status = message.SUCCESS_REQUEST.status
+            dadosAcademiasJSON.message = message.SUCCESS_REQUEST.message
+            dadosAcademiasJSON.quantidade = dadosAcademia.length
+
+            for (const academia of dadosAcademia) {
+                let tagsDasAcademias = await academiaDAO.selectAcademiaTags(academia.id)
+
+                academia.tags = tagsDasAcademias
+            }
+
+            dadosAcademiasJSON.academias = dadosAcademia
+
+            return dadosAcademiasJSON
+        } else {
+            return message.ERROR_NOT_FOUND
+        }
     }
+
+
 }
+
+
+const getAcademiasTestes = async function (page) {
+
+    if (page == '' || page == undefined || isNaN(page)) {
+        return message.ERROR_REQUIRED_FIELDS
+    } else {
+        let dadosAcademiasJSON = {}
+
+        let dadosAcademia = await academiaDAO.selectAllAcademiasTestessss(page)
+
+        if (dadosAcademia) {
+            dadosAcademiasJSON.pagina = page
+            dadosAcademiasJSON.status = message.SUCCESS_REQUEST.status
+            dadosAcademiasJSON.message = message.SUCCESS_REQUEST.message
+            dadosAcademiasJSON.quantidade = dadosAcademia.length
+
+            for(let academia of dadosAcademia){
+                let idAcademia = academia.id
+
+                
+                
+            }
+
+            dadosAcademiasJSON.academias = dadosAcademia
+
+            return dadosAcademiasJSON
+        } else {
+            return message.ERROR_NOT_FOUND
+        }
+    }
+
+    //para cada academia eu checo se ela tem id igual
+
+
+}
+
 
 const getAcademiaById = async function (idAcademia) {
 
@@ -322,5 +366,6 @@ module.exports = {
     atualizarAcademia,
     deletarAcademia,
     getAcademiaByEmail,
-    redefinirSenha
+    redefinirSenha,
+    getAcademiasTestes
 }

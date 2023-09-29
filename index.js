@@ -161,7 +161,20 @@ app.post('/kalos/academia/redefinir_senha', bodyParserJSON, cors(), async functi
 
 // Retorna todas as academia existentes
 app.get('/kalos/academia', cors(), async function (request, response){
-    let dadosAcademias = await controllerAcademia.getAcademias()
+    let pageNum = request.query.page
+
+
+    let dadosAcademias = await controllerAcademia.getAcademias(pageNum)
+
+    response.json(dadosAcademias)
+    response.status(dadosAcademias.status)
+})
+
+app.get('/kalos/academia/teste', cors(), async function (request, response){
+    let pageNum = request.query.page
+
+
+    let dadosAcademias = await controllerAcademia.getAcademiasTestes(pageNum)
 
     response.json(dadosAcademias)
     response.status(dadosAcademias.status)

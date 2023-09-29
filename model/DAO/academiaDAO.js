@@ -16,7 +16,9 @@ var prisma = new PrismaClient()
 //const mailer = require('../../nodemailer/mailer.js')
 
 // Seleciona todas as academias do banco
-const selectAllAcademias = async function(){
+const selectAllAcademias = async function(page){
+    page = Number(page) - 1
+
 
     let sql = `select tbl_academia.*, tbl_academia_categoria.id_categoria,
     tbl_categoria.nome as categoria, tbl_endereco.id as id_endereco,
@@ -29,8 +31,48 @@ const selectAllAcademias = async function(){
         inner join tbl_categoria
             on tbl_categoria.id = tbl_academia_categoria.id_categoria
         inner join tbl_endereco
-            on tbl_endereco.id = tbl_academia.id_endereco`
+            on tbl_endereco.id = tbl_academia.id_endereco
+            
+            order by id asc limit 10 offset ${page}0`
 
+
+    console.log(sql);
+    let resultadoAcademia = await prisma.$queryRawUnsafe(sql)
+
+    if(resultadoAcademia.length > 0){
+        return resultadoAcademia
+    } else{
+        return false
+    }
+}
+
+
+const selectAllAcademiasTestessss = async function(page){
+    page = Number(page) - 1
+
+
+    let sql = `select tbl_academia.*, tbl_academia_categoria.id_categoria,
+    tbl_categoria.nome as categoria, tbl_endereco.id as id_endereco,
+    tbl_endereco.logradouro, tbl_endereco.numero as numero_endereco, tbl_endereco.complemento,
+    tbl_endereco.cep, tbl_endereco.cidade, tbl_endereco.estado, tbl_academia_tags.*, tbl_tags.nome as tag, tbl_tags.id as id_tag
+    
+    from tbl_academia
+        inner join tbl_academia_categoria
+            on tbl_academia_categoria.id_academia = tbl_academia.id
+        inner join tbl_categoria
+            on tbl_categoria.id = tbl_academia_categoria.id_categoria
+        inner join tbl_endereco
+            on tbl_endereco.id = tbl_academia.id_endereco
+		inner join tbl_academia_tags
+			on tbl_academia.id = tbl_academia_tags.id_academia
+		inner join tbl_tags
+			on tbl_tags.id = tbl_academia_tags.id_tags`
+		
+               
+            // order by tbl_academia.id asc limit 10 offset ${page}0`
+
+
+    console.log(sql);
     let resultadoAcademia = await prisma.$queryRawUnsafe(sql)
 
     if(resultadoAcademia.length > 0){
@@ -303,5 +345,6 @@ module.exports = {
     updatePassword,
     updateTokenAndExpiresByEmail,
     selectAcademiaByTokenAndEmail,
-    selectAcademiaTags
+    selectAcademiaTags,
+    selectAllAcademiasTestessss
 }
