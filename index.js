@@ -447,7 +447,7 @@ app.post('/kalos/aluno/esqueci_senha', bodyParserJSON, cors(), async function(re
  })
 
  // Atualiza a senha
-app.post('/kalos/aluno/redefinir_senha', bodyParserJSON, cors(), async function(request, response){
+app.put('/kalos/aluno/redefinir_senha', bodyParserJSON, cors(), async function(request, response){
     const body = request.body
 
     var rsAluno = await controllerAluno.redefinirSenha(body)
