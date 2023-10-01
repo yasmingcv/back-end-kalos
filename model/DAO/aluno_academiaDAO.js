@@ -38,6 +38,25 @@ const selectAlunoAcademiaById = async function (idAlunoAcademia) {
         return false
 }
 
+const selectAcademiasAlunoByID = async function(idAluno){
+    let sql = `select	tbl_aluno_academia.id_aluno,
+                        tbl_academia.*
+    
+                from tbl_aluno_academia
+                    inner join tbl_aluno
+                        on tbl_aluno_academia.id_aluno = tbl_aluno.id
+                    inner join tbl_academia
+                        on tbl_aluno_academia.id_academia = tbl_academia.id
+                where tbl_aluno_academia.id_aluno = ${idAluno};`
+
+    let resultadoAlunoAcademia = await prisma.$queryRawUnsafe(sql)
+
+    if(resultadoAlunoAcademia.length > 0)
+        return resultadoAlunoAcademia
+    else
+        return false
+}
+
 const insertAlunoAcademia = async function (dadosAlunoAcademia) {
 
     let sql = ` insert into tbl_aluno_academia (
@@ -99,5 +118,6 @@ module.exports = {
     insertAlunoAcademia,
     updateAlunoAcademia,
     selectAlunoAcademiaById,
-    selectLast5Alunos
+    selectLast5Alunos,
+    selectAcademiasAlunoByID
 }

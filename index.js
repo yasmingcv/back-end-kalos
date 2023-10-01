@@ -769,6 +769,17 @@ app.get('/kalos/alunoAcademia/idAcademia/:idAcademia', cors(), async function(re
     response.status(dadosAlunoAcademia.status)
     response.json(dadosAlunoAcademia)
 })
+
+// Retorna as academias do aluno, pelo seu ID
+app.get('/kalos/alunoAcademia/idAluno/:idAluno', cors(), async function(request, response){
+
+    let idAluno = request.params.idAluno
+
+    let dadosAlunoAcademia = await controllerAlunoAcademia.getAcademiasAlunoByID(idAluno)
+
+    response.status(dadosAlunoAcademia.status)
+    response.json(dadosAlunoAcademia)
+})
 // Insere um aluno na academia
 app.post('/kalos/alunoAcademia', cors(), bodyParserJSON, async function(request, response){
     let contentType = request.headers['content-type']
@@ -793,6 +804,7 @@ app.post('/kalos/alunoAcademia', cors(), bodyParserJSON, async function(request,
     
 })
 
+// Insere novos dados ao aluno (a academia)
 app.put('/kalos/alunoAcademia/id/:id', cors(), async function(request, response){
     let contentType = request.headers['content-type']
 

@@ -33,6 +33,28 @@ const getAlunoAcademiaById = async function(idAlunoAcademia){
     }
 }
 
+const getAcademiasAlunoByID = async function(idAluno){
+    let dadosAlunoAcademiaJSON = {}
+
+    if(idAluno == '' || idAluno == undefined || isNaN(idAluno)){
+        return message.ERROR_INVALID_ID
+    } else {
+
+        let dadosAlunoAcademia = await alunoAcademiaDAO.selectAcademiasAlunoByID(idAluno)
+
+        if(dadosAlunoAcademia){
+
+            dadosAlunoAcademiaJSON.status = message.SUCCESS_REQUEST.status
+            dadosAlunoAcademiaJSON.message = message.SUCCESS_REQUEST.message
+            dadosAlunoAcademiaJSON.quantidade = dadosAlunoAcademia.length
+            dadosAlunoAcademiaJSON.academias = dadosAlunoAcademia
+
+            return dadosAlunoAcademiaJSON
+        } else {
+            return message.ERROR_NOT_FOUND
+        }
+    }
+}
 const inserirAlunoAcademia = async function(dadosAlunoAcademia){
 
     if(
@@ -125,5 +147,6 @@ module.exports = {
     inserirAlunoAcademia,
     atualizarAlunoAcademia,
     getAlunoAcademiaById,
-    getLastAlunos
+    getLastAlunos,
+    getAcademiasAlunoByID
 }
