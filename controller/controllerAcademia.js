@@ -216,7 +216,7 @@ const inserirAcademia = async function (dadosAcademia) {
     }
 }
 
-const atualizarAcademia = async function (dadosAcademia, idAcademia) {
+const atualizarAcademia = async function (dadosAcademia) {
 
     //Verifica se o atributo veio undefined ou se não foi digitado, se sim, define como "null",
     //se não, adiciona aspas. No DAO, o atributo não contém aspas ao ser inserido, pois pode ser nulo, e se for nulo, não vai aspas.
@@ -255,24 +255,24 @@ const atualizarAcademia = async function (dadosAcademia, idAcademia) {
 
         return message.ERROR_REQUIRED_FIELDS
 
-    } else if (idAcademia == '' || idAcademia == undefined || isNaN(idAcademia)) {
+    } else if (dadosAcademia.id == '' || dadosAcademia.id == undefined || isNaN(dadosAcademia.id)) {
 
         return message.ERROR_INVALID_ID
 
     } else {
-        dadosAcademia.id = idAcademia
 
-        let statusId = await academiaDAO.selectAcademiaById(idAcademia)
+        let statusId = await academiaDAO.selectAcademiaById(dadosAcademia.id)
 
         if (statusId) {
             let resultadoDadosAcademia = await academiaDAO.updateAcademia(dadosAcademia)
 
             if (resultadoDadosAcademia) {
                 let dadosAcademiaJSON = {}
+                let dadosAcademiaAtualizado = await getAcademiaById(dadosAcademia.id)
 
                 dadosAcademiaJSON.status = message.SUCCESS_UPDATE_ITEM.status
                 dadosAcademiaJSON.message = message.SUCCESS_UPDATE_ITEM.message
-                dadosAcademiaJSON.academia = dadosAcademia
+                dadosAcademiaJSON.academia = dadosAcademiaAtualizado.academia
 
                 return dadosAcademiaJSON
             } else {
