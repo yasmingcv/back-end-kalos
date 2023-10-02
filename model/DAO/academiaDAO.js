@@ -190,27 +190,45 @@ const insertAcademia = async function(dadosAcademia){
 // Atualiza os dados de uma academia
 const updateAcademia = async function(dadosAcademia){
 
-    let sql = ` update tbl_academia set
-                nome = '${dadosAcademia.nome}',
-                email = '${dadosAcademia.email}',
-                senha = '${dadosAcademia.senha}',
-                telefone = '${dadosAcademia.telefone}',
-                cnpj = '${dadosAcademia.cnpj}',
-                foto = '${dadosAcademia.foto}',
-                descricao = '${dadosAcademia.descricao}',
-                cor_primaria = '${dadosAcademia.cor_primaria}',
-                cor_secundaria = '${dadosAcademia.cor_secundaria}',
-                data_abertura = '${dadosAcademia.data_abertura}',
-                razao_social = '${dadosAcademia.razao_social}',
-                facebook = ${dadosAcademia.facebook},
-                whatsapp = ${dadosAcademia.whatsapp},
-                instagram = ${dadosAcademia.instagram},
-                status = ${dadosAcademia.status},
-                id_endereco = ${dadosAcademia.id_endereco}
-                where id = ${dadosAcademia.id}`
+    let sqlCriaTempTable = 'create temporary table tmp_tbl_tags (id_tag int)'
 
-    let resultadoAcademia = await prisma.$executeRawUnsafe(sql)
+    await prisma.$executeRawUnsafe(sqlCriaTempTable)
 
+    for (const tag of dadosAcademia.tags) {
+        await inserirTag(tag)
+    }
+
+    let sql = `call procUpdateAcademiaEnderecoCategoriaTags(
+        ${dadosAcademia.id},
+        ${dadosAcademia.id_endereco},
+        '${dadosAcademia.nome}',
+        '${dadosAcademia.email}',
+        '${dadosAcademia.senha}',
+        '${dadosAcademia.telefone}',
+        '${dadosAcademia.cnpj}',
+        '${dadosAcademia.foto}',
+        '${dadosAcademia.descricao}',
+        '${dadosAcademia.cor_primaria}',
+        '${dadosAcademia.cor_secundaria}',
+        '${dadosAcademia.data_abertura}',
+        '${dadosAcademia.razao_social}',
+        ${dadosAcademia.facebook},
+        ${dadosAcademia.whatsapp},
+        ${dadosAcademia.instagram},
+        '${dadosAcademia.logradouro}',
+        '${dadosAcademia.numero}',
+        '${dadosAcademia.bairro}',
+        '${dadosAcademia.complemento}',
+        '${dadosAcademia.cep}',
+        '${dadosAcademia.cidade}',
+        '${dadosAcademia.estado}',
+        ${dadosAcademia.id_categoria},
+        '${dadosAcademia.status}'
+    )`
+    
+
+    let resultadoAcademia = await prisma.$queryRawUnsafe(sql)
+    
     if(!resultadoAcademia){
         return false
     }else{

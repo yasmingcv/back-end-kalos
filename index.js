@@ -39,6 +39,7 @@ var funcoesNodemailerAcademia = require('./nodemailer2.0/funcoes/academia.js')
 var funcoesNodemailerAluno = require('./nodemailer2.0/funcoes/aluno.js')
 var controllerTreino = require('./controller/controllerTreino.js')
 var controllerAlunoAcademia = require('./controller/controllerAlunoAcademia.js')
+var controllerExercicio = require('./controller/controllerExercicio.js')
 
 
 //Define que os dados que irao chegar na requisição será no padrão JSON
@@ -240,7 +241,7 @@ app.post('/kalos/academia', cors(), bodyParserJSON, async function(request, resp
 })
 
 // Atualiza os dados de uma academia
-app.put('/kalos/academia/id/:id', cors(), bodyParserJSON, async function (request, response){
+app.put('/kalos/academia', cors(), bodyParserJSON, async function (request, response){
     let contentType = request.headers['content-type']
 
     //Validação para receber dados apenas no formato JSON
@@ -248,9 +249,7 @@ app.put('/kalos/academia/id/:id', cors(), bodyParserJSON, async function (reques
 
         let dadosBody = request.body
 
-        let idAcademia = request.params.id
-
-        let dadosAcademia = await controllerAcademia.atualizarAcademia(dadosBody, idAcademia)
+        let dadosAcademia = await controllerAcademia.atualizarAcademia(dadosBody )
 
         response.status(dadosAcademia.status)
         response.json(dadosAcademia)
