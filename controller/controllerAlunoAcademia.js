@@ -51,8 +51,13 @@ const getAcademiasAlunoByID = async function(idAluno){
 
             for (const academia of dadosAlunoAcademia) {
                 let tagsDasAcademiasAluno = await academiaDAO.selectAcademiaTags(academia.id)
-
-                academia.tags = tagsDasAcademiasAluno
+            
+                if(tagsDasAcademiasAluno == false){
+                    academia.tags = []
+                } else {
+                    academia.tags = tagsDasAcademiasAluno
+                }
+                
             }
 
             dadosAlunoAcademiaJSON.academias = dadosAlunoAcademia
