@@ -6,6 +6,7 @@
  ***********************************************************************/
 
 var alunoAcademiaDAO = require('../model/DAO/aluno_academiaDAO.js')
+var academiaDAO = require('../model/DAO/academiaDAO.js')
 
 
 var message = require('./modulo/config.js') 
@@ -43,10 +44,22 @@ const getAcademiasAlunoByID = async function(idAluno){
         let dadosAlunoAcademia = await alunoAcademiaDAO.selectAcademiasAlunoByID(idAluno)
 
         if(dadosAlunoAcademia){
-
+            
             dadosAlunoAcademiaJSON.status = message.SUCCESS_REQUEST.status
             dadosAlunoAcademiaJSON.message = message.SUCCESS_REQUEST.message
             dadosAlunoAcademiaJSON.quantidade = dadosAlunoAcademia.length
+
+            for (const academia of dadosAlunoAcademia) {
+                let tagsDasAcademiasAluno = await academiaDAO.selectAcademiaTags(academia.id)
+            
+                if(tagsDasAcademiasAluno == false){
+                    academia.tags = []
+                } else {
+                    academia.tags = tagsDasAcademiasAluno
+                }
+                
+            }
+
             dadosAlunoAcademiaJSON.academias = dadosAlunoAcademia
 
             return dadosAlunoAcademiaJSON

@@ -40,6 +40,10 @@ var funcoesNodemailerAluno = require('./nodemailer2.0/funcoes/aluno.js')
 var controllerTreino = require('./controller/controllerTreino.js')
 var controllerAlunoAcademia = require('./controller/controllerAlunoAcademia.js')
 var controllerExercicio = require('./controller/controllerExercicio.js')
+var controllerCategoriaTreino = require('./controller/controllerCategoriaTreino.js')
+var controllerNivel = require('./controller/controllerNivel.js')
+var controllerRepeticao = require('./controller/controllerRepeticao.js')
+var controllerSerie = require('./controller/controllerSerie.js')
 
 
 //Define que os dados que irao chegar na requisição será no padrão JSON
