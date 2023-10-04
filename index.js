@@ -46,6 +46,7 @@ var controllerRepeticao = require('./controller/controllerRepeticao.js')
 var controllerSerie = require('./controller/controllerSerie.js')
 var controllerTreinoNivelCategoria = require('./controller/controllerTreinoNivelCategoria.js')
 var controllerExercicioSerieRepeticao = require('./controller/controllerExercicioSerieRepeticao.js')
+var controllerAlunoTreino = require('./controller/controllerAlunoTreino.js')
 
 
 //Define que os dados que irao chegar na requisição será no padrão JSON
@@ -927,7 +928,26 @@ app.get('/kalos/exercicioSerieRepeticao/id/:id', cors(), async function(request,
 
 })
 
+/******************************************* ENDPOINTs ALUNO-ACADEMIA ********************************************/
 
+app.post('/kalos/alunoTreino', cors(), bodyParserJSON, async function(request, response){
+
+    let contentType = request.headers['content-type']
+
+    // validacao para receber em formato json
+    if(String(contentType).toLowerCase() == 'application/json'){
+        
+        let dadosBody = request.body
+
+        let resultadoDadosAlunoTreino = await controllerAlunoTreino.inserirAlunoTreino(dadosBody)
+
+        response.status(resultadoDadosAlunoTreino.status)
+        response.json(resultadoDadosAlunoTreino)
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
+    }
+})
 app.listen(8080, function(){
     console.log('Aguardando requisições na porta 8080')
 })
