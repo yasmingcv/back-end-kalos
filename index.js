@@ -44,6 +44,8 @@ var controllerCategoriaTreino = require('./controller/controllerCategoriaTreino.
 var controllerNivel = require('./controller/controllerNivel.js')
 var controllerRepeticao = require('./controller/controllerRepeticao.js')
 var controllerSerie = require('./controller/controllerSerie.js')
+var controllerTreinoNivelCategoria = require('./controller/controllerTreinoNivelCategoria.js')
+var controllerExercicioSerieRepeticao = require('./controller/controllerExercicioSerieRepeticao.js')
 
 
 //Define que os dados que irao chegar na requisição será no padrão JSON
@@ -898,7 +900,32 @@ app.delete('/kalos/exercicio/id/:id', cors(), async function(request, response){
     response.json(dadosExercicio)
 })
 
+/******************************************* ENDPOINTs TREINO-NIVEL-CATEGORIA ********************************************/
 
+app.get('/kalos/treinoNivelCategoria/id/:id', cors(), async function(request, response){
+
+    let idTreinoNivelCategoria = request.params.id
+
+    let dadosTreinoNivelCategoria = await controllerTreinoNivelCategoria.getTreinoNivelCategoriaById(idTreinoNivelCategoria)
+
+    response.status(dadosTreinoNivelCategoria.status)
+    response.json(dadosTreinoNivelCategoria)
+})
+
+
+
+/******************************************* ENDPOINTs EXERCICIO-SERIE-REPETICAO ********************************************/
+
+app.get('/kalos/exercicioSerieRepeticao/id/:id', cors(), async function(request, response){
+
+    let idExercicioSerieRepeticao = request.params.id
+
+    let dadosExercicioSerieRepeticao = await controllerExercicioSerieRepeticao.getExercicioSerieRepeticaoById(idExercicioSerieRepeticao)
+
+    response.status(dadosExercicioSerieRepeticao.status)
+    response.json(dadosExercicioSerieRepeticao)
+
+})
 
 
 app.listen(8080, function(){
