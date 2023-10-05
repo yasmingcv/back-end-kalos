@@ -51,7 +51,7 @@ const getTreinoNivelCategoriaByIdAcademia = async function(idAcademia){
     } else {
 
         let dadosTreinoNivelCategoria = await treinoNivelCategoriaDAO.selectTreinoNivelCategoriaByIdAcademia(idAcademia)
-        console.log(dadosTreinoNivelCategoria);
+
 
         if(dadosTreinoNivelCategoria){
 
@@ -70,7 +70,55 @@ const getTreinoNivelCategoriaByIdAcademia = async function(idAcademia){
     } 
 }
 
+const getTreinoNivelCategoriaByIdAluno = async function(idAluno){
+    let dadosTreinoNivelCategoriaJSON = {}
+
+    if(idAluno == '' || idAluno == undefined || isNaN(idAluno)){
+        return message.ERROR_INVALID_ID
+    } else {
+
+        let dadosTreinoNivelCategoria = await treinoNivelCategoriaDAO.selectTreinoNivelCategoriaByIdAluno(idAluno)
+
+        if(dadosTreinoNivelCategoria){
+
+            dadosTreinoNivelCategoriaJSON.status = message.SUCCESS_REQUEST.status
+            dadosTreinoNivelCategoriaJSON.message = message.SUCCESS_REQUEST.message
+
+            dadosTreinoNivelCategoriaJSON.informacoes = dadosTreinoNivelCategoria
+
+            return dadosTreinoNivelCategoriaJSON
+        } else {
+            return message.ERROR_NOT_FOUND
+        }
+    }
+}
+
+const getTreinoNivelCategoriaByIdAlunoAndIdAcademia = async function(idAluno, idAcademia){
+    let dadosTreinoNivelCategoriaJSON = {}
+
+    if(idAluno == '' || idAluno == undefined || isNaN(idAluno) || idAcademia == '' || idAcademia == undefined || isNaN(idAcademia)){
+        return message.ERROR_INVALID_ID
+    } else {
+
+        let dadosTreinoNivelCategoria = await treinoNivelCategoriaDAO.selectTreinoNivelCategoriaByIdAlunoAndIdAcademia(idAluno, idAcademia)
+
+        if(dadosTreinoNivelCategoria){
+
+            dadosTreinoNivelCategoriaJSON.status = message.SUCCESS_REQUEST.status
+            dadosTreinoNivelCategoriaJSON.message = message.SUCCESS_REQUEST.message
+
+            dadosTreinoNivelCategoriaJSON.informacoes = dadosTreinoNivelCategoria
+
+            return dadosTreinoNivelCategoriaJSON
+        } else {
+            return message.ERROR_NOT_FOUND
+        }
+    }
+}
+
 module.exports = {
     getTreinoNivelCategoriaById,
-    getTreinoNivelCategoriaByIdAcademia
+    getTreinoNivelCategoriaByIdAcademia,
+    getTreinoNivelCategoriaByIdAluno,
+    getTreinoNivelCategoriaByIdAlunoAndIdAcademia
 }

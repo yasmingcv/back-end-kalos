@@ -924,6 +924,27 @@ app.get('/kalos/treinoNivelCategoria/idAcademia/:id', cors(), async function(req
     response.json(dadosTreinoNivelCategoria)
 })
 
+app.get('/kalos/treinoNivelCategoria/idAluno/:id', cors(), async function(request, response){
+
+    let idAluno = request.params.id
+
+    let dadosTreinoNivelCategoria = await controllerTreinoNivelCategoria.getTreinoNivelCategoriaByIdAluno(idAluno)
+
+    response.status(dadosTreinoNivelCategoria.status)
+    response.json(dadosTreinoNivelCategoria)
+})
+
+app.get('/kalos/treinoNivelCategoria/idAluno/:idAluno/idAcademia/:idAcademia', cors(), async function(request, response){
+
+    let idAluno = request.params.idAluno
+    let idAcademia = request.params.idAcademia
+
+    let dadosTreinoNivelCategoria = await controllerTreinoNivelCategoria.getTreinoNivelCategoriaByIdAlunoAndIdAcademia(idAluno, idAcademia)
+    
+    response.status(dadosTreinoNivelCategoria.status)
+    response.json(dadosTreinoNivelCategoria)
+})
+
 
 
 /******************************************* ENDPOINTs EXERCICIO-SERIE-REPETICAO ********************************************/
