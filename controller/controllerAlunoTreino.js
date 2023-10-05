@@ -37,6 +37,7 @@ const getAlunoTreinoById = async function(idAlunoTreino){
 
         let dadosAlunoTreino = await alunoTreinoDAO.selectAlunoTreinoById(idAlunoTreino)
 
+
         if(dadosAlunoTreino){
 
             dadosAlunoTreinoJSON.status = message.SUCCESS_REQUEST.status
@@ -111,7 +112,8 @@ const deletarAlunoTreino = async function(idAlunoTreino){
         if(statusId){
 
             let resultadoDadosAlunoTreino = await alunoTreinoDAO.deleteAlunoTreino(idAlunoTreino)
-
+            
+            console.log(resultadoDadosAlunoTreino)
             if(resultadoDadosAlunoTreino){
                 return message.SUCCESS_DELETE_ITEM
             } else {
