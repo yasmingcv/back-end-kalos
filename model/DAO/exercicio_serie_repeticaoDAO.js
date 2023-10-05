@@ -56,6 +56,7 @@ const selectExercicioSerieRepeticaoByIDTreinoNivelCategoria = async function(id)
                     tbl_exercicio.anexo,
                     tbl_serie.numero as series,
                     tbl_repeticao.numero as repeticoes,
+                    time_format(tbl_exercicio_serie_repeticao.duracao, '%H:%i:%s') as duracao,
                     tbl_treino_nivel_categoria.id as id_treino_nivel_categoria
              
             from tbl_exercicio_serie_repeticao
@@ -63,13 +64,15 @@ const selectExercicioSerieRepeticaoByIDTreinoNivelCategoria = async function(id)
                     on tbl_exercicio_serie_repeticao.id_exercicio = tbl_exercicio.id
                 inner join tbl_serie
                     on tbl_exercicio_serie_repeticao.id_serie = tbl_serie.id
-                inner join tbl_repeticao
+                left join tbl_repeticao
                     on tbl_exercicio_serie_repeticao.id_repeticao = tbl_repeticao.id
                 inner join tbl_treino_nivel_categoria
                     on tbl_exercicio_serie_repeticao.id_treino_nivel_categoria = tbl_treino_nivel_categoria.id
 
             where tbl_treino_nivel_categoria.id = ${id};
             `
+
+    console.log(sql);
 
     let rsExercicioSerieRepeticao = await prisma.$queryRawUnsafe(sql)
 

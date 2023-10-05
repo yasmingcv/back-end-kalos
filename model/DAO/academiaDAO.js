@@ -11,14 +11,9 @@ var { PrismaClient } = require('@prisma/client')
 // Criando instância do prisma
 var prisma = new PrismaClient()
 
-
-//const crypto = require('crypto')
-//const mailer = require('../../nodemailer/mailer.js')
-
 // Seleciona todas as academias do banco
 const selectAllAcademias = async function(page){
     page = Number(page) - 1
-
 
     let sql = `select tbl_academia.*, tbl_academia_categoria.id_categoria,
     tbl_categoria.nome as categoria, tbl_endereco.id as id_endereco,
@@ -35,8 +30,6 @@ const selectAllAcademias = async function(page){
             
             order by id asc limit 10 offset ${page}0`
 
-
-    console.log(sql);
     let resultadoAcademia = await prisma.$queryRawUnsafe(sql)
 
     if(resultadoAcademia.length > 0){

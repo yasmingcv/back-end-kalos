@@ -914,6 +914,16 @@ app.get('/kalos/treinoNivelCategoria/id/:id', cors(), async function(request, re
     response.json(dadosTreinoNivelCategoria)
 })
 
+app.get('/kalos/treinoNivelCategoria/idAcademia/:id', cors(), async function(request, response){
+
+    let idAcademia = request.params.id
+
+    let dadosTreinoNivelCategoria = await controllerTreinoNivelCategoria.getTreinoNivelCategoriaByIdAcademia(idAcademia)
+
+    response.status(dadosTreinoNivelCategoria.status)
+    response.json(dadosTreinoNivelCategoria)
+})
+
 
 
 /******************************************* ENDPOINTs EXERCICIO-SERIE-REPETICAO ********************************************/
@@ -923,6 +933,17 @@ app.get('/kalos/exercicioSerieRepeticao/id/:id', cors(), async function(request,
     let idExercicioSerieRepeticao = request.params.id
 
     let dadosExercicioSerieRepeticao = await controllerExercicioSerieRepeticao.getExercicioSerieRepeticaoById(idExercicioSerieRepeticao)
+
+    response.status(dadosExercicioSerieRepeticao.status)
+    response.json(dadosExercicioSerieRepeticao)
+
+})
+
+app.get('/kalos/exercicioSerieRepeticao/idTreino/:id', cors(), async function(request, response){
+
+    let idTreino = request.params.id
+
+    let dadosExercicioSerieRepeticao = await controllerExercicioSerieRepeticao.getExercicioSerieRepeticaoByIdTreino(idTreino)
 
     response.status(dadosExercicioSerieRepeticao.status)
     response.json(dadosExercicioSerieRepeticao)
@@ -959,6 +980,11 @@ app.get('/kalos/categoria', cors(), async function(request, response){
     response.status(dadosCategoria.status)
     response.json(dadosCategoria)
 })
+
+
+
+
+
 app.listen(8080, function(){
     console.log('Aguardando requisições na porta 8080')
 })

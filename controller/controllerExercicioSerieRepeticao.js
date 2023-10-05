@@ -35,7 +35,34 @@ const getExercicioSerieRepeticaoById = async function(idESR){
 
 }
 
+const getExercicioSerieRepeticaoByIdTreino = async function(id){
+
+    let dadosExercicioSerieRepeticaoJSON = {}
+
+    if(id == '' || id == undefined || isNaN(id)){
+        return message.ERROR_INVALID_ID
+    } else {
+
+        let dadosExercicioSerieRepeticao = await exercicioSerieRepeticaoDAO.selectExercicioSerieRepeticaoByIDTreinoNivelCategoria(id)
+
+        if(dadosExercicioSerieRepeticao){
+
+            dadosExercicioSerieRepeticaoJSON.status = message.SUCCESS_REQUEST.status
+            dadosExercicioSerieRepeticaoJSON.message = message.SUCCESS_REQUEST.message
+            dadosExercicioSerieRepeticaoJSON.exercicios = dadosExercicioSerieRepeticao
+
+            return dadosExercicioSerieRepeticaoJSON
+
+        } else {
+            return message.ERROR_NOT_FOUND
+        }
+
+    }
+
+}
+
 module.exports = {
 
-    getExercicioSerieRepeticaoById
+    getExercicioSerieRepeticaoById,
+    getExercicioSerieRepeticaoByIdTreino
 }
