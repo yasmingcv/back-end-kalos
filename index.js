@@ -47,6 +47,7 @@ var controllerSerie = require('./controller/controllerSerie.js')
 var controllerTreinoNivelCategoria = require('./controller/controllerTreinoNivelCategoria.js')
 var controllerExercicioSerieRepeticao = require('./controller/controllerExercicioSerieRepeticao.js')
 var controllerAlunoTreino = require('./controller/controllerAlunoTreino.js')
+var controllerCategoria = require('./controller/controllerCategoria.js')
 
 
 //Define que os dados que irao chegar na requisição será no padrão JSON
@@ -947,6 +948,16 @@ app.post('/kalos/alunoTreino', cors(), bodyParserJSON, async function(request, r
         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
         response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
     }
+})
+
+/******************************************* ENDPOINTs CATEGORIA ********************************************/
+
+app.get('/kalos/categoria', cors(), async function(request, response){
+
+    let dadosCategoria = await controllerCategoria.getCategorias()
+
+    response.status(dadosCategoria.status)
+    response.json(dadosCategoria)
 })
 app.listen(8080, function(){
     console.log('Aguardando requisições na porta 8080')
