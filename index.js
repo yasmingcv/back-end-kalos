@@ -940,7 +940,7 @@ app.get('/kalos/treinoNivelCategoria/idAluno/:idAluno/idAcademia/:idAcademia', c
     let idAcademia = request.params.idAcademia
 
     let dadosTreinoNivelCategoria = await controllerTreinoNivelCategoria.getTreinoNivelCategoriaByIdAlunoAndIdAcademia(idAluno, idAcademia)
-    
+
     response.status(dadosTreinoNivelCategoria.status)
     response.json(dadosTreinoNivelCategoria)
 })
@@ -971,7 +971,36 @@ app.get('/kalos/exercicioSerieRepeticao/idTreino/:id', cors(), async function(re
 
 })
 
-/******************************************* ENDPOINTs ALUNO-ACADEMIA ********************************************/
+/******************************************* ENDPOINTs ALUNO-TREINO ********************************************/
+
+
+app.get('/kalos/alunoTreino', cors(), async function(request, response){
+
+    let dadosAlunoTreino = await controllerAlunoTreino.getAlunoTreinos()
+
+    response.status(dadosAlunoTreino.status)
+    response.json(dadosAlunoTreino)
+})
+
+app.get('/kalos/alunoTreino/id/:id', cors(), async function(request, response){
+
+    let idAlunoTreino = request.params.id
+
+    let dadosAlunoTreino = await controllerAlunoTreino.getAlunoTreinoById(idAlunoTreino)
+
+    response.status(dadosAlunoTreino.status)
+    response.json(dadosAlunoTreino)
+})
+
+app.get('/kalos/alunoTreino/idAcademia/:idAcademia', cors(), async function(request, response){
+
+    let idAcademia = request.params.idAcademia
+
+    let dadosAlunoTreino = await controllerAlunoTreino.getAlunoTreinoByIdAcademia(idAcademia)
+
+    response.status(dadosAlunoTreino.status)
+    response.json(dadosAlunoTreino)
+})
 
 app.post('/kalos/alunoTreino', cors(), bodyParserJSON, async function(request, response){
 
@@ -990,6 +1019,16 @@ app.post('/kalos/alunoTreino', cors(), bodyParserJSON, async function(request, r
         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
         response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
     }
+})
+
+app.delete('/kalos/alunoTreino/id/:id', cors(), async function(request, response){
+    
+    let idAlunoTreino = request.params.id
+
+    let dadosAlunoTreino = await controllerAlunoTreino.deletarAlunoTreino(idAlunoTreino)
+
+    response.status(dadosAlunoTreino.status)
+    response.json(dadosAlunoTreino)
 })
 
 /******************************************* ENDPOINTs CATEGORIA ********************************************/

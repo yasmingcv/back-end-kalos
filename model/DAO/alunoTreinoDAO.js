@@ -30,6 +30,73 @@ const insertAlunoTreino = async function(dadosAlunoTreino){
         return false
 }
 
+const selectAllAlunoTreino = async function(){
+    
+    let sql = `
+    select  tbl_aluno_treino.id,
+            tbl_aluno_treino.id_aluno,
+            tbl_aluno_treino.id_treino_nivel_categoria
+
+    from tbl_aluno_treino
+    `
+    let resultadoAlunoTreino = await prisma.$queryRawUnsafe(sql)
+
+    if(resultadoAlunoTreino.length > 0)
+        return resultadoAlunoTreino
+    else
+        return false
+}
+
+const selectAlunoTreinoById = async function(idAlunoTreino){
+    
+    let sql = `
+    select   tbl_aluno_treino.id,
+             tbl_aluno_treino.id_aluno,
+             tbl_aluno_treino.id_treino_nivel_categoria
+             
+    from tbl_aluno_treino
+    where id = ${idAlunoTreino}`
+}
+
+const selectAlunoTreinoByIdAcademia = async function(idAcademia){
+    
+    let sql = `
+    select   tbl_aluno_treino.id,
+             tbl_aluno_treino.id_aluno,
+             tbl_aluno_treino.id_treino_nivel_categoria,
+             tbl_treino_nivel_categoria.id_academia
+             
+    from tbl_aluno_treino
+        inner join tbl_treino_nivel_categoria
+            on tbl_aluno_treino.id_treino_nivel_categoria = tbl_treino_nivel_categoria.id
+            
+    where tbl_treino_nivel_categoria.id_academia = ${idAcademia}`
+
+    let resultadoAlunoTreino = await prisma.$queryRawUnsafe(sql)
+
+
+    if(resultadoAlunoTreino.length > 0)
+        return resultadoAlunoTreino
+    else
+        return false
+}
+
+const deleteAlunoTreino = async function(idAlunoTreino){
+    let sql = `delete from tbl_aluno_treino where id = ${idAlunoTreino}`
+
+    let resultadoAlunoTreino = await prisma.$queryRawUnsafe(sql)
+
+    if(resultadoAlunoTreino.length > 0){
+        return resultadoAlunoTreino
+    } else {
+        return false
+    }
+}
+
 module.exports = {
-    insertAlunoTreino
+    insertAlunoTreino,
+    selectAllAlunoTreino,
+    selectAlunoTreinoById,
+    selectAlunoTreinoByIdAcademia,
+    deleteAlunoTreino
 }
