@@ -6,6 +6,7 @@
  ***********************************************************************/
 
 var treinoNivelCategoriaDAO = require('../model/DAO/treinoNivelCategoriaDAO.js')
+var exercicioSerieRepeticaoDAO = require('../model/DAO/exercicio_serie_repeticaoDAO.js')
 
 var message = require('./modulo/config.js') 
 
@@ -19,11 +20,19 @@ const getTreinoNivelCategoriaById = async function(idTreinoNivelCategoria){
 
         let dadosTreinoNivelCategoria = await treinoNivelCategoriaDAO.selectTreinoNivelCategoriaById(idTreinoNivelCategoria)
 
+
         if(dadosTreinoNivelCategoria){
 
             dadosTreinoNivelCategoriaJSON.status = message.SUCCESS_REQUEST.status
             dadosTreinoNivelCategoriaJSON.message = message.SUCCESS_REQUEST.message
+
+            
+            let exerciciosTreino = await exercicioSerieRepeticaoDAO.selectExercicioSerieRepeticaoByIDTreinoNivelCategoria(dadosTreinoNivelCategoria.id)
+            dadosTreinoNivelCategoria.exercicios = exerciciosTreino
+               
             dadosTreinoNivelCategoriaJSON.informacoes = dadosTreinoNivelCategoria
+            
+
 
             return dadosTreinoNivelCategoriaJSON
 

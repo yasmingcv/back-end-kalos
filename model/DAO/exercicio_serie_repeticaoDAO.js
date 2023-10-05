@@ -46,7 +46,42 @@ const selectExercicioSerieRepeticaoByID = async function(idESR){
     }
 }
 
+const selectExercicioSerieRepeticaoByIDTreinoNivelCategoria = async function(id){
+
+    let sql = `
+    select   tbl_exercicio_serie_repeticao.id as id_exercicio_serie_repeticao,
+                    tbl_exercicio.id as id_exercicio,
+                    tbl_exercicio.nome,
+                    tbl_exercicio.descricao,
+                    tbl_exercicio.anexo,
+                    tbl_serie.numero as series,
+                    tbl_repeticao.numero as repeticoes,
+                    tbl_treino_nivel_categoria.id as id_treino_nivel_categoria
+             
+            from tbl_exercicio_serie_repeticao
+                inner join tbl_exercicio
+                    on tbl_exercicio_serie_repeticao.id_exercicio = tbl_exercicio.id
+                inner join tbl_serie
+                    on tbl_exercicio_serie_repeticao.id_serie = tbl_serie.id
+                inner join tbl_repeticao
+                    on tbl_exercicio_serie_repeticao.id_repeticao = tbl_repeticao.id
+                inner join tbl_treino_nivel_categoria
+                    on tbl_exercicio_serie_repeticao.id_treino_nivel_categoria = tbl_treino_nivel_categoria.id
+
+            where tbl_treino_nivel_categoria.id = ${id};
+            `
+
+    let rsExercicioSerieRepeticao = await prisma.$queryRawUnsafe(sql)
+
+    if(rsExercicioSerieRepeticao.length > 0){
+        return rsExercicioSerieRepeticao
+    } else {
+        return false
+    }
+}
+
 
 module.exports = {
-    selectExercicioSerieRepeticaoByID
+    selectExercicioSerieRepeticaoByID,
+    selectExercicioSerieRepeticaoByIDTreinoNivelCategoria
 }
