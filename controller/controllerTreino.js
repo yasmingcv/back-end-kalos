@@ -1,11 +1,13 @@
-/******
+/************************************************************************************************
  * Objetivo: Arquivo de controle dos dados de um treino em nosso sistema
  * Data: 03/09/23
- * Autores: Artur Alves
+ * Autores: Artur Alves e Yasmin Gonçalves
  * Versão: 1.0
- ******/
+ ************************************************************************************************/
 
 var treinoDAO = require('../model/DAO/treinoDAO.js')
+var treinoNivelCategoriaDAO = require('../model/DAO/treinoNivelCategoriaDAO.js')
+var controllerTreinoNIvelNivelCategoria = require('./controllerTreinoNivelCategoria.js')
 
 var message = require('./modulo/config.js')
 
@@ -75,7 +77,14 @@ const inserirTreino = async function (dadosTreino) {
         let rsTreino = await treinoDAO.insertTreino(dadosTreino)
 
         if (rsTreino) {
-            return message.SUCCESS_CREATE_ITEM
+            let dadosTreinoJSON = {}
+            dadosTreinoJSON.message = message.SUCCESS_CREATE_ITEM.message
+            dadosTreinoJSON.status = message.SUCCESS_CREATE_ITEM.status
+            let idNovoTreino = await treinoNivelCategoriaDAO.selectLastId()
+            let novoTreino = await controllerTreinoNIvelNivelCategoria.getTreinoNivelCategoriaById(idNovoTreino[0].id)
+            dadosTreinoJSON.treino = novoTreino.informacoes
+
+            return dadosTreinoJSON
         } else {
             return message.ERROR_INTERNAL_SERVER
         }
