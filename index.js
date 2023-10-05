@@ -992,6 +992,7 @@ app.get('/kalos/alunoTreino/id/:id', cors(), async function(request, response){
     response.json(dadosAlunoTreino)
 })
 
+// retorna os alunos com treinos atribuidos de uma academia específica
 app.get('/kalos/alunoTreino/idAcademia/:idAcademia', cors(), async function(request, response){
 
     let idAcademia = request.params.idAcademia
