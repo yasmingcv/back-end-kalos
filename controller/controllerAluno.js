@@ -148,7 +148,7 @@ const inserirAluno = async function (dadosAluno) {
 
                 dadosAlunoJSON.status = message.SUCCESS_CREATE_ITEM.status
                 dadosAlunoJSON.message = message.SUCCESS_CREATE_ITEM.message
-                dadosAlunoJSON.aluno = novoAluno
+                dadosAlunoJSON.aluno = novoAluno[0]
 
                 return dadosAlunoJSON
             } else {
