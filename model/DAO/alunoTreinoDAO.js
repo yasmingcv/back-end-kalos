@@ -22,7 +22,7 @@ const insertAlunoTreino = async function(dadosAlunoTreino){
                 ${dadosAlunoTreino.id_treino_nivel_categoria}
     );`
 
-    let resultadoAlunoTreino = await prisma.$executeRawUnsafe(sql)
+    let resultadoAlunoTreino = await prisma.$queryRawUnsafe(sql)
 
     if(resultadoAlunoTreino)
         return true
@@ -56,6 +56,14 @@ const selectAlunoTreinoById = async function(idAlunoTreino){
              
     from tbl_aluno_treino
     where id = ${idAlunoTreino}`
+
+    let resultadoAlunoTreino = await prisma.$queryRawUnsafe(sql)
+
+
+    if(resultadoAlunoTreino.length > 0)
+        return resultadoAlunoTreino
+    else
+        return false
 }
 
 const selectAlunoTreinoByIdAcademia = async function(idAcademia){
@@ -86,7 +94,7 @@ const deleteAlunoTreino = async function(idAlunoTreino){
 
     let resultadoAlunoTreino = await prisma.$queryRawUnsafe(sql)
 
-    if(resultadoAlunoTreino.length > 0){
+    if(resultadoAlunoTreino){
         return resultadoAlunoTreino
     } else {
         return false

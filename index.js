@@ -974,6 +974,7 @@ app.get('/kalos/exercicioSerieRepeticao/idTreino/:id', cors(), async function(re
 /******************************************* ENDPOINTs ALUNO-TREINO ********************************************/
 
 
+// retorna todos os alunos com treinos atribuidos
 app.get('/kalos/alunoTreino', cors(), async function(request, response){
 
     let dadosAlunoTreino = await controllerAlunoTreino.getAlunoTreinos()
@@ -982,6 +983,7 @@ app.get('/kalos/alunoTreino', cors(), async function(request, response){
     response.json(dadosAlunoTreino)
 })
 
+// retorna um aluno com treino atribuido especifico
 app.get('/kalos/alunoTreino/id/:id', cors(), async function(request, response){
 
     let idAlunoTreino = request.params.id
@@ -1003,6 +1005,7 @@ app.get('/kalos/alunoTreino/idAcademia/:idAcademia', cors(), async function(requ
     response.json(dadosAlunoTreino)
 })
 
+// atribui um treino a um aluno
 app.post('/kalos/alunoTreino', cors(), bodyParserJSON, async function(request, response){
 
     let contentType = request.headers['content-type']
