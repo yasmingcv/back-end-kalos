@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@prisma/client": "^5.2.0",
+    "@prisma/client": "^5.4.2",
     "body-parser": "^1.20.2",
     "cookie-session": "^2.0.0",
     "cors": "^2.8.5",
@@ -14,7 +14,7 @@
     "passport-google-oauth2": "^0.2.0",
     "passport-oauth2": "^1.7.0",
     "path": "^0.12.7",
-    "prisma": "^5.2.0",
+    "prisma": "^5.4.2",
     "prisma-client": "^0.0.0"
   }
 }
