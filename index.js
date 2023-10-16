@@ -48,6 +48,7 @@ var controllerTreinoNivelCategoria = require('./controller/controllerTreinoNivel
 var controllerExercicioSerieRepeticao = require('./controller/controllerExercicioSerieRepeticao.js')
 var controllerAlunoTreino = require('./controller/controllerAlunoTreino.js')
 var controllerCategoria = require('./controller/controllerCategoria.js')
+var controllerPostagem = require('./controller/controllerPostagem.js')
 
 
 //Define que os dados que irao chegar na requisição será no padrão JSON
@@ -1054,6 +1055,80 @@ app.get('/kalos/categoria', cors(), async function(request, response){
     response.json(dadosCategoria)
 })
 
+/******************************************* ENDPOINTs POSTAGEM ********************************************/
+
+
+app.get('/kalos/postagem/id/:id', cors(), async function(request, response){
+
+    let idPostagem = request.params.id
+
+    let dadosPostagem = await controllerPostagem.getPostagemByID(idPostagem)
+
+    response.status(dadosPostagem.status)
+    response.json(dadosPostagem)
+})
+
+app.get('/kalos/postagem/idAcademia/:idAcademia', cors(), async function(request, response){
+    
+    let idAcademia = request.params.idAcademia
+
+    let dadosPostagem = await controllerPostagem.getPostagensByIdAcademia(idAcademia)
+
+    response.status(dadosPostagem.status)
+    response.json(dadosPostagem)
+})
+// Insere uma nova postagem
+app.post('/kalos/postagem', cors(), bodyParserJSON, async function(request, response){
+
+    let contentType = request.headers['content-type']
+
+    // validacao para receber em formato json
+    if(String(contentType).toLowerCase() == 'application/json'){
+
+        let dadosBody = request.body
+
+        let resultadoDadosPostagem = await controllerPostagem.inserirPostagem(dadosBody)
+
+        response.status(resultadoDadosPostagem.status)
+        response.json(resultadoDadosPostagem)
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
+    }
+})
+
+// Atualiza uma postagem
+app.put('/kalos/postagem/id/:id', cors(), bodyParserJSON, async function(request, response){
+    let contentType = request.headers['content-type']
+
+    //Validação para receber dados apenas no formato JSON
+    if (String(contentType).toLowerCase() == 'application/json'){
+        
+
+        let dadosBody = request.body
+
+        let idPostagem = request.params.id
+
+        let resultadoDadosPostagem = await controllerPostagem.atualizarPostagem(dadosBody, idPostagem)
+
+        response.status(resultadoDadosPostagem.status)
+        response.json(resultadoDadosPostagem)
+    }else {
+        
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
+    }
+})
+
+app.delete('/kalos/postagem/id/:id', cors(), async function(request, response){
+
+    let idPostagem = request.params.id
+
+    let dadosPostagem = await controllerPostagem.deletarPostagem(idPostagem)
+
+    response.status(dadosPostagem.status)
+    response.json(dadosPostagem)
+})
 
 
 
