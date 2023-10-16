@@ -11,7 +11,26 @@ var { PrismaClient } = require('@prisma/client')
 // Criando instância do prisma
 var prisma = new PrismaClient()
 
+const selectAllAlunosByIdAcademia = async function (idAcademia){
 
+    let sql = `select tbl_aluno_academia.id_academia,
+                      tbl_aluno.*
+                      
+                    from tbl_aluno_academia
+                    inner join tbl_aluno
+                        on tbl_aluno_academia.id_aluno = tbl_aluno.id
+                    inner join tbl_academia
+                        on tbl_aluno_academia.id_academia = tbl_academia.id
+                        
+                    where tbl_aluno_academia.id_academia = ${idAcademia};`
+
+    let rsAlunoAcademia = await prisma.$queryRawUnsafe(sql)
+
+    if(rsAlunoAcademia.length > 0)
+        return rsAlunoAcademia
+    else
+        return false
+}
 const selectAlunoAcademiaById = async function (idAlunoAcademia) {
 
     let sql = `select   tbl_aluno.*,
@@ -119,5 +138,6 @@ module.exports = {
     updateAlunoAcademia,
     selectAlunoAcademiaById,
     selectLast5Alunos,
-    selectAcademiasAlunoByID
+    selectAcademiasAlunoByID,
+    selectAllAlunosByIdAcademia
 }

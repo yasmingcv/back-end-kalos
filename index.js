@@ -765,7 +765,16 @@ app.get('/kalos/alunoAcademia/id/:id', cors(), async function(request, response)
     response.status(dadosAlunoAcademia.status)
     response.json(dadosAlunoAcademia)
 })
+// Retorna todos alunos de uma academia específica
+app.get('/kalos/alunoAcademia/idAcademia/:idAcademia', cors(), async function(request, response){
 
+    let idAcademia = request.params.idAcademia
+
+    let dadosAlunoAcademia = await controllerAlunoAcademia.getAllAlunosByIdAcademia(idAcademia)
+
+    response.status(dadosAlunoAcademia.status)
+    response.json(dadosAlunoAcademia)
+})
 // Retorna os último cinco alunos cadastrados de uma academia específica
 app.get('/kalos/alunoAcademia/idAcademia/:idAcademia', cors(), async function(request, response){
 

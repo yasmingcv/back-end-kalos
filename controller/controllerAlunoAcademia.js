@@ -11,6 +11,28 @@ var academiaDAO = require('../model/DAO/academiaDAO.js')
 
 var message = require('./modulo/config.js') 
 
+
+const getAllAlunosByIdAcademia = async function(idAcademia){
+    let dadosAlunoAcademiaJSON = {}
+
+    if(idAcademia == '' || idAcademia == undefined || isNaN(idAcademia)){
+        return message.ERROR_INVALID_ID
+    } else {
+
+        let dadosAlunoAcademia = await alunoAcademiaDAO.selectAllAlunosByIdAcademia(idAcademia)
+
+        if(dadosAlunoAcademia){
+
+            dadosAlunoAcademiaJSON.status = message.SUCCESS_REQUEST.status
+            dadosAlunoAcademiaJSON.message = message.SUCCESS_REQUEST.message
+            dadosAlunoAcademiaJSON.alunos = dadosAlunoAcademia
+
+            return dadosAlunoAcademiaJSON
+        } else {
+            return message.ERROR_NOT_FOUND
+        }
+    }
+}
 const getAlunoAcademiaById = async function(idAlunoAcademia){
 
     let dadosAlunoAcademiaJSON = {}
@@ -161,5 +183,6 @@ module.exports = {
     atualizarAlunoAcademia,
     getAlunoAcademiaById,
     getLastAlunos,
-    getAcademiasAlunoByID
+    getAcademiasAlunoByID,
+    getAllAlunosByIdAcademia
 }
