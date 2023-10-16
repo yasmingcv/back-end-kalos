@@ -28,6 +28,13 @@ const getTreinoNivelCategoriaById = async function(idTreinoNivelCategoria){
 
             
             let exerciciosTreino = await exercicioSerieRepeticaoDAO.selectExercicioSerieRepeticaoByIDTreinoNivelCategoria(dadosTreinoNivelCategoria.id)
+
+            let i = 0
+            for(var exercicio of exerciciosTreino){
+                 i++
+                 exercicio.numero = i
+            }
+
             dadosTreinoNivelCategoria.exercicios = exerciciosTreino
                
             dadosTreinoNivelCategoriaJSON.informacoes = dadosTreinoNivelCategoria
