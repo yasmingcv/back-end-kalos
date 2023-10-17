@@ -450,8 +450,9 @@ app.post('/kalos/aluno/esqueci_senha', bodyParserJSON, cors(), async function(re
  
      var rsAluno = await funcoesNodemailerAluno.verificarToken(body)
  
-     response.json(rsAluno)
      response.status(rsAluno.status)
+     response.json(rsAluno)
+     
  })
 
  // Atualiza a senha
