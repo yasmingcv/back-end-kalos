@@ -1131,7 +1131,80 @@ app.delete('/kalos/postagem/id/:id', cors(), async function(request, response){
     response.json(dadosPostagem)
 })
 
+/******************************************* ENDPOINTs CARGA ********************************************/
 
+app.get('/kalos/carga/id/:id', cors(), async function(request, response){
+
+    let idCarga = request.params.id
+
+    let dadosCarga = await controllerCarga.getCargaByID(idCarga)
+
+    response.status(dadosCarga.status)
+    response.json(dadosCarga)
+})
+
+app.get('/kalos/carga/idAluno/:idAluno/idESR/:idESR', cors(), async function(request, response){
+
+    let idAluno = request.params.idAluno
+
+    let idESR = request.params.idESR
+
+    let dadosCarga = await controllerCarga.getCargaByIdAlunoAndIdExercicioSerieRepeticao(idAluno, idESR)
+
+    response.status(dadosCarga.status)
+    response.json(dadosCarga)
+
+})
+
+app.post('/kalos/carga', cors(), bodyParserJSON, async function(request, response){
+
+    let contentType = request.headers['content-type']
+
+    // validacao para receber em formato json
+    if(String(contentType).toLowerCase() == 'application/json'){
+
+        let dadosBody = request.body
+
+        let resultadoDadosCarga = await controllerCarga.inserirCarga(dadosBody)
+
+        response.status(resultadoDadosCarga.status)
+        response.json(resultadoDadosCarga)
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
+    }
+})
+
+app.put('/kalos/carga/id/:id', cors(), bodyParserJSON, async function(request, response){
+    let contentType = request.headers['content-type']
+
+    //Validação para receber dados apenas no formato JSON
+    if (String(contentType).toLowerCase() == 'application/json'){
+
+        let dadosBody = request.body
+
+        let idCarga = request.params.id
+
+        let resultadoDadosCarga = await controllerCarga.atualizarCarga(dadosBody, idCarga)
+
+        response.status(resultadoDadosCarga.status)
+        response.json(resultadoDadosCarga)
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
+    }
+})
+
+app.delete('/kalos/carga/id/:id', cors(), async function(request, response){
+
+    let idCarga = request.params.id
+
+    let dadosCarga = await controllerCarga.deletarCarga(idCarga)
+
+    response.status(dadosCarga.status)
+    response.status(dadosCarga)
+
+})
 
 
 app.listen(8080, function(){
