@@ -103,9 +103,9 @@ const updatePostagem = async function(dadosPostagem){
 const deletePostagem = async function(idPostagem){
     let sql = `delete from tbl_postagem where id = ${idPostagem}`
 
-    let resultadoAluno = await prisma.$queryRawUnsafe(sql)
+    let resultadoPostagem = await prisma.$queryRawUnsafe(sql)
 
-    if(resultadoAluno)
+    if(resultadoPostagem)
         return true
     else
         return false
@@ -115,10 +115,10 @@ const deletePostagem = async function(idPostagem){
 const selectLastId = async function(){
     let sql = `select * from tbl_postagem order by id desc limit 1;`
 
-    let resultadoAluno = await prisma.$queryRawUnsafe(sql)
+    let resultadoPostagem = await prisma.$queryRawUnsafe(sql)
 
-    if(resultadoAluno.length > 0){
-        return resultadoAluno
+    if(resultadoPostagem.length > 0){
+        return resultadoPostagem
     } else
         return false
 
