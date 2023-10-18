@@ -24,7 +24,9 @@ const selectAllPostagensByIdAcademia = async function(idAcademia){
                     inner join tbl_academia
                         on tbl_academia.id = tbl_postagem.id_academia
                         
-                        where tbl_postagem.id_academia = ${idAcademia}`
+                        where tbl_postagem.id_academia = ${idAcademia}
+                        
+                        order by id desc;`
 
     let resultadoPostagem = await prisma.$queryRawUnsafe(sql)
 
