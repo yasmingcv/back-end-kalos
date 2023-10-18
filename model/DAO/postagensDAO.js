@@ -16,7 +16,7 @@ var prisma = new PrismaClient()
 // Seleciona todas as postagens da academia
 const selectAllPostagensByIdAcademia = async function(idAcademia){
 
-    let sql = `select   tbl_postagem.id, tbl_postagem.titulo, tbl_postagem.corpo, tbl_postagem.anexo,
+    let sql = `select   tbl_postagem.id, tbl_postagem.titulo, tbl_postagem.corpo, tbl_postagem.anexo, tbl_postagem.data, tbl_postagem.hora,
                         tbl_postagem.id_academia
                         
                         
@@ -58,11 +58,15 @@ const insertPostagem = async function(dadosPostagem){
         titulo,
         corpo,
         anexo,
+        data,
+        hora,
         id_academia
     ) values (
         '${dadosPostagem.titulo}',
         '${dadosPostagem.corpo}',
         '${dadosPostagem.anexo}',
+        CURDATE(),
+        CURTIME(),
         ${dadosPostagem.id_academia}
     );`
 
@@ -81,6 +85,8 @@ const updatePostagem = async function(dadosPostagem){
                 titulo = '${dadosPostagem.titulo}',
                 corpo = '${dadosPostagem.corpo}',
                 anexo = '${dadosPostagem.anexo}',
+                data = CURDATE(),
+                hora = CURTIME(),
                 id_academia = ${dadosPostagem.id_academia}
                 
                 where id = ${dadosPostagem.id}`
