@@ -89,6 +89,7 @@ const selectAlunoTreinoByIdAcademia = async function(idAcademia){
         return false
 }
 
+
 const deleteAlunoTreino = async function(idAlunoTreino){
     let sql = `delete from tbl_aluno_treino where id = ${idAlunoTreino}`
 

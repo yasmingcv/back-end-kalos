@@ -21,9 +21,9 @@ const selectAllCargasByIdAlunoAndIdExercicioSerieRepeticao = async function(idAl
                     
                 from tbl_carga
                     inner join tbl_aluno
-                        on tbl_aluno.id = tbl_postagem.id_aluno
+                        on tbl_aluno.id = tbl_carga.id_aluno
                     inner join tbl_exercicio_serie_repeticao
-                        on tbl_exercicio_serie_repeticao.id = tbl_postagem.id_exercicio_serie_repeticao
+                        on tbl_exercicio_serie_repeticao.id = tbl_carga.id_exercicio_serie_repeticao
                         
                         where tbl_carga.id_aluno = ${idAluno} AND tbl_carga.id_exercicio_serie_repeticao = ${idExercicioSerieRepeticao}`
 
@@ -42,9 +42,9 @@ const selectCargaById = async function(idCarga){
             
         from tbl_carga
             inner join tbl_aluno
-                on tbl_aluno.id = tbl_postagem.id_aluno
+                on tbl_aluno.id = tbl_carga.id_aluno
             inner join tbl_exercicio_serie_repeticao
-                on tbl_exercicio_serie_repeticao.id = tbl_postagem.id_exercicio_serie_repeticao
+                on tbl_exercicio_serie_repeticao.id = tbl_carga.id_exercicio_serie_repeticao
                 
             where tbl_carga.id = ${idCarga}`
     

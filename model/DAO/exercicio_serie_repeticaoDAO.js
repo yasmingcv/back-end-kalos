@@ -22,7 +22,9 @@ const selectExercicioSerieRepeticaoByID = async function(idESR){
                     tbl_exercicio.anexo,
                     tbl_serie.numero as series,
                     tbl_repeticao.numero as repeticoes,
+                    time_format(tbl_exercicio_serie_repeticao.duracao, '%H:%i:%s') as duracao,
                     tbl_treino_nivel_categoria.id as id_treino_nivel_categoria
+                    
              
             from tbl_exercicio_serie_repeticao
                 inner join tbl_exercicio

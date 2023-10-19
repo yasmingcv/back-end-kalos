@@ -88,8 +88,7 @@ const inserirCarga = async function(dadosCarga){
 const atualizarCarga = async function(dadosCarga, idCarga){
 
     if(
-        dadosCarga.peso == '' || dadosCarga.peso == undefined || dadosCarga.peso.length > 5 ||
-        dadosCarga.data_horario == '' || dadosCarga.data_horario == undefined
+        dadosCarga.peso == '' || dadosCarga.peso == undefined || dadosCarga.peso.length > 5 
     ){
         return message.ERROR_REQUIRED_FIELDS
     } else if (idCarga == '' || idCarga == undefined || isNaN(idCarga)){

@@ -23,7 +23,9 @@ const getExercicioSerieRepeticaoById = async function(idESR){
 
             dadosExercicioSerieRepeticaoJSON.status = message.SUCCESS_REQUEST.status
             dadosExercicioSerieRepeticaoJSON.message = message.SUCCESS_REQUEST.message
+            dadosExercicioSerieRepeticao.numero = null
             dadosExercicioSerieRepeticaoJSON.informacoes = dadosExercicioSerieRepeticao
+            
 
             return dadosExercicioSerieRepeticaoJSON
 

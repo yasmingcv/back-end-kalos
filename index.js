@@ -49,6 +49,7 @@ var controllerExercicioSerieRepeticao = require('./controller/controllerExercici
 var controllerAlunoTreino = require('./controller/controllerAlunoTreino.js')
 var controllerCategoria = require('./controller/controllerCategoria.js')
 var controllerPostagem = require('./controller/controllerPostagem.js')
+var controllerCarga = require('./controller/controllerCarga.js')
 
 
 //Define que os dados que irao chegar na requisição será no padrão JSON
