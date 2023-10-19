@@ -96,18 +96,21 @@ const selectTreinoNivelCategoriaByIdAluno = async function(idAluno){
                         tbl_academia.id as id_academia,
                         tbl_aluno_treino.id_aluno
                         
-             from tbl_treino_nivel_categoria
-                inner join tbl_treino
+             from tbl_aluno_treino
+				inner join tbl_treino_nivel_categoria
+					on tbl_aluno_treino.id_treino_nivel_categoria = tbl_treino_nivel_categoria.id
+				inner join tbl_aluno
+					on tbl_aluno_treino.id_aluno = tbl_aluno.id
+				inner join tbl_treino
                     on tbl_treino_nivel_categoria.id_treino = tbl_treino.id
-                inner join tbl_nivel
+				inner join tbl_nivel
                     on tbl_treino_nivel_categoria.id_nivel = tbl_nivel.id
-                inner join tbl_categoria_treino
+				inner join tbl_categoria_treino
                     on tbl_treino_nivel_categoria.id_categoria_treino = tbl_categoria_treino.id
-                inner join tbl_academia
+				inner join tbl_academia
                     on tbl_treino_nivel_categoria.id_academia = tbl_academia.id
-				inner join tbl_aluno_treino
 					
-                    
+					
             where tbl_aluno_treino.id_aluno = ${idAluno}
             
             order by id desc;`
@@ -134,18 +137,21 @@ const selectTreinoNivelCategoriaByIdAlunoAndIdAcademia = async function(idAluno,
                         tbl_academia.id as id_academia,
                         tbl_aluno_treino.id_aluno
                         
-             from tbl_treino_nivel_categoria
-                inner join tbl_treino
+             from tbl_aluno_treino
+				inner join tbl_treino_nivel_categoria
+					on tbl_aluno_treino.id_treino_nivel_categoria = tbl_treino_nivel_categoria.id
+				inner join tbl_aluno
+					on tbl_aluno_treino.id_aluno = tbl_aluno.id
+				inner join tbl_treino
                     on tbl_treino_nivel_categoria.id_treino = tbl_treino.id
-                inner join tbl_nivel
+				inner join tbl_nivel
                     on tbl_treino_nivel_categoria.id_nivel = tbl_nivel.id
-                inner join tbl_categoria_treino
+				inner join tbl_categoria_treino
                     on tbl_treino_nivel_categoria.id_categoria_treino = tbl_categoria_treino.id
-                inner join tbl_academia
+				inner join tbl_academia
                     on tbl_treino_nivel_categoria.id_academia = tbl_academia.id
-				inner join tbl_aluno_treino
 					
-                    
+					
             where tbl_aluno_treino.id_aluno = ${idAluno} AND tbl_treino_nivel_categoria.id_academia = ${idAcademia}
             
             order by id desc;`
