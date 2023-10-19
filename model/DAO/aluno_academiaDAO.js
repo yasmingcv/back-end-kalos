@@ -59,13 +59,16 @@ const selectAlunoAcademiaById = async function (idAlunoAcademia) {
 
 const selectAcademiasAlunoByID = async function(idAluno){
     let sql = `select	tbl_aluno_academia.id_aluno,
-                        tbl_academia.*
+                        tbl_academia.*,
+                        tbl_endereco.logradouro, tbl_endereco.numero, tbl_endereco.cidade, tbl_endereco.estado
     
                 from tbl_aluno_academia
                     inner join tbl_aluno
                         on tbl_aluno_academia.id_aluno = tbl_aluno.id
                     inner join tbl_academia
                         on tbl_aluno_academia.id_academia = tbl_academia.id
+                    inner join tbl_endereco
+                        on tbl_academia.id_endereco = tbl_endereco.id
                 where tbl_aluno_academia.id_aluno = ${idAluno};`
 
     let resultadoAlunoAcademia = await prisma.$queryRawUnsafe(sql)
