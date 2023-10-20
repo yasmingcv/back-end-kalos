@@ -31,7 +31,7 @@ const selectExercicioSerieRepeticaoByID = async function(idESR){
                     on tbl_exercicio_serie_repeticao.id_exercicio = tbl_exercicio.id
                 inner join tbl_serie
                     on tbl_exercicio_serie_repeticao.id_serie = tbl_serie.id
-                inner join tbl_repeticao
+                left join tbl_repeticao
                     on tbl_exercicio_serie_repeticao.id_repeticao = tbl_repeticao.id
                 inner join tbl_treino_nivel_categoria
                     on tbl_exercicio_serie_repeticao.id_treino_nivel_categoria = tbl_treino_nivel_categoria.id

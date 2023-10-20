@@ -123,6 +123,8 @@ const getTreinoNivelCategoriaByIdAlunoAndIdAcademia = async function(idAluno, id
     }
 }
 
+const getAlunoOnTreinoNivelCategoriaByIdAcademiaAndIdTreino = async function(idAcademia, idTreino){}
+
 module.exports = {
     getTreinoNivelCategoriaById,
     getTreinoNivelCategoriaByIdAcademia,

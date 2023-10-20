@@ -44,7 +44,33 @@ const selectTreinoNivelCategoriaById = async function(idTreinoNivelCategoria){
         return false
     }
 }
+const selectAlunosOnTreinoNivelCategoriaByIdAcademiaAndIdTreino = async function(idAcademia, idTreino){
 
+    let sql = `
+    select  tbl_treino_nivel_categoria.id as id_treino_nivel_categoria
+            tbl_aluno.*,
+            tbl_academia.id as id_academia
+            
+            from tbl_aluno_treino
+                inner join tbl_aluno
+                    on tbl_aluno_treino.id_aluno = tbl_aluno.id
+                inner join tbl_treino_nivel_categoria
+                    on tbl_aluno_treino.id_treino_nivel_categoria = tbl_treino_nivel_categoria.id
+                inner join tbl_academia
+                    on tbl_treino_nivel_categoria.id_academia = tbl_academia.id
+                    
+                where tbl_treino_nivel_categoria.id_academia = ${idAcademia} AND tbl_aluno_treino.id_treino_nivel_categoria = ${idTreino}
+                
+                order by id desc`
+
+    let rsTreinoNivelCategoria = await prisma.$queryRawUnsafe(sql)
+
+    if(rsTreinoNivelCategoria.length > 0){
+        return rsTreinoNivelCategoria
+    } else {
+        return false
+    }
+}
 const selectTreinoNivelCategoriaByIdAcademia = async function(idAcademia){
 
     let sql = `
@@ -182,5 +208,6 @@ module.exports = {
     selectLastId,
     selectTreinoNivelCategoriaByIdAcademia,
     selectTreinoNivelCategoriaByIdAluno,
-    selectTreinoNivelCategoriaByIdAlunoAndIdAcademia
+    selectTreinoNivelCategoriaByIdAlunoAndIdAcademia,
+    selectAlunosOnTreinoNivelCategoriaByIdAcademiaAndIdTreino
 }
