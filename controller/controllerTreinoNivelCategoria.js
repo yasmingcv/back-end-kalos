@@ -123,11 +123,33 @@ const getTreinoNivelCategoriaByIdAlunoAndIdAcademia = async function(idAluno, id
     }
 }
 
-const getAlunoOnTreinoNivelCategoriaByIdAcademiaAndIdTreino = async function(idAcademia, idTreino){}
+const getAlunoOnTreinoNivelCategoriaByIdAcademiaAndIdTreino = async function(idAcademia, idTreinoNivelCategoria){
+    let dadosTreinoNivelCategoriaJSON = {}
+
+    if(idAcademia == '' || idAcademia == undefined || isNaN(idAcademia) || idTreinoNivelCategoria == '' || idTreinoNivelCategoria == undefined || isNaN(idTreinoNivelCategoria)){
+        return message.ERROR_INVALID_ID
+    } else {
+
+        let dadosTreinoNivelCategoria = await treinoNivelCategoriaDAO.selectAlunosOnTreinoNivelCategoriaByIdAcademiaAndIdTreino(idAcademia, idTreinoNivelCategoria)
+
+        if(dadosTreinoNivelCategoria){
+
+            dadosTreinoNivelCategoriaJSON.status = message.SUCCESS_REQUEST.status
+            dadosTreinoNivelCategoriaJSON.message = message.SUCCESS_REQUEST.message
+
+            dadosTreinoNivelCategoriaJSON.informacoes = dadosTreinoNivelCategoria
+
+            return dadosTreinoNivelCategoriaJSON
+        } else {
+            return message.ERROR_NOT_FOUND
+        }
+    }
+}
 
 module.exports = {
     getTreinoNivelCategoriaById,
     getTreinoNivelCategoriaByIdAcademia,
     getTreinoNivelCategoriaByIdAluno,
-    getTreinoNivelCategoriaByIdAlunoAndIdAcademia
+    getTreinoNivelCategoriaByIdAlunoAndIdAcademia,
+    getAlunoOnTreinoNivelCategoriaByIdAcademiaAndIdTreino
 }

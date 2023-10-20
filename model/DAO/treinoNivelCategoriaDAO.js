@@ -44,10 +44,10 @@ const selectTreinoNivelCategoriaById = async function(idTreinoNivelCategoria){
         return false
     }
 }
-const selectAlunosOnTreinoNivelCategoriaByIdAcademiaAndIdTreino = async function(idAcademia, idTreino){
+const selectAlunosOnTreinoNivelCategoriaByIdAcademiaAndIdTreino = async function(idAcademia, idTreinoNivelCategoria){
 
     let sql = `
-    select  tbl_treino_nivel_categoria.id as id_treino_nivel_categoria
+    select  tbl_treino_nivel_categoria.id as id_treino_nivel_categoria,
             tbl_aluno.*,
             tbl_academia.id as id_academia
             
@@ -59,7 +59,7 @@ const selectAlunosOnTreinoNivelCategoriaByIdAcademiaAndIdTreino = async function
                 inner join tbl_academia
                     on tbl_treino_nivel_categoria.id_academia = tbl_academia.id
                     
-                where tbl_treino_nivel_categoria.id_academia = ${idAcademia} AND tbl_aluno_treino.id_treino_nivel_categoria = ${idTreino}
+                where tbl_treino_nivel_categoria.id_academia = ${idAcademia} AND tbl_aluno_treino.id_treino_nivel_categoria = ${idTreinoNivelCategoria}
                 
                 order by id desc`
 
