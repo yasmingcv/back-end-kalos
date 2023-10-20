@@ -1,9 +1,9 @@
-/******
+/***************************************************************************************
  * Objetivo: Arquivo de conexão com a tabela treinoNivelCategoria do banco de dados
  * Data: 04/10/23
  * Autores: Artur Alves
  * Versão: 1.0
- ******/
+ ****************************************************************************************/
 
 // Import da biblioteca do cliente do prisma
 var { PrismaClient } = require('@prisma/client')

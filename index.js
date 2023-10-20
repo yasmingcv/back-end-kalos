@@ -848,6 +848,18 @@ app.put('/kalos/alunoAcademia/id/:id', cors(), async function(request, response)
     }
 })
 
+// Deleta um aluno de uma academia
+app.delete('/kalos/alunoAcademia/idAluno/:idAluno/idAcademia/:idAcademia', cors(), async function(request, response){
+
+    let idAluno = request.params.idAluno
+    let idAcademia = request.params.idAcademia
+
+    let dadosAlunoAcademia = await controllerAlunoAcademia.deletarAlunoDaAcademia(idAluno, idAcademia)
+
+    response.status(dadosAlunoAcademia.status)
+    response.json(dadosAlunoAcademia)
+})
+
 
 /******************************************* ENDPOINTs EXERCICIO ********************************************/
 

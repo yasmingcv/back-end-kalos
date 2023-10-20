@@ -117,6 +117,17 @@ const updateAlunoAcademia = async function (dadosAlunoAcademia) {
 
 }
 
+const deleteAlunoFromAcademia = async function(idAluno, idAcademia){
+
+    let sql = `delete from tbl_aluno_academia where tbl_aluno_academia.id_aluno = ${idAluno} AND tbl_aluno_academia.id_academia = ${idAcademia}`
+
+    let resultadoAlunoAcademia = await prisma.$executeRawUnsafe(sql)
+
+    if(resultadoAlunoAcademia)
+        return true
+    else
+        return false
+}
 const selectLast5Alunos = async function(idAcademia){
     let sql = `select tbl_aluno.*
 	    from tbl_aluno
@@ -142,5 +153,6 @@ module.exports = {
     selectAlunoAcademiaById,
     selectLast5Alunos,
     selectAcademiasAlunoByID,
-    selectAllAlunosByIdAcademia
+    selectAllAlunosByIdAcademia,
+    deleteAlunoFromAcademia
 }

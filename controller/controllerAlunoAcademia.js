@@ -7,6 +7,7 @@
 
 var alunoAcademiaDAO = require('../model/DAO/aluno_academiaDAO.js')
 var academiaDAO = require('../model/DAO/academiaDAO.js')
+var alunoDAO = require('../model/DAO/alunoDAO.js')
 
 
 var message = require('./modulo/config.js') 
@@ -178,11 +179,38 @@ const getLastAlunos = async function(idAcademia){
     }
 }
 
+const deletarAlunoDaAcademia = async function (idAluno, idAcademia){
+
+    if (idAluno == '' || idAluno == undefined || isNaN(idAluno) || idAcademia == '' || idAcademia == undefined || isNaN(idAcademia)){
+        return message.ERROR_INVALID_ID
+    } else {
+
+        let statusAcademiaId = await academiaDAO.selectAcademiaById(idAcademia)
+        let statusAlunoId = await alunoDAO.selectAlunoById(idAluno)
+
+        if(statusAcademiaId && statusAlunoId){
+
+            let resultadoDadosAlunoAcademia = await alunoAcademiaDAO.deleteAlunoFromAcademia(idAluno, idAcademia)
+
+            if(resultadoDadosAlunoAcademia) {
+                return message.SUCCESS_DELETE_ITEM
+            } else {
+                return message.ERROR_INTERNAL_SERVER
+            }
+        } else {
+            return message.ERROR_NOT_FOUND
+        }
+
+    } 
+    
+}
+
 module.exports = {
     inserirAlunoAcademia,
     atualizarAlunoAcademia,
     getAlunoAcademiaById,
     getLastAlunos,
     getAcademiasAlunoByID,
-    getAllAlunosByIdAcademia
+    getAllAlunosByIdAcademia,
+    deletarAlunoDaAcademia
 }
