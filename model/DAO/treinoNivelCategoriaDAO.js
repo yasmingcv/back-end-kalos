@@ -44,6 +44,41 @@ const selectTreinoNivelCategoriaById = async function(idTreinoNivelCategoria){
         return false
     }
 }
+
+const selectTreinoNivelCategoriaByName = async function (nomeTreinoNivelCategoria, idAcademia){
+
+    let sql = `
+    select   tbl_treino_nivel_categoria.id,
+                tbl_treino.id as id_treino,
+                tbl_treino.nome,
+                tbl_treino.descricao,
+                tbl_treino.foto,
+                date_format(tbl_treino.data_criacao, '%d/%m/%y') as data_criacao,
+                tbl_nivel.nome as nome_nivel,
+                tbl_categoria_treino.nome as nome_categoria_treino,
+                tbl_academia.id as id_academia
+    
+                from tbl_treino_nivel_categoria
+                    inner join tbl_treino
+                        on tbl_treino_nivel_categoria.id_treino = tbl_treino.id
+                    inner join tbl_nivel
+                        on tbl_treino_nivel_categoria.id_nivel = tbl_nivel.id
+                    inner join tbl_categoria_treino
+                        on tbl_treino_nivel_categoria.id_categoria_treino = tbl_categoria_treino.id
+                    inner join tbl_academia
+                        on tbl_treino_nivel_categoria.id_academia = tbl_academia.id
+                
+                where tbl_treino.nome like '%${nomeTreinoNivelCategoria}%' AND tbl_treino_nivel_categoria.id_academia = ${idAcademia}`
+
+    let rsTreinoNivelCategoria = await prisma.$queryRawUnsafe(sql)
+
+    if(rsTreinoNivelCategoria.length > 0){
+        return rsTreinoNivelCategoria
+    } else {
+        return false
+    }
+
+}
 const selectAlunosOnTreinoNivelCategoriaByIdAcademiaAndIdTreino = async function(idAcademia, idTreinoNivelCategoria){
 
     let sql = `
@@ -209,5 +244,6 @@ module.exports = {
     selectTreinoNivelCategoriaByIdAcademia,
     selectTreinoNivelCategoriaByIdAluno,
     selectTreinoNivelCategoriaByIdAlunoAndIdAcademia,
-    selectAlunosOnTreinoNivelCategoriaByIdAcademiaAndIdTreino
+    selectAlunosOnTreinoNivelCategoriaByIdAcademiaAndIdTreino,
+    selectTreinoNivelCategoriaByName
 }

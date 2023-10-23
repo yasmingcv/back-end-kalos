@@ -49,6 +49,32 @@ const getTreinoNivelCategoriaById = async function(idTreinoNivelCategoria){
     } 
 }
 
+const getTreinoNivelCategoriaByName = async function(nomeTreinoNivelCategoria, idAcademia){
+
+    let dadosTreinoNivelCategoriaJSON = {}
+
+    if(idAcademia == '' || idAcademia == undefined || isNaN(idAcademia)){
+        return message.ERROR_INVALID_ID
+    }
+    else if(nomeTreinoNivelCategoria == '' || nomeTreinoNivelCategoria == undefined){
+        return message.ERROR_INVALID_NAME
+    } else {
+
+        let dadosTreinoNivelCategoria = await treinoNivelCategoriaDAO.selectTreinoNivelCategoriaByName(nomeTreinoNivelCategoria, idAcademia)
+
+        if(dadosTreinoNivelCategoria){
+
+            dadosTreinoNivelCategoriaJSON.status = message.SUCCESS_REQUEST.status
+            dadosTreinoNivelCategoriaJSON.message = message.SUCCESS_REQUEST.message
+
+            dadosTreinoNivelCategoriaJSON.informacoes = dadosTreinoNivelCategoria
+
+            return dadosTreinoNivelCategoriaJSON
+        } else {
+            return message.ERROR_NOT_FOUND
+        }
+    }
+}
 const getTreinoNivelCategoriaByIdAcademia = async function(idAcademia){
 
     let dadosTreinoNivelCategoriaJSON = {}
@@ -151,5 +177,6 @@ module.exports = {
     getTreinoNivelCategoriaByIdAcademia,
     getTreinoNivelCategoriaByIdAluno,
     getTreinoNivelCategoriaByIdAlunoAndIdAcademia,
-    getAlunoOnTreinoNivelCategoriaByIdAcademiaAndIdTreino
+    getAlunoOnTreinoNivelCategoriaByIdAcademiaAndIdTreino,
+    getTreinoNivelCategoriaByName
 }

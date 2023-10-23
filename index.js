@@ -980,6 +980,17 @@ app.get('/kalos/treinoNivelCategoria/idAcademia/:idAcademia/idTreinoNivelCategor
     response.json(dadosTreinoNivelCategoria)
 })
 
+app.get('/kalos/treinoNivelCategoria/nome/:nomeTreinoNivelCategoria/idAcademia/:idAcademia', cors(), async function (request, response){
+
+    let nomeTreino = request.params.nomeTreinoNivelCategoria
+    let idAcademia = request.params.idAcademia
+
+    let dadosTreinoNivelCategoria = await controllerTreinoNivelCategoria.getTreinoNivelCategoriaByName(nomeTreino, idAcademia)
+
+    response.status(dadosTreinoNivelCategoria.status)
+    response.json(dadosTreinoNivelCategoria)
+})
+
 
 
 /******************************************* ENDPOINTs EXERCICIO-SERIE-REPETICAO ********************************************/
