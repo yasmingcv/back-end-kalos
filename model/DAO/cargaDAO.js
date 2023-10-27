@@ -14,7 +14,7 @@ var prisma = new PrismaClient()
 // Seleciona todas as cargas do aluno
 const selectAllCargasByIdAlunoAndIdExercicioSerieRepeticao = async function(idAluno, idExercicioSerieRepeticao){
 
-    let sql = `select   tbl_carga.peso, tbl_carga.data_horario,
+    let sql = `select   tbl_carga.id, tbl_carga.peso, tbl_carga.data_horario,
                         tbl_carga.id_aluno,
                         tbl_carga.id_exercicio_serie_repeticao
                     
@@ -26,6 +26,8 @@ const selectAllCargasByIdAlunoAndIdExercicioSerieRepeticao = async function(idAl
                         on tbl_exercicio_serie_repeticao.id = tbl_carga.id_exercicio_serie_repeticao
                         
                         where tbl_carga.id_aluno = ${idAluno} AND tbl_carga.id_exercicio_serie_repeticao = ${idExercicioSerieRepeticao}`
+
+                        console.log(sql);
 
     let resultadoCarga = await prisma.$queryRawUnsafe(sql)
 
