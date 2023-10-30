@@ -14,20 +14,22 @@ var prisma = new PrismaClient()
 
 const insertAlunoTreino = async function(dadosAlunoTreino){
 
-    let sql = `insert into tbl_aluno_treino (
-                id_aluno,
-                id_treino_nivel_categoria
-        ) values (
-                ${dadosAlunoTreino.id_aluno},
-                ${dadosAlunoTreino.id_treino_nivel_categoria}
-    );`
-
-    let resultadoAlunoTreino = await prisma.$queryRawUnsafe(sql)
-
-    if(resultadoAlunoTreino)
-        return true
-    else 
+    if(!dadosAlunoTreino.id_aluno || !dadosAlunoTreino.id_treino_nivel_categoria || dadosAlunoTreino.id_treino_nivel_categoria.length === 0){
         return false
+    }
+
+    try{
+        for (const id_treino_nivel_categoria of dadosAlunoTreino.id_treino_nivel_categoria) {
+            let sql = `INSERT INTO tbl_aluno_treino (id_aluno, id_treino_nivel_categoria) VALUES (${dadosAlunoTreino.id_aluno}, ${id_treino_nivel_categoria});`
+            await prisma.$queryRawUnsafe(sql)
+        }
+
+        return true;
+    } catch(error) {
+        console.error(error)
+        return false
+    }
+
 }
 
 const selectAllAlunoTreino = async function(){
