@@ -57,13 +57,11 @@ const insertExercicio = async function(dadosExercicio){
         nome,
         descricao,
         anexo,
-        duracao,
         id_academia
     ) values (
         '${dadosExercicio.nome}',
         '${dadosExercicio.descricao}',
         '${dadosExercicio.anexo}',
-        '${dadosExercicio.duracao}',
         ${dadosExercicio.id_academia}
     );`
 

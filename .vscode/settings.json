@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/c45e8fd1-2373-4e2a-a0fe-3e72c5a26747/resourceGroups/kalos-corp-api/providers/Microsoft.Web/sites/tux437unix",
+    "appService.deploySubpath": "."
+}
