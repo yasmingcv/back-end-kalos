@@ -238,7 +238,7 @@ const autenticarAluno = async function (dadosAluno) {
     if (dados) {
         let tokenUser = await jwt.createJWT(dados.id)
 
-        await redis.setRedis(`aluno-${dados.id}`, JSON.stringify(dados))
+        // await redis.setRedis(`aluno-${dados.id}`, JSON.stringify(dados))
 
         dados[0].token = tokenUser
 
