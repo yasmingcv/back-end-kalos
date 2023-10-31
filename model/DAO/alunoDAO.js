@@ -48,7 +48,7 @@ const selectAlunoById = async function(idAluno){
     let resultadoAluno = await prisma.$queryRawUnsafe(sql)
 
     if(resultadoAluno.length > 0)
-        return resultadoAluno
+        return resultadoAluno[0]
     else
         return false
 }
