@@ -9,6 +9,8 @@ var alunoDAO = require('../model/DAO/alunoDAO.js')
 
 var message = require('./modulo/config.js')
 
+var redis = require('../middleware/redisConfig.js')
+
 // Retorna todos os alunos existentens no banco de dados
 const getAlunos = async function () {
 
@@ -231,10 +233,13 @@ const deletarAluno = async function (idAluno) {
 const autenticarAluno = async function (dadosAluno) {
     const dados = await alunoDAO.selectAlunoByPassword(dadosAluno)
 
-    const jwt = require('../middleware/jwtAluno.js')
+    const jwt = require('../middleware/jwtAluno.js') 
 
     if (dados) {
         let tokenUser = await jwt.createJWT(dados.id)
+
+        await redis.setRedis(`aluno-${dados.id}`, JSON.stringify(dados))
+
         dados[0].token = tokenUser
 
         return dados[0]

@@ -11,6 +11,7 @@ var { PrismaClient } = require('@prisma/client')
 // Criando instância do prisma
 var prisma = new PrismaClient()
 
+var redis = require('../../middleware/redisConfig.js')
 
 // Seleciona todos os alunos
 const selectAllAlunos = async function (){
@@ -35,6 +36,9 @@ const selectAllAlunos = async function (){
 // Seleciona um aluno pelo seu id
 const selectAlunoById = async function(idAluno){
 
+    const userRedis = await redis.getRedis(`aluno-${idAluno}`);
+    const user = JSON.parse(userRedis)
+
     let sql = `select   tbl_aluno.*, tbl_genero.nome as genero
     
     from tbl_aluno
@@ -44,7 +48,7 @@ const selectAlunoById = async function(idAluno){
     let resultadoAluno = await prisma.$queryRawUnsafe(sql)
 
     if(resultadoAluno.length > 0)
-        return resultadoAluno[0]
+        return user
     else
         return false
 }
