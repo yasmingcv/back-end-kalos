@@ -17,7 +17,7 @@ const selectAllAcademias = async function(page){
 
     let sql = `select tbl_academia.*, tbl_academia_categoria.id_categoria,
     tbl_categoria.nome as categoria, tbl_endereco.id as id_endereco,
-    tbl_endereco.logradouro, tbl_endereco.numero as numero_endereco, tbl_endereco.complemento,
+    tbl_endereco.logradouro, tbl_endereco.numero as numero, tbl_endereco.complemento,
     tbl_endereco.cep, tbl_endereco.cidade, tbl_endereco.estado, tbl_endereco.bairro
     
     from tbl_academia
@@ -46,7 +46,7 @@ const selectAllAcademiasTestessss = async function(page){
 
     let sql = `select tbl_academia.*, tbl_academia_categoria.id_categoria,
     tbl_categoria.nome as categoria, tbl_endereco.id as id_endereco,
-    tbl_endereco.logradouro, tbl_endereco.numero as numero_endereco, tbl_endereco.complemento,
+    tbl_endereco.logradouro, tbl_endereco.numero as numero, tbl_endereco.complemento,
     tbl_endereco.cep, tbl_endereco.cidade, tbl_endereco.estado, tbl_academia_tags.*, tbl_tags.nome as tag, tbl_tags.id as id_tag
     
     from tbl_academia
@@ -79,7 +79,7 @@ const selectAcademiaById = async function(idAcademia){
 
     let sql = ` select tbl_academia.*, tbl_academia_categoria.id_categoria,
     tbl_categoria.nome as categoria, tbl_endereco.id as id_endereco,
-    tbl_endereco.logradouro, tbl_endereco.numero as numero_endereco, tbl_endereco.complemento,
+    tbl_endereco.logradouro, tbl_endereco.numero as numero, tbl_endereco.complemento,
     tbl_endereco.cep, tbl_endereco.cidade, tbl_endereco.estado, tbl_endereco.bairro
     
     from tbl_academia
@@ -105,7 +105,7 @@ const selectAcademiaById = async function(idAcademia){
 const selectAcademiaByName = async function(nomeAcademia){
     let sql = ` select tbl_academia.*, tbl_academia_categoria.id_categoria,
     tbl_categoria.nome as categoria, tbl_endereco.id as id_endereco,
-    tbl_endereco.logradouro, tbl_endereco.numero as numero_endereco, tbl_endereco.complemento,
+    tbl_endereco.logradouro, tbl_endereco.numero as numero, tbl_endereco.complemento,
     tbl_endereco.cep, tbl_endereco.cidade, tbl_endereco.estado
     
     from tbl_academia
