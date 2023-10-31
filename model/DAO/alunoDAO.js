@@ -36,8 +36,8 @@ const selectAllAlunos = async function (){
 // Seleciona um aluno pelo seu id
 const selectAlunoById = async function(idAluno){
 
-    const userRedis = await redis.getRedis(`aluno-${idAluno}`);
-    const user = JSON.parse(userRedis)
+    // const userRedis = await redis.getRedis(`aluno-${idAluno}`);
+    // const user = JSON.parse(userRedis)
 
     let sql = `select   tbl_aluno.*, tbl_genero.nome as genero
     
@@ -48,7 +48,7 @@ const selectAlunoById = async function(idAluno){
     let resultadoAluno = await prisma.$queryRawUnsafe(sql)
 
     if(resultadoAluno.length > 0)
-        return user
+        return resultadoAluno
     else
         return false
 }
