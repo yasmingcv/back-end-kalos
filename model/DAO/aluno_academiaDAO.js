@@ -61,7 +61,7 @@ const selectAcademiasAlunoByID = async function(idAluno){
     let sql = `select	tbl_aluno_academia.id_aluno,
                         tbl_academia.*,
                         tbl_endereco.logradouro, tbl_endereco.numero, tbl_endereco.cidade, tbl_endereco.estado, tbl_endereco.bairro,
-                        tbl_categoria.nome as nome_categoria
+                        tbl_categoria.nome as categoria
 
                         from tbl_aluno_academia
                         inner join tbl_aluno
