@@ -143,6 +143,7 @@ const selectLast5Alunos = async function(idAcademia){
 
 	    order by tbl_aluno.id desc limit 5;`
 
+       
     let resultadoAlunos = await prisma.$queryRawUnsafe(sql)
 
     if(resultadoAlunos.length > 0){

@@ -168,6 +168,7 @@ const getLastAlunos = async function(idAcademia){
     } else {
     if(dadosAluno){
 
+
         dadosAlunosJSON.status = message.SUCCESS_REQUEST.status
         dadosAlunosJSON.message = message.SUCCESS_REQUEST.message
         dadosAlunosJSON.ultimos_alunos = dadosAluno

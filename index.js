@@ -779,7 +779,7 @@ app.get('/kalos/alunoAcademia/idAcademia/:idAcademia', cors(), async function(re
     response.json(dadosAlunoAcademia)
 })
 // Retorna os último cinco alunos cadastrados de uma academia específica
-app.get('/kalos/alunoAcademia/idAcademia/:idAcademia', cors(), async function(request, response){
+app.get('/kalos/ultimosAlunos/idAcademia/:idAcademia', cors(), async function(request, response){
 
     let idAcademia = request.params.idAcademia
 
