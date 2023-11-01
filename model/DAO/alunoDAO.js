@@ -182,7 +182,7 @@ const updateAluno = async function(dadosAluno){
 const deleteAluno = async function(idAluno){
     let sql = `delete from tbl_aluno where id = ${idAluno}`
 
-    let resultadoAluno = await prisma.$queryRawUnsafe(sql)
+    let resultadoAluno = await prisma.$executeRawUnsafe(sql)
 
     if(resultadoAluno)
         return true

@@ -90,11 +90,18 @@ const getTreinoNivelCategoriaByIdAcademia = async function(idAcademia){
 
             dadosTreinoNivelCategoriaJSON.status = message.SUCCESS_REQUEST.status
             dadosTreinoNivelCategoriaJSON.message = message.SUCCESS_REQUEST.message
-               
+
+            for (const treino of dadosTreinoNivelCategoria){
+                let alunosTreino = await treinoNivelCategoriaDAO.selectAlunosByIdTreinoNivelCategoria(treino.id)
+
+                console.log(alunosTreino)
+                treino.alunos = alunosTreino
+            }
+
             dadosTreinoNivelCategoriaJSON.informacoes = dadosTreinoNivelCategoria
+            dadosTreinoNivelCategoriaJSON.alunos
             
-
-
+            
             return dadosTreinoNivelCategoriaJSON
 
         } else {
