@@ -11,41 +11,52 @@ var { PrismaClient } = require('@prisma/client')
 // Criando instância do prisma
 var prisma = new PrismaClient()
 
+const inserirTreinos = async function (treinos){
+    let sql = `insert into tmp_tbl_treino (id_treino) values (${treinos})`
 
-const insertAlunoTreino = async function(dadosAlunoTreino){
+    let rsTempTreino = await prisma.$executeRawUnsafe(sql)
 
-
-    let sql = `insert into tbl_aluno_treino (
-        id_aluno,
-        id_treino_nivel_categoria
-    ) values (
-        ${dadosAlunoTreino.id_aluno},
-        ${dadosAlunoTreino.id_treino_nivel_categoria}
-    );`
-
-    let resultadoAlunoTreino = await prisma.$executeRawUnsafe(sql)
-
-    if(resultadoAlunoTreino){
+    if(rsTempTreino)
         return true
-    } else{
+    else
+        return false
+}
+const insertAlunoTreino = async function(dadosAlunoTreino){
+    let sqlCriaTempTable = 'create temporary table tmp_tbl_treino (id_treino int)'
+
+    await prisma.$executeRawUnsafe(sqlCriaTempTable)
+
+    console.log(dadosAlunoTreino)
+    for(const treino of dadosAlunoTreino.treinos){
+
+        let sql = `insert into tbl_aluno_treino (
+            id_aluno,
+            id_treino_nivel_categoria
+            ) values (
+                ${dadosAlunoTreino.id_aluno},
+                ${treino}
+            );`
+
+            var resultadoAlunoTreino = await prisma.$queryRawUnsafe(sql)
+     
+    }
+    
+    if(resultadoAlunoTreino){
+
+        let sqlDrop = `drop table tmp_tbl_treino`
+        await prisma.$queryRawUnsafe(sqlDrop)
+
+        return true
+        
+    } else {
         return false
     }
 
-    // if(!dadosAlunoTreino.id_aluno || !dadosAlunoTreino.id_treino_nivel_categoria || dadosAlunoTreino.id_treino_nivel_categoria.length === 0){
-    //     return false
-    // }
+    
 
-    // try{
-    //     for (const id_treino_nivel_categoria of dadosAlunoTreino.id_treino_nivel_categoria) {
-    //         let sql = `INSERT INTO tbl_aluno_treino (id_aluno, id_treino_nivel_categoria) VALUES (${dadosAlunoTreino.id_aluno}, ${id_treino_nivel_categoria});`
-    //         await prisma.$queryRawUnsafe(sql)
-    //     }
-
-    //     return true;
-    // } catch(error) {
-    //     console.error(error)
-    //     return false
-    // }
+    
+    
+    
 
 }
 

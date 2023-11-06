@@ -77,9 +77,8 @@ const getAlunoTreinoByIdAcademia = async function(idAcademia){
 const inserirAlunoTreino = async function(dadosAlunoTreino){
 
 
-    if( dadosAlunoTreino.id_aluno == '' || dadosAlunoTreino.id_aluno == undefined || isNaN(dadosAlunoTreino.id_aluno) ||
-        dadosAlunoTreino.id_treino_nivel_categoria == '' || dadosAlunoTreino.id_treino_nivel_categoria == undefined || isNaN(dadosAlunoTreino.id_treino_nivel_categoria) ||
-        dadosAlunoTreino.id_treino_nivel_categoria.length === 0)
+    if( dadosAlunoTreino.id_aluno == '' || dadosAlunoTreino.id_aluno == undefined || isNaN(dadosAlunoTreino.id_aluno) 
+        )
         {
             return message.ERROR_INVALID_ID
         } else {
