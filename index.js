@@ -50,6 +50,7 @@ var controllerAlunoTreino = require('./controller/controllerAlunoTreino.js')
 var controllerCategoria = require('./controller/controllerCategoria.js')
 var controllerPostagem = require('./controller/controllerPostagem.js')
 var controllerCarga = require('./controller/controllerCarga.js')
+var controllerCategoriaProduto = require('./controller/controllerCategoriaProduto.js')
 
 
 //Define que os dados que irao chegar na requisição será no padrão JSON
@@ -1246,11 +1247,62 @@ app.delete('/kalos/carga/id/:id', cors(), async function(request, response){
 app.get('/kalos/categoriaProduto/:id', cors(), async function(request, response){
     let idCategoriaProduto = request.params.id
 
-    let dadosCategoriaProduto = await 
-    
+    let dadosCategoriaProduto = await controllerCategoriaProduto.getCategoriaProdutoById(idCategoriaProduto)
+
     response.status(dadosCategoriaProduto.status)
     response.json(dadosCategoriaProduto)
 })
+
+app.get('/kalos/categoriaProduto', cors(), async function(request, response){
+    
+
+    let dadosCategoriaProduto = await controllerCategoriaProduto.getCategoriaProduto()
+
+    response.status(dadosCategoriaProduto.status)
+    response.json(dadosCategoriaProduto)
+})
+
+app.post('/kalos/categoriaProduto', cors(), bodyParserJSON,async function(request, response){
+
+    let contentType = request.headers['content-type']
+
+    // validacao para receber em formato json
+    if(String(contentType).toLowerCase() == 'application/json'){
+
+        let dadosBody = request.body
+
+        let dadosCategoriaProduto = await controllerCategoriaProduto.inserirCategoriaProduto(dadosBody)
+
+        response.status(dadosCategoriaProduto.status)
+        response.json(dadosCategoriaProduto)
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
+    }
+    
+})
+
+app.put('/kalos/categoriaProduto/id/:id', cors(), bodyParserJSON,async function(request, response){
+
+    let contentType = request.headers['content-type']
+
+    // validacao para receber em formato json
+    if(String(contentType).toLowerCase() == 'application/json'){
+
+        let idCategoriaProduto = request.params.id
+        let dadosBody = request.body
+
+        let dadosCategoriaProduto = await controllerCategoriaProduto.atualizarCategoriaProduto(dadosBody, idCategoriaProduto)
+        console.log(dadosCategoriaProduto)
+        response.status(dadosCategoriaProduto.status)
+        response.json(dadosCategoriaProduto)
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
+    }
+    
+})
+
 
 app.listen(8080, function(){
     console.log('Aguardando requisições na porta 8080')
