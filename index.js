@@ -1241,6 +1241,16 @@ app.delete('/kalos/carga/id/:id', cors(), async function(request, response){
 
 })
 
+/******************************************* ENDPOINTs categoria produto ********************************************/
+
+app.get('/kalos/categoriaProduto/:id', cors(), async function(request, response){
+    let idCategoriaProduto = request.params.id
+
+    let dadosCategoriaProduto = await 
+    
+    response.status(dadosCategoriaProduto.status)
+    response.json(dadosCategoriaProduto)
+})
 
 app.listen(8080, function(){
     console.log('Aguardando requisições na porta 8080')

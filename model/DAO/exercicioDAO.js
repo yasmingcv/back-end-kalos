@@ -80,7 +80,6 @@ const updateExercicio = async function(dadosExercicio){
                 nome = '${dadosExercicio.nome}',
                 descricao = '${dadosExercicio.descricao}',
                 anexo = '${dadosExercicio.anexo}',
-                duracao = '${dadosExercicio.duracao}',
                 id_academia = ${dadosExercicio.id_academia}
                 where id = ${dadosExercicio.id};`
 
