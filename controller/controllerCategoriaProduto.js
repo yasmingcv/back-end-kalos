@@ -90,7 +90,7 @@ const atualizarCategoriaProduto =  async (dadosCategoriaProduto, idCategoriaProd
                 dadosCategoriaProduto.id = idCategoriaProduto
                 dadosCategoriaProdutoJSON.status = message.SUCCESS_REQUEST.status
                 dadosCategoriaProdutoJSON.message = message.SUCCESS_REQUEST.message
-                dadosCategoriaProdutoJSON.categoria =  dadosCategoriaProduto
+                dadosCategoriaProdutoJSON.categoria_produto =  dadosCategoriaProduto
         
                 return dadosCategoriaProdutoJSON
             }
@@ -101,11 +101,41 @@ const atualizarCategoriaProduto =  async (dadosCategoriaProduto, idCategoriaProd
     }
 }
 
+const deletarCategoriaProduto = async (idCategoriaProduto) => {
+
+    let dadosCategoriaProdutoJSON = {}
+
+    if(idCategoriaProduto == '' || idCategoriaProduto == undefined || isNaN(idCategoriaProduto)){
+        return message.ERROR_INVALID_ID
+    }else{
+
+        
+
+        let statusId = await categoriaProdutoDAO.selectCategoriaProdutoById(idCategoriaProduto)
+
+        if(statusId){
+            let resultadoExercicio = await categoriaProdutoDAO.deleteCategoriaProduto(idCategoriaProduto)
+
+            if(resultadoExercicio){
+                return message.SUCCESS_DELETE_ITEM
+            } else {
+                return message.ERROR_INTERNAL_SERVER
+            }
+        } else {
+            message.ERROR_INVALID_ID
+        }
+
+        
+
+    }
+}
+
 
 
 module.exports = {
     getCategoriaProduto,
     getCategoriaProdutoById,
     inserirCategoriaProduto,
-    atualizarCategoriaProduto
+    atualizarCategoriaProduto,
+    deletarCategoriaProduto
 }

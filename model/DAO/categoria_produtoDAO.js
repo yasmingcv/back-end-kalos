@@ -60,8 +60,8 @@ const insertCategoriaProduto = async (dadosCategoriaProduto) => {
 const updateCategoriaProduto = async (dadosCategoriaProduto, idCategoriaProduto) => {
 
     let sql = `
-            update tbl_categoria set
-            nome = ${dadosCategoriaProduto.nome}
+            update tbl_categoria_produto set
+            nome = '${dadosCategoriaProduto.nome}'
             where id = ${idCategoriaProduto}
     `
 
@@ -72,6 +72,21 @@ const updateCategoriaProduto = async (dadosCategoriaProduto, idCategoriaProduto)
     else 
         return false
 
+}
+
+const deleteCategoriaProduto = async (idCategoriaProduto) => {
+
+    let sql = `
+        delete from tbl_categoria_produto where id = ${idCategoriaProduto}
+    `
+
+    var resultadoDadosCategoriaProduto = await prisma.$executeRawUnsafe(sql)
+
+    if(resultadoDadosCategoriaProduto)
+        return true
+    else 
+        return false
+    
 }
 
 const selectLastId = async function(){
@@ -91,5 +106,6 @@ module.exports = {
     selectCategoriaProdutoById,
     insertCategoriaProduto,
     selectLastId,
-    updateCategoriaProduto
+    updateCategoriaProduto,
+    deleteCategoriaProduto
 }
