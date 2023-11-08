@@ -97,6 +97,21 @@ const updateProduto = async (dadosProduto) => {
 
 }
 
+const deleteProduto = async (idProduto) => {
+
+    let sql = `
+        delete from tbl_produto where id = ${idProduto}
+    `
+
+    var resultadoDadosProduto = await prisma.$executeRawUnsafe(sql)
+
+    if(resultadoDadosProduto)
+        return true
+    else 
+        return false
+    
+}
+
 const selectLastId = async function(){
     let sql = `select * from tbl_produto order by id desc limit 1;`
 
@@ -114,5 +129,6 @@ module.exports = {
     selectProdutoById,
     insertProduto,
     updateProduto,
+    deleteProduto,
     selectLastId
 }

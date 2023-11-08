@@ -121,7 +121,11 @@ const inserirAlunoAcademia = async function(dadosAlunoAcademia){
 
 }
 
-const atualizarAlunoAcademia = async function(dadosAlunoAcademia, idAluno){
+const atualizarAlunoAcademia = async function( idAluno, dadosAlunoAcademia){
+    console.log(dadosAlunoAcademia.frequencia_cardiaca);
+    console.log(dadosAlunoAcademia.tempo_em_pe);
+    console.log(dadosAlunoAcademia.rotina_regular);
+    console.log(dadosAlunoAcademia.frequencia_treino_semanal);
 
     if( dadosAlunoAcademia.frequencia_cardiaca == '' || dadosAlunoAcademia.frequencia_cardiaca == undefined ||
         dadosAlunoAcademia.tempo_em_pe == '' || dadosAlunoAcademia.tempo_em_pe == undefined ||

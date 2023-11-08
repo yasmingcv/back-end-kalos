@@ -95,7 +95,7 @@ const inserirProduto =  async (dadosProduto) => {
     }
 }
 
-const atualizarProduto = async (idProduto, dadosProduto) => {
+const atualizarProduto = async ( dadosProduto,idProduto) => {
     let dadosProdutoJSON = {}
 
     if(
@@ -135,9 +135,38 @@ const atualizarProduto = async (idProduto, dadosProduto) => {
     }
 }
 
+const deletarProduto = async (idProduto) => {
+
+    
+
+    if(idProduto == '' || idProduto == undefined || isNaN(idProduto)){
+        return message.ERROR_INVALID_ID
+    }else{
+
+    
+        let statusId = await produtoDAO.selectProdutoById(idProduto)
+
+        if(statusId){
+            let resultadoProduto = await produtoDAO.deleteProduto(idProduto)
+
+            if(resultadoProduto){
+                return message.SUCCESS_DELETE_ITEM
+            } else {
+                return message.ERROR_INTERNAL_SERVER
+            }
+        } else {
+            message.ERROR_INVALID_ID
+        }
+
+        
+
+    }
+}
+
 module.exports = {
     getProduto,
     getProdutoById,
     inserirProduto,
+    deletarProduto,
     atualizarProduto
 }

@@ -103,14 +103,13 @@ const atualizarCategoriaProduto =  async (dadosCategoriaProduto, idCategoriaProd
 
 const deletarCategoriaProduto = async (idCategoriaProduto) => {
 
-    let dadosCategoriaProdutoJSON = {}
+    
 
     if(idCategoriaProduto == '' || idCategoriaProduto == undefined || isNaN(idCategoriaProduto)){
         return message.ERROR_INVALID_ID
     }else{
 
-        
-
+    
         let statusId = await categoriaProdutoDAO.selectCategoriaProdutoById(idCategoriaProduto)
 
         if(statusId){

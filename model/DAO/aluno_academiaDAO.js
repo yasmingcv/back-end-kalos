@@ -105,7 +105,7 @@ const insertAlunoAcademia = async function (dadosAlunoAcademia) {
 const updateAlunoAcademia = async function (dadosAlunoAcademia) {
 
     let sql = `  update tbl_aluno set
-                    frequencia_cardiaca = ${dadosAlunoAcademia.frequencia_cardiaca},
+                    frequencia_cardiaca = '${dadosAlunoAcademia.frequencia_cardiaca}',
                     tempo_em_pe = '${dadosAlunoAcademia.tempo_em_pe}',
                     rotina_regular = '${dadosAlunoAcademia.rotina_regular}',
                     frequencia_treino_semanal = ${dadosAlunoAcademia.frequencia_treino_semanal},

@@ -826,7 +826,7 @@ app.post('/kalos/alunoAcademia', cors(), bodyParserJSON, async function(request,
 })
 
 // Insere novos dados ao aluno (a academia)
-app.put('/kalos/alunoAcademia/id/:id', cors(), async function(request, response){
+app.put('/kalos/alunoAcademia/id/:id', cors(), bodyParserJSON, async function(request, response){
     let contentType = request.headers['content-type']
 
     //Validação para receber dados apenas no formato JSON
@@ -838,7 +838,7 @@ app.put('/kalos/alunoAcademia/id/:id', cors(), async function(request, response)
         //recebe o ID  do aluno pelo parametro
         let idAlunoAcademia = request.params.id
 
-        let resultadoDadosAlunoAcademia = await controllerAlunoAcademia.atualizarAlunoAcademia(dadosBody, idAlunoAcademia)
+        let resultadoDadosAlunoAcademia = await controllerAlunoAcademia.atualizarAlunoAcademia( idAlunoAcademia, dadosBody)
 
         response.status(resultadoDadosAlunoAcademia.status)
         response.json(resultadoDadosAlunoAcademia)
@@ -1353,6 +1353,38 @@ app.post('/kalos/produto', cors(), bodyParserJSON,async function(request, respon
     }
     
 })
+
+app.put('/kalos/produto/id/:id', cors(), bodyParserJSON,async function(request, response){
+
+    let contentType = request.headers['content-type']
+
+    // validacao para receber em formato json
+    if(String(contentType).toLowerCase() == 'application/json'){
+
+        let idProduto = request.params.id
+        let dadosBody = request.body
+        
+
+        let dadosProduto = await controllerProduto.atualizarProduto(dadosBody, idProduto)
+        
+        response.status(dadosProduto.status)
+        response.json(dadosProduto)
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
+    }
+    
+})
+
+app.delete('/kalos/produto/:id', cors(), async function(request, response){
+    let idProduto = request.params.id
+
+    let dadosProduto = await controllerProduto.deletarProduto(idProduto)
+
+    response.status(dadosProduto.status)
+    response.json(dadosProduto)
+})
+
 
 
 
