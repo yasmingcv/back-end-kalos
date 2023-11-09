@@ -6,7 +6,7 @@
  ****************************************************************************************************/
 
 // Import da biblioteca do cliente do prisma
-var { PrismaClient } = require('@prisma/client')
+var { PrismaClient, Prisma } = require('@prisma/client')
 
 // Criando instância do prisma
 var prisma = new PrismaClient()
@@ -32,29 +32,25 @@ const selectAllAlunosByIdAcademia = async function (idAcademia){
         return false
 }
 const selectAlunoAcademiaById = async function (idAlunoAcademia) {
+    console.log('teste');
 
-    let sql = `select   tbl_aluno.*,
-    tbl_nivel.nome as nivel_experiencia,
-    tbl_qualidade_do_sono.qualidade,
-    tbl_academia.id as id_academia, tbl_academia.nome as nome_academia
-    
-    from tbl_aluno
-    inner join tbl_nivel
-        on tbl_aluno.id_nivel_experiencia = tbl_nivel.id
-    inner join tbl_qualidade_do_sono
+    let sql = `select * from tbl_aluno left join tbl_nivel on tbl_aluno.id_nivel_experiencia = tbl_nivel.id
+
+        left join tbl_qualidade_do_sono
         on tbl_aluno.id_qualidade_do_sono = tbl_qualidade_do_sono.id
-    inner join tbl_aluno_academia
+    left join tbl_aluno_academia
         on tbl_aluno.id = tbl_aluno_academia.id_aluno
-    inner join tbl_academia
-        on tbl_academia.id = tbl_aluno_academia.id_academia
-        where tbl_aluno.id = ${idAlunoAcademia};`
+    left join tbl_academia
+        on tbl_academia.id = tbl_aluno_academia.id_academia`
 
     let resultadoAlunoAcademia = await prisma.$queryRawUnsafe(sql)
 
-    if(resultadoAlunoAcademia.length > 0)
-        return resultadoAlunoAcademia[0]
-    else
-        return false
+    console.log(resultadoAlunoAcademia);
+
+    // if(resultadoAlunoAcademia.length > 0)
+    //     return resultadoAlunoAcademia[0]
+    // else
+    //     return false
 }
 
 const selectAcademiasAlunoByID = async function(idAluno){
@@ -133,6 +129,20 @@ const deleteAlunoFromAcademia = async function(idAluno, idAcademia){
     else
         return false
 }
+
+const verifyAlunoFromAcademia = async function(idAluno, idAcademia){
+
+    let sql = `select * from tbl_aluno_academia where tbl_aluno_academia.id_aluno = ${idAluno} AND tbl_aluno_academia.id_academia = ${idAcademia}`
+
+    let resultadoAlunoAcademia = await prisma.$queryRawUnsafe(sql)
+
+    if(resultadoAlunoAcademia.length > 0)
+        return true
+    else
+        return false
+}
+
+
 const selectLast5Alunos = async function(idAcademia){
     let sql = `select tbl_aluno.*
 	    from tbl_aluno
@@ -160,5 +170,6 @@ module.exports = {
     selectLast5Alunos,
     selectAcademiasAlunoByID,
     selectAllAlunosByIdAcademia,
-    deleteAlunoFromAcademia
+    deleteAlunoFromAcademia,
+    verifyAlunoFromAcademia
 }

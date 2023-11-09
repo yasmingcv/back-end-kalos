@@ -99,33 +99,38 @@ const inserirAlunoAcademia = async function(dadosAlunoAcademia){
     ){
         return message.ERROR_INVALID_ID
     } else{
+        let verificacao = await alunoAcademiaDAO.verifyAlunoFromAcademia(dadosAlunoAcademia.id_aluno, dadosAlunoAcademia.id_academia)
 
-        let resultadoDadosAlunoAcademia = await alunoAcademiaDAO.insertAlunoAcademia(dadosAlunoAcademia)
+        if(verificacao == false){
+            let resultadoDadosAlunoAcademia = await alunoAcademiaDAO.insertAlunoAcademia(dadosAlunoAcademia)
 
         
-        if(resultadoDadosAlunoAcademia){
+            if(resultadoDadosAlunoAcademia){
+    
+                let dadosAlunoAcademiaJSON = {}
+                
+                dadosAlunoAcademiaJSON.status = message.SUCCESS_CREATE_ITEM.status
+                dadosAlunoAcademiaJSON.message = message.SUCCESS_CREATE_ITEM.message
+                dadosAlunoAcademiaJSON.aluno_academia = dadosAlunoAcademia
+                
+    
+                return dadosAlunoAcademiaJSON
+                
+            } else{
+                return message.ERROR_INTERNAL_SERVER
+            }
+        }else{
 
-            let dadosAlunoAcademiaJSON = {}
-            
-            dadosAlunoAcademiaJSON.status = message.SUCCESS_CREATE_ITEM.status
-            dadosAlunoAcademiaJSON.message = message.SUCCESS_CREATE_ITEM.message
-            dadosAlunoAcademiaJSON.aluno_academia = dadosAlunoAcademia
-            
-
-            return dadosAlunoAcademiaJSON
-            
-        } else{
-            return message.ERROR_INTERNAL_SERVER
+            return message.ERROR_ALREADY_EXISTS_ID
         }
+
+        
     }
 
 }
 
 const atualizarAlunoAcademia = async function( idAluno, dadosAlunoAcademia){
-    console.log(dadosAlunoAcademia.frequencia_cardiaca);
-    console.log(dadosAlunoAcademia.tempo_em_pe);
-    console.log(dadosAlunoAcademia.rotina_regular);
-    console.log(dadosAlunoAcademia.frequencia_treino_semanal);
+   
 
     if( dadosAlunoAcademia.frequencia_cardiaca == '' || dadosAlunoAcademia.frequencia_cardiaca == undefined ||
         dadosAlunoAcademia.tempo_em_pe == '' || dadosAlunoAcademia.tempo_em_pe == undefined ||
@@ -141,6 +146,7 @@ const atualizarAlunoAcademia = async function( idAluno, dadosAlunoAcademia){
         dadosAlunoAcademia.id_aluno = idAluno
 
         let statusId = await alunoAcademiaDAO.selectAlunoAcademiaById(idAluno)
+        // console.log(statusId);
 
         if(statusId){
             let resultadoDadosAlunoAcademia = await alunoAcademiaDAO.updateAlunoAcademia(dadosAlunoAcademia)

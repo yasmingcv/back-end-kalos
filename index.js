@@ -1376,7 +1376,7 @@ app.put('/kalos/produto/id/:id', cors(), bodyParserJSON,async function(request, 
     
 })
 
-app.delete('/kalos/produto/:id', cors(), async function(request, response){
+app.delete('/kalos/produto/id/:id', cors(), async function(request, response){
     let idProduto = request.params.id
 
     let dadosProduto = await controllerProduto.deletarProduto(idProduto)

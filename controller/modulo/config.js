@@ -16,6 +16,10 @@ const ERROR_INVALID_ID = {
   status: 400,
   message: "O ID informado na requisição não é válido ou não foi encaminhado.",
 };
+const ERROR_ALREADY_EXISTS_ID = {
+  status: 400,
+  message: "Os IDs informados na requisição ja existem juntos na tabela.",
+};
 
 const ERROR_INVALID_NAME = {
   status: 400,
@@ -114,5 +118,6 @@ module.exports = {
     ERROR_UNAUTHORIZED,
     ERROR_INVALID_EMAIL,
     ERROR_EXISTING_REGISTER,
-    ERROR_INVALID_TOKEN
+    ERROR_INVALID_TOKEN,
+    ERROR_ALREADY_EXISTS_ID
 }
