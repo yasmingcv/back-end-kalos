@@ -75,14 +75,17 @@ const getAlunoTreinoByIdAcademia = async function(idAcademia){
 }
 
 const inserirAlunoTreino = async function(dadosAlunoTreino){
+    console.log(dadosAlunoTreino.treinos)
 
-
-    if( dadosAlunoTreino.id_aluno == '' || dadosAlunoTreino.id_aluno == undefined || isNaN(dadosAlunoTreino.id_aluno) 
-        )
+    if( dadosAlunoTreino.id_aluno == '' || dadosAlunoTreino.id_aluno == undefined || isNaN(dadosAlunoTreino.id_aluno) || 
+        dadosAlunoTreino.treinos == '' || dadosAlunoTreino.treinos == undefined
+      )
         {
             return message.ERROR_INVALID_ID
         } else {
+            let verificacao = await alunoTreinoDAO.verifyAlunoTreino(dadosAlunoTreino.id_aluno, dadosAlunoTreino.id_treino_nivel_categoria)
 
+            if(verificacao == false){
             let resultadoDadosAlunoTreino = await alunoTreinoDAO.insertAlunoTreino(dadosAlunoTreino)
 
             if(resultadoDadosAlunoTreino){
@@ -97,6 +100,9 @@ const inserirAlunoTreino = async function(dadosAlunoTreino){
             } else {
                 return message.ERROR_INTERNAL_SERVER
             }
+        } else {
+            return message.ERROR_ALREADY_EXISTS_ID
+        }
         }
 
 }

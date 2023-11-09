@@ -1386,6 +1386,59 @@ app.delete('/kalos/produto/id/:id', cors(), async function(request, response){
 })
 
 
+/******************************************* ENDPOINTs NIVEL ********************************************/
+
+app.get('/kalos/nivel', cors(), async function(request, response){
+
+    let dadosNivel = await controllerNivel.getNiveis()
+
+    response.status(dadosNivel.status)
+    response.json(dadosNivel)
+})
+
+app.get('/kalos/nivel/id/:id', cors(), async function(request, response){
+
+    let idNivel = request.params.id
+
+    let dadosNivel = await controllerNivel.getNivelByID(idNivel)
+
+    response.status(dadosNivel.status)
+    response.json(dadosNivel)
+})
+
+app.post('/kalos/nivel', cors(), bodyParserJSON, async function(request, response){
+
+    let dadosBody = request.body
+
+    let resultadoDadosNivel = await controllerNivel.inserirNivel(dadosBody)
+
+    response.status(resultadoDadosNivel.status)
+    response.json(resultadoDadosNivel)
+})
+
+app.put('/kalos/nivel/id/:id', cors(), bodyParserJSON, async function(request, response){
+
+    let dadosBody = request.body
+
+    let idNivel = request.params.id
+
+    let resultadoDadosNivel = await controllerNivel.atualizarNivel(dadosBody, idNivel)
+
+    response.status(resultadoDadosNivel.status)
+    response.json(resultadoDadosNivel)
+})
+
+app.delete('/kalos/nivel/id/:id', cors(), async function(request, response){
+
+    let idNivel = request.params.id
+
+    let resultadoDadosNivel = await controllerNivel.deletarNivel(idNivel)
+
+    response.status(resultadoDadosNivel.status)
+    response.json(resultadoDadosNivel)
+})
+
+
 
 
 

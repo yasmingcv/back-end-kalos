@@ -23,7 +23,6 @@ const inserirTreinos = async function (treinos){
 }
 const insertAlunoTreino = async function(dadosAlunoTreino){
 
-    console.log(dadosAlunoTreino)
     for(const treino of dadosAlunoTreino.treinos){
 
         let sql = `insert into tbl_aluno_treino (
@@ -34,24 +33,16 @@ const insertAlunoTreino = async function(dadosAlunoTreino){
                 ${treino}
             );`
             
-            console.log(sql);
             var resultadoAlunoTreino = await prisma.$queryRawUnsafe(sql)
             
     }
-    
-
+    console.log(resultadoAlunoTreino);
     if(resultadoAlunoTreino){
         return true
         
     } else {
         return false
     }
-
-    
-
-    
-    
-    
 
 }
 
@@ -114,7 +105,6 @@ const selectAlunoTreinoByIdAcademia = async function(idAcademia){
         return false
 }
 
-
 const deleteAlunoTreino = async function(idAlunoTreino){
     let sql = `delete from tbl_aluno_treino where id = ${idAlunoTreino}`
 
@@ -127,10 +117,26 @@ const deleteAlunoTreino = async function(idAlunoTreino){
     }
 }
 
+const verifyAlunoTreino = async function(idAluno, idTreino){
+
+    
+    let sql = `select * from tbl_aluno_treino
+                where tbl_aluno_treino.id_aluno = ${idAluno} AND tbl_aluno_treino.id_treino_nivel_categoria = ${idTreino}`
+
+               
+                let rsAlunoTreino = await prisma.$queryRawUnsafe(sql)
+                
+                if(rsAlunoTreino.length > 0)
+                    return true
+                else
+                    return false
+}
+
 module.exports = {
     insertAlunoTreino,
     selectAllAlunoTreino,
     selectAlunoTreinoById,
     selectAlunoTreinoByIdAcademia,
-    deleteAlunoTreino
+    deleteAlunoTreino,
+    verifyAlunoTreino
 }
