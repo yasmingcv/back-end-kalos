@@ -55,6 +55,9 @@ const getPostagemByID = async function(idPostagem){
 
 // Insere uma nova postagem
 const inserirPostagem = async function(dadosPostagem){
+    if(dadosPostagem.anexo != null){
+        dadosPostagem.anexo  = `'${dadosPostagem.anexo}'`
+    }
 
     // validacao de campos obrigatorios
     if( dadosPostagem.titulo == '' || dadosPostagem.titulo == undefined || dadosPostagem.titulo > 45 ||
@@ -84,6 +87,9 @@ const inserirPostagem = async function(dadosPostagem){
 
 // Atualiza os dados de uma postagem
 const atualizarPostagem = async function(dadosPostagem, idPostagem){
+    if(dadosPostagem.anexo != null){
+        dadosPostagem.anexo  = `'${dadosPostagem.anexo}'`
+    }
 
     if( dadosPostagem.titulo == '' || dadosPostagem.titulo == undefined || dadosPostagem.titulo > 45 ||
         dadosPostagem.corpo == '' || dadosPostagem.corpo == undefined || dadosPostagem.length > 500 

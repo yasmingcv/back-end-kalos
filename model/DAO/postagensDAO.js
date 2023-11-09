@@ -12,6 +12,8 @@ var { PrismaClient } = require('@prisma/client')
 // Criando instância do prisma
 var prisma = new PrismaClient()
 
+const { DateTime } = require('luxon')
+
 
 // Seleciona todas as postagens da academia
 const selectAllPostagensByIdAcademia = async function(idAcademia){
@@ -55,6 +57,10 @@ const selectPostagemById = async function(idPostagem){
 }
 // Insere uma nova postagem
 const insertPostagem = async function(dadosPostagem){
+    const timeZone = 'America/Sao_Paulo'
+    const now = DateTime.now().setZone(timeZone)
+
+    console.log(now);
 
     let sql = `insert into tbl_postagem (
         titulo,
@@ -66,9 +72,9 @@ const insertPostagem = async function(dadosPostagem){
     ) values (
         '${dadosPostagem.titulo}',
         '${dadosPostagem.corpo}',
-        '${dadosPostagem.anexo}',
-        CURDATE(),
-        CURTIME(),
+        ${dadosPostagem.anexo},
+        '${now.toFormat('yyyy-MM-dd')}',
+        '${now.toFormat('HH:mm:ss')}',
         ${dadosPostagem.id_academia}
     );`
 
@@ -82,13 +88,17 @@ const insertPostagem = async function(dadosPostagem){
 
 // Atualiza os dados de uma postagem
 const updatePostagem = async function(dadosPostagem){
+    const timeZone = 'America/Sao_Paulo'
+    const now = DateTime.now().setZone(timeZone)
+
+    console.log(now.toFormat('HH:mm:ss'));
 
     let sql = ` update tbl_postagem set
                 titulo = '${dadosPostagem.titulo}',
                 corpo = '${dadosPostagem.corpo}',
-                anexo = '${dadosPostagem.anexo}',
-                data = CURDATE(),
-                hora = CURTIME(),
+                anexo = ${dadosPostagem.anexo},
+                hora = '${now.toFormat('HH:mm:ss')}',
+                data = '${now.toFormat('yyyy-MM-dd')}',
                 id_academia = ${dadosPostagem.id_academia}
                 
                 where id = ${dadosPostagem.id}`
