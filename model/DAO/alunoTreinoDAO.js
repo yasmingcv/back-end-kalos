@@ -22,23 +22,36 @@ const inserirTreinos = async function (treinos){
         return false
 }
 const insertAlunoTreino = async function(dadosAlunoTreino){
-    
-    let sql = `
-        insert into tbl_aluno_treino
-        (
+
+    console.log(dadosAlunoTreino)
+    for(const treino of dadosAlunoTreino.treinos){
+
+        let sql = `insert into tbl_aluno_treino (
             id_aluno,
             id_treino_nivel_categoria
-        ) values (
-            ${dadosAlunoTreino.id_aluno},
-            ${dadosAlunoTreino.id_treino_nivel_categoria}
-        );`
+            ) values (
+                ${dadosAlunoTreino.id_aluno},
+                ${treino}
+            );`
+            
+            console.log(sql);
+            var resultadoAlunoTreino = await prisma.$queryRawUnsafe(sql)
+            
+    }
+    
 
-    let resultadoAlunoTreino = await prisma.$executeRawUnsafe(sql)
-
-    if(resultadoAlunoTreino)
+    if(resultadoAlunoTreino){
         return true
-    else
+        
+    } else {
         return false
+    }
+
+    
+
+    
+    
+    
 
 }
 
