@@ -32,7 +32,6 @@ const selectAllAlunosByIdAcademia = async function (idAcademia){
         return false
 }
 const selectAlunoAcademiaById = async function (idAlunoAcademia) {
-    console.log('teste');
 
     let sql = `select * from tbl_aluno left join tbl_nivel on tbl_aluno.id_nivel_experiencia = tbl_nivel.id
 
@@ -45,12 +44,10 @@ const selectAlunoAcademiaById = async function (idAlunoAcademia) {
 
     let resultadoAlunoAcademia = await prisma.$queryRawUnsafe(sql)
 
-    console.log(resultadoAlunoAcademia);
-
-    // if(resultadoAlunoAcademia.length > 0)
-    //     return resultadoAlunoAcademia[0]
-    // else
-    //     return false
+    if(resultadoAlunoAcademia.length > 0)
+        return resultadoAlunoAcademia[0]
+    else
+        return false
 }
 
 const selectAcademiasAlunoByID = async function(idAluno){
