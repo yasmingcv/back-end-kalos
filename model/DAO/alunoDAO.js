@@ -123,7 +123,10 @@ const insertAluno = async function (dadosAluno){
         peso,
         altura,
         objetivo,
-        id_genero
+        id_genero,
+        id_nivel_experiencia,
+        id_qualidade_do_sono
+
     ) values (
         '${dadosAluno.nome}',
         '${dadosAluno.data_nascimento}',
@@ -138,7 +141,9 @@ const insertAluno = async function (dadosAluno){
         '${dadosAluno.peso}',
         '${dadosAluno.altura}',
         '${dadosAluno.objetivo}',
-        ${dadosAluno.id_genero}
+        ${dadosAluno.id_genero},
+        1,
+        1
 
     );`
 

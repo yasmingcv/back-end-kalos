@@ -94,7 +94,6 @@ const getTreinoNivelCategoriaByIdAcademia = async function(idAcademia){
             for (const treino of dadosTreinoNivelCategoria){
                 let alunosTreino = await treinoNivelCategoriaDAO.selectAlunosByIdTreinoNivelCategoria(treino.id)
 
-                
                 treino.alunos = alunosTreino
             }
 
