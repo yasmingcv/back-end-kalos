@@ -52,6 +52,7 @@ var controllerPostagem = require('./controller/controllerPostagem.js')
 var controllerCarga = require('./controller/controllerCarga.js')
 var controllerCategoriaProduto = require('./controller/controllerCategoriaProduto.js')
 var controllerProduto = require('./controller/controllerProduto.js')
+var controllerFotos = require('./controller/controllerFotos.js')
 
 
 //Define que os dados que irao chegar na requisição será no padrão JSON
@@ -1438,6 +1439,66 @@ app.delete('/kalos/nivel/id/:id', cors(), async function(request, response){
     response.json(resultadoDadosNivel)
 })
 
+
+/******************************************* ENDPOINTs FOTOS ********************************************/
+app.get('/kalos/fotos', cors(), async function(request, response){
+
+    let dadosFotos = await controllerFotos.getFotos()
+
+    response.status(dadosFotos.status)
+    response.json(dadosFotos)
+})
+
+app.get('/kalos/fotos/id/:id', cors(), async function(request, response){
+
+    let idFotos = request.params.id
+
+    let dadosFotos = await controllerFotos.getFotosById(idFotos)
+
+    response.status(dadosFotos.status)
+    response.json(dadosFotos)
+})
+
+app.post('/kalos/fotos', cors(), bodyParserJSON, async function(request, response){
+
+    let contentType = request.headers['content-type']
+
+    // validacao para receber em formato json
+    if(String(contentType).toLowerCase() == 'application/json'){
+        
+        let dadosBody = request.body
+
+        let resultadoDadosFotos = await controllerFotos.inserirFotos(dadosBody)
+
+        response.status(resultadoDadosFotos.status)
+        response.json(resultadoDadosFotos)
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
+    }
+})
+
+app.put('/kalos/fotosByProduto/id/:id', cors(), bodyParserJSON, async function(request, response){
+
+    let dadosBody = request.body
+
+    let idProduto = request.params.id
+
+    let resultadoDadosFotos = await controllerFotos.atualizarFotos(dadosBody, idProduto)
+
+    response.status(resultadoDadosFotos.status)
+    response.json(resultadoDadosFotos)
+})
+
+app.delete('/kalos/fotosByProduto/id/:id', cors(), async function(request, response){
+
+    let idProduto = request.params.id
+
+    let resultadoDadosProduto = await controllerFotos.deletarFotos(idProduto)
+
+    response.status(resultadoDadosProduto.status)
+    response.json(resultadoDadosProduto)
+})
 
 
 
