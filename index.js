@@ -1054,7 +1054,7 @@ app.get('/kalos/alunoTreino/idAcademia/:idAcademia', cors(), async function(requ
     response.json(dadosAlunoTreino)
 })
 
-// atribui um treino a um aluno
+// atribui um treino ou mais a um aluno
 app.post('/kalos/alunoTreino', cors(), bodyParserJSON, async function(request, response){
 
     let contentType = request.headers['content-type']
@@ -1073,7 +1073,26 @@ app.post('/kalos/alunoTreino', cors(), bodyParserJSON, async function(request, r
         response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
     }
 })
+// atribui um aluno ou mais a um treino
+app.post('/kalos/treinoAluno', cors(), bodyParserJSON, async function(request, response){
 
+    let contentType = request.headers['content-type']
+
+    // validacao para receber em formato json
+    if(String(contentType).toLowerCase() == 'application/json'){
+
+        let dadosBody = request.body
+
+        let resultadoAlunosTreino = await controllerAlunoTreino.inserirTreinoAluno(dadosBody)
+
+        response.status(resultadoAlunosTreino.status)
+        response.json(resultadoAlunosTreino)
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.message)
+    }
+
+})
 app.delete('/kalos/alunoTreino/id/:id', cors(), async function(request, response){
     
     let idAlunoTreino = request.params.id

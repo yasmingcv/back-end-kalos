@@ -75,15 +75,15 @@ const getAlunoTreinoByIdAcademia = async function(idAcademia){
 }
 
 const inserirAlunoTreino = async function(dadosAlunoTreino){
-    console.log(dadosAlunoTreino.treinos)
 
+    console.log(dadosAlunoTreino.id_treino_nivel_categoria)
     if( dadosAlunoTreino.id_aluno == '' || dadosAlunoTreino.id_aluno == undefined || isNaN(dadosAlunoTreino.id_aluno) || 
-        dadosAlunoTreino.treinos == '' || dadosAlunoTreino.treinos == undefined
+        dadosAlunoTreino.id_treino_nivel_categoria == '' || dadosAlunoTreino.id_treino_nivel_categoria == undefined
       )
         {
             return message.ERROR_INVALID_ID
         } else {
-            let verificacao = await alunoTreinoDAO.verifyAlunoTreino(dadosAlunoTreino.id_aluno, dadosAlunoTreino.id_treino_nivel_categoria)
+            let verificacao = await alunoTreinoDAO.verifyAlunoTreino(dadosAlunoTreino.id_aluno, dadosAlunoTreino.treinos)
 
             if(verificacao == false){
             let resultadoDadosAlunoTreino = await alunoTreinoDAO.insertAlunoTreino(dadosAlunoTreino)
@@ -107,6 +107,39 @@ const inserirAlunoTreino = async function(dadosAlunoTreino){
 
 }
 
+const inserirTreinoAluno = async function (dadosAlunoTreino){
+    console.log(dadosAlunoTreino.alunos);
+    console.log(dadosAlunoTreino.id_treino_nivel_categoria);
+    if(
+        dadosAlunoTreino.id_aluno == '' || dadosAlunoTreino.alunos == undefined ||
+        dadosAlunoTreino.id_treino_nivel_categoria == undefined || dadosAlunoTreino.id_treino_nivel_categoria == '' || isNaN(dadosAlunoTreino.id_treino_nivel_categoria)
+    ) {
+        return message.ERROR_INVALID_ID
+    } else {
+        console.log("teste")
+        let verificacao = await alunoTreinoDAO.verifyAlunoTreino(dadosAlunoTreino.id_aluno, dadosAlunoTreino.id_treino_nivel_categoria)
+        
+        if(verificacao == false){
+            let resultadoDadosAlunoTreino = await alunoTreinoDAO.insertTreinoAluno(dadosAlunoTreino)
+
+            if(resultadoDadosAlunoTreino){
+
+                let dadosAlunoTreinoJSON = {}
+
+                dadosAlunoTreinoJSON.status = message.SUCCESS_CREATE_ITEM.status
+                dadosAlunoTreinoJSON.message = message.SUCCESS_CREATE_ITEM.message
+                dadosAlunoTreinoJSON.aluno_treino = dadosAlunoTreino
+
+                return dadosAlunoTreinoJSON
+            } else {
+                return message.ERROR_INTERNAL_SERVER
+            }
+        } else {
+            return message.ERROR_ALREADY_EXISTS_ID
+        }
+    }
+}
+
 const deletarAlunoTreino = async function(idAlunoTreino){
 
     if(idAlunoTreino == '' || idAlunoTreino == undefined || isNaN(idAlunoTreino)){
@@ -119,7 +152,6 @@ const deletarAlunoTreino = async function(idAlunoTreino){
 
             let resultadoDadosAlunoTreino = await alunoTreinoDAO.deleteAlunoTreino(idAlunoTreino)
             
-            console.log(resultadoDadosAlunoTreino)
             if(resultadoDadosAlunoTreino){
                 return message.SUCCESS_DELETE_ITEM
             } else {
@@ -135,5 +167,6 @@ module.exports = {
     getAlunoTreinoById,
     getAlunoTreinos,
     getAlunoTreinoByIdAcademia,
-    deletarAlunoTreino
+    deletarAlunoTreino,
+    inserirTreinoAluno
 }

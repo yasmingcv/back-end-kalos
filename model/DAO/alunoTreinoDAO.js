@@ -21,6 +21,8 @@ const inserirTreinos = async function (treinos){
     else
         return false
 }
+
+// Insere um aluno em um ou mais treinos.
 const insertAlunoTreino = async function(dadosAlunoTreino){
 
     for(const treino of dadosAlunoTreino.treinos){
@@ -36,7 +38,7 @@ const insertAlunoTreino = async function(dadosAlunoTreino){
             var resultadoAlunoTreino = await prisma.$queryRawUnsafe(sql)
             
     }
-    console.log(resultadoAlunoTreino);
+
     if(resultadoAlunoTreino){
         return true
         
@@ -45,6 +47,33 @@ const insertAlunoTreino = async function(dadosAlunoTreino){
     }
 
 }
+
+// Insere um ou mais alunos em um treino.
+const insertTreinoAluno = async function(dadosAlunoTreino){
+
+    for(const aluno of dadosAlunoTreino.alunos){
+
+        let sql = `insert into tbl_aluno_treino (
+            id_aluno,
+            id_treino_nivel_categoria
+            ) values (
+                ${aluno},
+                ${dadosAlunoTreino.id_treino_nivel_categoria}
+            );`
+            
+            var resultadoAlunoTreino = await prisma.$queryRawUnsafe(sql)
+           
+    }
+
+    if(resultadoAlunoTreino){
+        return true
+        
+    } else {
+        return false
+    }
+
+}
+
 
 const selectAllAlunoTreino = async function(){
     
@@ -138,5 +167,6 @@ module.exports = {
     selectAlunoTreinoById,
     selectAlunoTreinoByIdAcademia,
     deleteAlunoTreino,
-    verifyAlunoTreino
+    verifyAlunoTreino,
+    insertTreinoAluno
 }
