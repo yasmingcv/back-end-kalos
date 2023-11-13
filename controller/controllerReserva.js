@@ -9,43 +9,55 @@ var reservaDAO = require('../model/DAO/reservaDAO')
 var message = require('./modulo/config.js') 
 
 // Retorna todas as postagens de uma academia
-const getPostagensByIdAcademia = async function(idAcademia){
+const getReservasByIdAlunoIdAcademia = async function(idAcademia, idAluno){
 
-    let dadosPostagemJSON = {}
+    let dadosReservasJSON = {}
 
-    if(idAcademia == '' || idAcademia == undefined || isNaN(idAcademia)){
+    if(idAcademia == '' || idAcademia == undefined || isNaN(idAcademia) || idAluno == '' || idAluno == undefined || isNaN(idAluno)){
         return message.ERROR_INVALID_ID
     } else {
 
-    let dadosPostagem = await postagemDAO.selectAllPostagensByIdAcademia(idAcademia)
+    let dadosReservas = await reservaDAO.selectReservasByIdAlunoAndIdAcademia(idAluno, idAcademia)
 
-    if(dadosPostagem){
+    if(dadosReservas){
 
-        dadosPostagemJSON.status = message.SUCCESS_REQUEST.status
-        dadosPostagemJSON.message = message.SUCCESS_REQUEST.message
-        dadosPostagemJSON.quantidade = dadosPostagem.length
-        dadosPostagemJSON.postagens = dadosPostagem
+        dadosReservasJSON.status = message.SUCCESS_REQUEST.status
+        dadosReservasJSON.message = message.SUCCESS_REQUEST.message
+        dadosReservasJSON.quantidade = dadosReservas.length
+        dadosReservasJSON.reservas = dadosReservas
 
-        return dadosPostagemJSON
+        return dadosReservasJSON
     } else {
         return message.ERROR_NOT_FOUND
     }
 }
 }
 
+
 const inserirReserva = async function(dadosReserva){
-    // quantidade, 
-    // codigo, ------------ criar automaticamente SE VIRA
-    // total, 
-    // id_produto, 
-    // id_aluno, 
-    // id_status_reserva
-
     if(dadosReserva.quantidade == null || dadosReserva.quantidade == undefined || dadosReserva.quantidade == '' || !isNaN(dadosReserva.quantidade) ||
-       dadosReserva.total == null || dadosReserva.total == undefined || dadosReserva.total == '' || !isNaN(dadosReserva.total) //parei aqui
-
+       dadosReserva.total == null || dadosReserva.total == undefined || dadosReserva.total == '' || !isNaN(dadosReserva.total) ||
+       dadosReserva.id_produto == '' || dadosReserva.id_produto == undefined || isNaN(dadosReserva.id_produto) ||
+       dadosReserva.id_aluno == '' || dadosReserva.id_aluno == undefined || isNaN(dadosReserva.id_aluno) ||
+       dadosReserva.id_status_reserva == '' || dadosReserva.id_status_reserva == undefined || isNaN(dadosReserva.id_status_reserva) 
     ){
-        
+        return message.ERROR_REQUIRED_FIELDS
+    } else  {
+        let rsDadosReserva = await reservaDAO.insertReserva(dadosReserva)
+
+        if(rsDadosReserva){
+            let novaReserva = await reservaDAO.selectLastId()
+
+            let dadosReservaJSON = {}
+
+            dadosReservaJSON.status = message.SUCCESS_CREATE_ITEM.status
+            dadosReservaJSON.message = message.SUCCESS_CREATE_ITEM.message
+            dadosReservaJSON.reserva = novaReserva[0]
+
+            return dadosReservaJSON
+        } else {
+            return message.ERROR_INTERNAL_SERVER
+        }
     }
 }
 
@@ -77,3 +89,7 @@ const inserirReserva = async function(dadosReserva){
 //         return message.ERROR_INTERNAL_SERVER
 //     }
 // }
+
+module.exports = {
+    getReservasByIdAlunoIdAcademia
+}
