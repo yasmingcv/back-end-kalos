@@ -1354,6 +1354,14 @@ app.get('/kalos/produto', cors(), async function(request, response){
     response.json(dadosProduto)
 })
 
+app.get('/kalos/produtoByIdAcademia/id/:id', cors(), async function(request, response){
+    let idAcademia = request.params.id
+    let dadosProduto = await controllerProduto.getProdutoByIdAcademia(idAcademia)
+
+    response.status(dadosProduto.status)
+    response.json(dadosProduto)
+})
+
 app.post('/kalos/produto', cors(), bodyParserJSON,async function(request, response){
 
     let contentType = request.headers['content-type']

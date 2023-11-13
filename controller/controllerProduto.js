@@ -8,6 +8,7 @@
 var produtoDAO = require('../model/DAO/produtoDAO.js')
 var categoriaProdutoDAO = require('../model/DAO/categoria_produtoDAO.js')
 var academiaDAO = require('../model/DAO/academiaDAO.js')
+var fotosDAO = require('../model/DAO/fotosDAO.js')
 
 var message = require('./modulo/config.js') 
 
@@ -26,6 +27,35 @@ const getProduto =  async () => {
         return dadosProdutoJSON
     }else{
         return message.ERROR_NOT_FOUND
+    }
+}
+
+const getProdutoByIdAcademia = async (idAcademia) => {
+
+    let dadosProdutoJSON = {}
+
+    if(idAcademia == '' || idAcademia == undefined || isNaN(idAcademia)){
+        return message.ERROR_INVALID_ID
+    }else{
+
+        let dadosProduto = await produtoDAO.selectProdutoByIdAcademia(idAcademia)
+
+        if(dadosProduto){
+            dadosProdutoJSON.status = message.SUCCESS_REQUEST.status
+            dadosProdutoJSON.message = message.SUCCESS_REQUEST.message
+            for (const produto of dadosProduto) {
+                let fotosDoProduto = await fotosDAO.selectFotosByIdProduto(produto.id)
+
+                produto.fotos = fotosDoProduto
+            }
+
+            dadosProdutoJSON.produto = dadosProduto
+    
+            return dadosProdutoJSON
+        }else{
+            return message.ERROR_NOT_FOUND
+        }
+
     }
 }
 
@@ -168,5 +198,6 @@ module.exports = {
     getProdutoById,
     inserirProduto,
     deletarProduto,
-    atualizarProduto
+    atualizarProduto,
+    getProdutoByIdAcademia
 }

@@ -45,6 +45,20 @@ else
     return false
 }
 
+const selectFotosByIdProduto = async (idFotos) => {
+ 
+    let sql = `
+    select tbl_fotos.anexo as url from tbl_fotos where id_produto = ${idFotos}
+    `
+
+    let resultadoDadosFotos = await prisma.$queryRawUnsafe(sql)
+
+if(resultadoDadosFotos.length > 0)
+    return resultadoDadosFotos
+else
+    return false
+}
+
 const insertFotos = async (dadosFotos) => {
 
     for(const foto of dadosFotos.anexo){
@@ -137,5 +151,6 @@ module.exports = {
     selectLastId,
     insertFotos,
     updateFotos,
-    deleteFotos
+    deleteFotos,
+    selectFotosByIdProduto
 }

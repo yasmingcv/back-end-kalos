@@ -41,6 +41,22 @@ else
     return false
 }
 
+const selectProdutoByIdAcademia = async (idAcademia) => {
+ 
+    let sql = `
+    select tbl_produto.*
+        from tbl_produto 
+    where id_academia = ${idAcademia}
+    `
+
+    let resultadoDadosProduto = await prisma.$queryRawUnsafe(sql)
+
+if(resultadoDadosProduto.length > 0)
+    return resultadoDadosProduto
+else
+    return false
+}
+
 const insertProduto = async (dadosProduto) => {
 
     let sql = `
@@ -130,5 +146,6 @@ module.exports = {
     insertProduto,
     updateProduto,
     deleteProduto,
-    selectLastId
+    selectLastId,
+    selectProdutoByIdAcademia
 }
