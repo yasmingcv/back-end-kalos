@@ -90,6 +90,32 @@ const selectReservasByIdAlunoAndIdAcademia = async function(idAluno, idAcademia)
     }
 }
 
+const selectReservaById = async function(idReserva){
+
+    let sql = `select tbl_reserva.*, tbl_aluno.nome as nome_aluno,  tbl_status_reserva.nome as status_reserva, tbl_produto.nome as nome_produto, tbl_produto.id_academia
+	
+    from tbl_reserva
+    
+		inner join tbl_aluno
+			on tbl_aluno.id = tbl_reserva.id_aluno
+		inner join tbl_status_reserva
+			on tbl_status_reserva.id = tbl_reserva.id_status_reserva
+		inner join tbl_produto
+			on tbl_produto.id = tbl_reserva.id_produto
+            
+		where tbl_reserva.id = ${idReserva}
+;`
+
+    let resultReservas = await prisma.$queryRawUnsafe(sql)
+
+    if(resultReservas.length > 0){
+        return resultReservas[0]
+    } else {
+        return false
+    }
+}
+
+
 const deleteReserva = async function(idReserva){
     let sql = `delete from tbl_reserva where id = ${idReserva}`
 
@@ -101,9 +127,23 @@ const deleteReserva = async function(idReserva){
         return false
 }
 
+const selectLastId = async function(){
+    let sql = `select * from tbl_reserva order by id desc limit 1;`
+
+    let resultReserva = await prisma.$queryRawUnsafe(sql)
+
+    if(resultReserva.length > 0){
+        return resultReserva
+    } else {
+        return false
+    }
+}
+
 module.exports = {
     insertReserva,
     updateReserva,
     selectReservasByIdAlunoAndIdAcademia,
-    deleteReserva
+    deleteReserva,
+    selectReservaById,
+    selectLastId
 }
