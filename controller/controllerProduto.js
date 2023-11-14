@@ -47,9 +47,13 @@ const getProdutoByIdAcademia = async (idAcademia) => {
                 let fotosDoProduto = await fotosDAO.selectFotosByIdProduto(produto.id)
 
                 produto.fotos = fotosDoProduto
+                if(fotosDoProduto == false){
+                    produto.fotos = []
+                }
             }
 
             dadosProdutoJSON.produto = dadosProduto
+            
     
             return dadosProdutoJSON
         }else{
@@ -74,7 +78,7 @@ const getProdutoById = async (idProduto) => {
             dadosProdutoJSON.message = message.SUCCESS_REQUEST.message
             dadosProdutoJSON.produto = dadosProduto
             
-            
+
             return dadosProdutoJSON
         }else{
             return message.ERROR_NOT_FOUND
