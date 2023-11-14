@@ -6,46 +6,49 @@
  ***********************************************************************/
 
 var reservaDAO = require('../model/DAO/reservaDAO')
-var message = require('./modulo/config.js') 
+var message = require('./modulo/config.js')
 
-// Retorna todas as postagens de uma academia
-const getReservasByIdAlunoIdAcademia = async function(idAcademia, idAluno){
+// Filtra as reservas por id do aluno e id da academia
+const getReservasByIdAlunoIdAcademia = async function (idAcademia, idAluno) {
 
+    console.log(idAcademia, idAluno);
     let dadosReservasJSON = {}
 
-    if(idAcademia == '' || idAcademia == undefined || isNaN(idAcademia) || idAluno == '' || idAluno == undefined || isNaN(idAluno)){
+    if (idAcademia == '' || idAcademia == undefined || isNaN(idAcademia) || idAluno == '' || idAluno == undefined || isNaN(idAluno)) {
         return message.ERROR_INVALID_ID
     } else {
 
-    let dadosReservas = await reservaDAO.selectReservasByIdAlunoAndIdAcademia(idAluno, idAcademia)
+        let dadosReservas = await reservaDAO.selectReservasByIdAlunoAndIdAcademia(idAluno, idAcademia)
 
-    if(dadosReservas){
+        if (dadosReservas) {
 
-        dadosReservasJSON.status = message.SUCCESS_REQUEST.status
-        dadosReservasJSON.message = message.SUCCESS_REQUEST.message
-        dadosReservasJSON.quantidade = dadosReservas.length
-        dadosReservasJSON.reservas = dadosReservas
+            dadosReservasJSON.status = message.SUCCESS_REQUEST.status
+            dadosReservasJSON.message = message.SUCCESS_REQUEST.message
+            dadosReservasJSON.quantidade = dadosReservas.length
+            dadosReservasJSON.reservas = dadosReservas
 
-        return dadosReservasJSON
-    } else {
-        return message.ERROR_NOT_FOUND
+            return dadosReservasJSON
+        } else {
+            return message.ERROR_NOT_FOUND
+        }
     }
 }
-}
 
 
-const inserirReserva = async function(dadosReserva){
-    if(dadosReserva.quantidade == null || dadosReserva.quantidade == undefined || dadosReserva.quantidade == '' || !isNaN(dadosReserva.quantidade) ||
-       dadosReserva.total == null || dadosReserva.total == undefined || dadosReserva.total == '' || !isNaN(dadosReserva.total) ||
-       dadosReserva.id_produto == '' || dadosReserva.id_produto == undefined || isNaN(dadosReserva.id_produto) ||
-       dadosReserva.id_aluno == '' || dadosReserva.id_aluno == undefined || isNaN(dadosReserva.id_aluno) ||
-       dadosReserva.id_status_reserva == '' || dadosReserva.id_status_reserva == undefined || isNaN(dadosReserva.id_status_reserva) 
-    ){
+const inserirReserva = async function (dadosReserva) {
+    console.log(dadosReserva);
+    console.log('bateu');
+    if (dadosReserva.quantidade == null || dadosReserva.quantidade == undefined || dadosReserva.quantidade == ''  ||
+        dadosReserva.total == null || dadosReserva.total == undefined || dadosReserva.total == '' ||
+        dadosReserva.id_produto == '' || dadosReserva.id_produto == undefined || isNaN(dadosReserva.id_produto) ||
+        dadosReserva.id_aluno == '' || dadosReserva.id_aluno == undefined || isNaN(dadosReserva.id_aluno) ||
+        dadosReserva.id_status_reserva == '' || dadosReserva.id_status_reserva == undefined || isNaN(dadosReserva.id_status_reserva)
+    ) {
         return message.ERROR_REQUIRED_FIELDS
-    } else  {
+    } else {
         let rsDadosReserva = await reservaDAO.insertReserva(dadosReserva)
 
-        if(rsDadosReserva){
+        if (rsDadosReserva) {
             let novaReserva = await reservaDAO.selectLastId()
 
             let dadosReservaJSON = {}
@@ -61,35 +64,91 @@ const inserirReserva = async function(dadosReserva){
     }
 }
 
-// if(dadosPostagem.anexo != null){
-//     dadosPostagem.anexo  = `'${dadosPostagem.anexo}'`
-// }
+const atualizarReserva = async function (dadosReserva, idReserva) {
 
-// // validacao de campos obrigatorios
-// if( dadosPostagem.titulo == '' || dadosPostagem.titulo == undefined || dadosPostagem.titulo > 45 ||
-//     dadosPostagem.corpo == '' || dadosPostagem.corpo == undefined || dadosPostagem.length > 500 
-// ){
-//     return message.ERROR_REQUIRED_FIELDS
-// } else {
+    console.log(dadosReserva, idReserva);
+    if (dadosReserva.quantidade == null || dadosReserva.quantidade == undefined || dadosReserva.quantidade == '' || 
+        dadosReserva.total == null || dadosReserva.total == undefined || dadosReserva.total == '' ||
+        dadosReserva.id_produto == '' || dadosReserva.id_produto == undefined || isNaN(dadosReserva.id_produto) ||
+        dadosReserva.id_aluno == '' || dadosReserva.id_aluno == undefined || isNaN(dadosReserva.id_aluno) ||
+        dadosReserva.id_status_reserva == '' || dadosReserva.id_status_reserva == undefined || isNaN(dadosReserva.id_status_reserva) ||
+        idReserva == null || idReserva == undefined || isNaN(idReserva)
+    ) {
+        return message.ERROR_REQUIRED_FIELDS
+    } else {
+        let rsReserva = await reservaDAO.selectReservaById(idReserva)
 
-//     let resultadoDadosPostagem = await postagemDAO.insertPostagem(dadosPostagem)
+        if (rsReserva) {
+            let rsDadosReserva = await reservaDAO.updateReserva(dadosReserva, idReserva)
 
-//     if(resultadoDadosPostagem){
+            if (rsDadosReserva) {
+                let novaReserva = await reservaDAO.selectLastId()
 
-//         let novaPostagem = await postagemDAO.selectLastId()
+                let dadosReservaJSON = {}
 
-//         let dadosPostagemJSON = {}
+                dadosReservaJSON.status = message.SUCCESS_CREATE_ITEM.status
+                dadosReservaJSON.message = message.SUCCESS_CREATE_ITEM.message
+                dadosReservaJSON.reserva = novaReserva[0]
 
-//         dadosPostagemJSON.status = message.SUCCESS_CREATE_ITEM.status
-//         dadosPostagemJSON.message = message.SUCCESS_CREATE_ITEM.message
-//         dadosPostagemJSON.postagem = novaPostagem[0]
+                return dadosReservaJSON
+            } else {
+                return message.ERROR_INTERNAL_SERVER
+            }
+        } else {
+            return message.ERROR_ID_NOT_FOUND
+        }
+    }
+}
 
-//         return dadosPostagemJSON
-//     } else {
-//         return message.ERROR_INTERNAL_SERVER
-//     }
-// }
+const getReservaById = async function (idReserva) {
+
+    let dadosReservaJSON = {}
+
+    if (idReserva == '' || idReserva == undefined || isNaN(idReserva)) {
+        return message.ERROR_INVALID_ID
+    } else {
+
+        let dadosReserva = await reservaDAO.selectReservaById(idReserva)
+
+        if (dadosReserva) {
+
+            dadosReservaJSON.status = message.SUCCESS_REQUEST.status
+            dadosReservaJSON.message = message.SUCCESS_REQUEST.message
+            dadosReservaJSON.reserva = dadosReserva
+            return dadosReservaJSON
+        } else {
+            return message.ERROR_NOT_FOUND
+        }
+    }
+}
+
+const deletarReserva = async function (idReserva) {
+
+    if (idReserva == '' || idReserva == undefined || isNaN(idReserva)) {
+        return message.ERROR_INVALID_ID
+    } else {
+
+        let statusId = await reservaDAO.selectReservaById(idReserva)
+
+        if (statusId) {
+
+            let resultReserva = await reservaDAO.deleteReserva(idReserva)
+
+            if (resultReserva) {
+                return message.SUCCESS_DELETE_ITEM
+            } else {
+                return message.ERROR_INTERNAL_SERVER
+            }
+        } else {
+            return message.ERROR_ID_NOT_FOUND
+        }
+    }
+}
 
 module.exports = {
-    getReservasByIdAlunoIdAcademia
+    getReservasByIdAlunoIdAcademia,
+    inserirReserva,
+    atualizarReserva,
+    getReservaById,
+    deletarReserva
 }
