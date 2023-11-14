@@ -73,7 +73,8 @@ const getProdutoById = async (idProduto) => {
             dadosProdutoJSON.status = message.SUCCESS_REQUEST.status
             dadosProdutoJSON.message = message.SUCCESS_REQUEST.message
             dadosProdutoJSON.produto = dadosProduto
-    
+            
+            
             return dadosProdutoJSON
         }else{
             return message.ERROR_NOT_FOUND

@@ -44,8 +44,10 @@ else
 const selectProdutoByIdAcademia = async (idAcademia) => {
  
     let sql = `
-    select tbl_produto.*
+    select tbl_produto.*, tbl_categoria_produto.nome as categoria
         from tbl_produto 
+        inner join tbl_categoria_produto
+        on tbl_produto.id_categoria_produto = tbl_categoria_produto.id
     where id_academia = ${idAcademia}
     `
 

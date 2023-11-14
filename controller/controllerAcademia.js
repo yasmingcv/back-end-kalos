@@ -273,6 +273,7 @@ const atualizarAcademia = async function (dadosAcademia) {
                 dadosAcademiaJSON.status = message.SUCCESS_UPDATE_ITEM.status
                 dadosAcademiaJSON.message = message.SUCCESS_UPDATE_ITEM.message
                 dadosAcademiaJSON.academia = dadosAcademiaAtualizado.academia
+                
 
                 return dadosAcademiaJSON
             } else {
