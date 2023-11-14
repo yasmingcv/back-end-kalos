@@ -53,6 +53,7 @@ var controllerCarga = require('./controller/controllerCarga.js')
 var controllerCategoriaProduto = require('./controller/controllerCategoriaProduto.js')
 var controllerProduto = require('./controller/controllerProduto.js')
 var controllerFotos = require('./controller/controllerFotos.js')
+var controllerReserva = require('./controller/controllerReserva.js')
 
 
 //Define que os dados que irao chegar na requisição será no padrão JSON
@@ -1527,8 +1528,74 @@ app.delete('/kalos/fotosByProduto/id/:id', cors(), async function(request, respo
     response.json(resultadoDadosProduto)
 })
 
+/******************************************* ENDPOINTs RESERVAS ********************************************/
 
+//Insere uma nova reserva
+app.post('/kalos/reserva', cors(), bodyParserJSON, async function(request, response){
+    console.log('bateu no endpoint');
 
+    let contentType = request.headers['content-type']
+
+    // validacao para receber em formato json
+    if(String(contentType).toLowerCase() == 'application/json'){
+        
+        let dadosBody = request.body
+
+        let rsReserva = await controllerReserva.inserirReserva(dadosBody)
+
+        response.status(rsReserva.status)
+        response.json(rsReserva)
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
+    }
+})
+
+//Filtra as reservas pelo id do aluno e id da academia
+app.get('/kalos/reserva/idAluno/:idAluno/idAcademia/:idAcademia', cors(), async function(request, response){
+
+    let idAluno = request.params.idAluno
+    let idAcademia = request.params.idAcademia
+
+    let reservas = await controllerReserva.getReservasByIdAlunoIdAcademia(idAcademia, idAluno)
+
+    response.status(reservas.status)
+    response.json(reservas)
+})
+
+//Atualiza uma reserva
+app.put('/kalos/reserva/id/:id', cors(), bodyParserJSON, async function(request, response){
+
+    let dadosBody = request.body
+
+    let idReserva = request.params.id
+
+    let rsReserva = await controllerReserva.atualizarReserva(dadosBody, idReserva)
+
+    response.status(rsReserva.status)
+    response.json(rsReserva)
+})
+
+//Pega uma reserva por id
+app.get('/kalos/reserva/id/:id', cors(), async function(request, response){
+
+    let id = request.params.id
+
+    let dadosReserva = await controllerReserva.getReservaById(id)
+
+    response.status(dadosReserva.status)
+    response.json(dadosReserva)
+})
+
+app.delete('/kalos/reserva/id/:id', cors(), async function(request, response){
+
+    let id = request.params.id
+
+    let rsReserva = await controllerReserva.deletarReserva(id)
+
+    response.status(rsReserva.status)
+    response.json(rsReserva)
+})
 
 app.listen(8080, function(){
     console.log('Aguardando requisições na porta 8080')

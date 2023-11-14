@@ -24,7 +24,7 @@ const insertReserva = async function(dadosReserva) {
         ) values (
             '${dadosReserva.quantidade}',
             '${now.toFormat('yyyy-MM-dd HH:mm:ss')}',
-            '${dadosReserva.codigo}',
+            '${now.toFormat('yyyyMMddHHmmss')}',
             '${dadosReserva.total}',
              ${dadosReserva.id_produto},
              ${dadosReserva.id_aluno},
@@ -46,8 +46,6 @@ const updateReserva = async function(dadosReserva, id) {
 
     let sql = `update tbl_reserva set
             quantidade = '${dadosReserva.quantidade}', 
-            data = '${dadosReserva.data}',  
-            codigo = '${dadosReserva.codigo}', 
             total = '${dadosReserva.total}', 
             id_produto = ${dadosReserva.id_produto}, 
             id_aluno = ${dadosReserva.id_aluno}, 
