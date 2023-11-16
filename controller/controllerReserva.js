@@ -6,6 +6,7 @@
  ***********************************************************************/
 
 var reservaDAO = require('../model/DAO/reservaDAO')
+var fotosDAO = require('../model/DAO/fotosDAO')
 var message = require('./modulo/config.js')
 
 // Filtra as reservas por id do aluno e id da academia
@@ -26,6 +27,11 @@ const getReservasByIdAlunoIdAcademia = async function (idAcademia, idAluno) {
             dadosReservasJSON.message = message.SUCCESS_REQUEST.message
             dadosReservasJSON.quantidade = dadosReservas.length
             dadosReservasJSON.reservas = dadosReservas
+
+            for(const reserva of dadosReservas){
+                let fotos = await fotosDAO.selectFotosByIdProduto(reserva.id_produto)
+                reserva.foto = fotos[0].url
+            }
 
             return dadosReservasJSON
         } else {
@@ -66,7 +72,7 @@ const inserirReserva = async function (dadosReserva) {
 
 const atualizarReserva = async function (dadosReserva, idReserva) {
 
-    console.log(dadosReserva, idReserva);
+
     if (dadosReserva.quantidade == null || dadosReserva.quantidade == undefined || dadosReserva.quantidade == '' || 
         dadosReserva.total == null || dadosReserva.total == undefined || dadosReserva.total == '' ||
         dadosReserva.id_produto == '' || dadosReserva.id_produto == undefined || isNaN(dadosReserva.id_produto) ||
