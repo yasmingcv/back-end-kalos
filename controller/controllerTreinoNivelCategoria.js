@@ -98,7 +98,7 @@ const getTreinoNivelCategoriaByIdAcademia = async function(idAcademia){
             }
 
             dadosTreinoNivelCategoriaJSON.informacoes = dadosTreinoNivelCategoria
-            dadosTreinoNivelCategoriaJSON.alunos
+            dadosTreinoNivelCategoriaJSON.alunos  
             
             
             return dadosTreinoNivelCategoriaJSON

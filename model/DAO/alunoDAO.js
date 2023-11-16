@@ -142,8 +142,8 @@ const insertAluno = async function (dadosAluno){
         '${dadosAluno.altura}',
         '${dadosAluno.objetivo}',
         ${dadosAluno.id_genero},
-        1,
-        1
+        'Iniciante',
+        'Boa'
 
     );`
 
