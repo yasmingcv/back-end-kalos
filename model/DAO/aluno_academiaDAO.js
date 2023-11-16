@@ -139,7 +139,20 @@ const verifyAlunoFromAcademia = async function(idAluno, idAcademia){
         return false
 }
 
+const selectAlunosPerMonthByIdAcademia = async function(monthNumber, idAcademia){
+    let sql = 
+    `select tbl_aluno_academia.id_aluno from tbl_aluno_academia where MONTH(data_entrada) = ${monthNumber} AND tbl_aluno_academia.id_academia = ${idAcademia}`
 
+    let resultadoAlunoAcademia = await prisma.$queryRawUnsafe(sql)
+
+    if(resultadoAlunoAcademia.length > 0){
+        return resultadoAlunoAcademia
+    } else {
+        return false
+    }
+
+
+}
 const selectLast5Alunos = async function(idAcademia){
     let sql = `select tbl_aluno.*
 	    from tbl_aluno
@@ -168,5 +181,6 @@ module.exports = {
     selectAcademiasAlunoByID,
     selectAllAlunosByIdAcademia,
     deleteAlunoFromAcademia,
-    verifyAlunoFromAcademia
+    verifyAlunoFromAcademia,
+    selectAlunosPerMonthByIdAcademia
 }

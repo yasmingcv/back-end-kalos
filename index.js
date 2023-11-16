@@ -803,6 +803,19 @@ app.get('/kalos/alunoAcademia/idAluno/:idAluno', cors(), async function(request,
     response.status(dadosAlunoAcademia.status)
     response.json(dadosAlunoAcademia)
 })
+
+app.get('/kalos/alunoAcademiaGrafico/mes/:mes/idAcademia/:idAcademia', cors(), async function(request, response){
+
+    let numeroMes = request.params.mes
+
+    let idAcademia = request.params.idAcademia
+
+    let dadosGrafico = await controllerAlunoAcademia.getAlunosPerMonth(numeroMes, idAcademia)
+
+    response.status(dadosGrafico.status)
+    response.json(dadosGrafico)
+
+})
 // Insere um aluno na academia
 app.post('/kalos/alunoAcademia', cors(), bodyParserJSON, async function(request, response){
     let contentType = request.headers['content-type']

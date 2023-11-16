@@ -169,6 +169,29 @@ const atualizarAlunoAcademia = async function( idAluno, dadosAlunoAcademia){
     }
 }
 
+const getAlunosPerMonth = async function(monthNumber, idAcademia){
+    let dadosAlunoAcademiaJSON = {}
+
+    if(idAcademia == '' || idAcademia == undefined || isNaN(idAcademia) || monthNumber == '' || monthNumber == undefined || isNaN(monthNumber)){
+        return message.ERROR_INVALID_ID
+    } else {
+
+        let dadosAlunoAcademia = await alunoAcademiaDAO.selectAlunosPerMonthByIdAcademia(monthNumber, idAcademia)
+
+        if(dadosAlunoAcademia){
+
+            dadosAlunoAcademiaJSON.status = message.SUCCESS_REQUEST.status
+            dadosAlunoAcademiaJSON.message = message.SUCCESS_REQUEST.message
+            dadosAlunoAcademiaJSON.quantidade = dadosAlunoAcademia.length
+            
+
+            return dadosAlunoAcademiaJSON
+        } else {
+            return message.ERROR_NOT_FOUND
+        }
+    }
+}
+
 const getLastAlunos = async function(idAcademia){
     let dadosAlunosJSON = {}
 
@@ -223,5 +246,6 @@ module.exports = {
     getLastAlunos,
     getAcademiasAlunoByID,
     getAllAlunosByIdAcademia,
-    deletarAlunoDaAcademia
+    deletarAlunoDaAcademia,
+    getAlunosPerMonth
 }
