@@ -30,7 +30,11 @@ const selectAllProduto = async () => {
 const selectProdutoById = async (idProduto) => {
  
     let sql = `
-    select * from tbl_produto where id = ${idProduto}
+    select tbl_produto.*, tbl_categoria_produto.nome as categoria
+    from tbl_produto 
+    inner join tbl_categoria_produto
+        on tbl_produto.id_categoria_produto = tbl_categoria_produto.id
+    where tbl_produto.id = ${idProduto}
     `
 
     let resultadoDadosProduto = await prisma.$queryRawUnsafe(sql)
@@ -44,7 +48,7 @@ else
 const selectProdutoByIdAcademia = async (idAcademia) => {
  
     let sql = `
-    select tbl_produto.*, tbl_categoria_produto.nome as categoria
+    select tbl_produto.*, tbl_categoria_produto.nome as categoria, 
         from tbl_produto 
         inner join tbl_categoria_produto
         on tbl_produto.id_categoria_produto = tbl_categoria_produto.id

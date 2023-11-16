@@ -76,6 +76,15 @@ const getProdutoById = async (idProduto) => {
         if(dadosProduto){
             dadosProdutoJSON.status = message.SUCCESS_REQUEST.status
             dadosProdutoJSON.message = message.SUCCESS_REQUEST.message
+
+            for (const produto of dadosProduto) {
+                let fotosDoProduto = await fotosDAO.selectFotosByIdProduto(produto.id)
+
+                produto.fotos = fotosDoProduto
+                if(fotosDoProduto == false){
+                    produto.fotos = []
+                }
+            }
             dadosProdutoJSON.produto = dadosProduto
             
 
