@@ -39,7 +39,7 @@ const selectAlunoById = async function(idAluno){
     // const userRedis = await redis.getRedis(`aluno-${idAluno}`);
     // const user = JSON.parse(userRedis)
 
-    let sql = `select   tbl_aluno.*, tbl_genero.nome as genero, tbl_nivel.nome, tbl_qualidade_do_sono.qualidade
+    let sql = `select   tbl_aluno.*, tbl_genero.nome as genero, tbl_nivel.nome as nome_nivel, tbl_qualidade_do_sono.qualidade as qualidade_do_sono
     
     from tbl_aluno
         inner join tbl_genero
