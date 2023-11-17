@@ -77,6 +77,8 @@ const selectReservasByIdAlunoAndIdAcademia = async function(idAluno, idAcademia)
 			on tbl_produto.id = tbl_reserva.id_produto
             
 		where tbl_aluno.id = ${idAluno} and tbl_produto.id_academia = ${idAcademia}
+
+  		order by id desc
 ;`
 
     let resultReservas = await prisma.$queryRawUnsafe(sql)
