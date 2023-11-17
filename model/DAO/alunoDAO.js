@@ -39,11 +39,17 @@ const selectAlunoById = async function(idAluno){
     // const userRedis = await redis.getRedis(`aluno-${idAluno}`);
     // const user = JSON.parse(userRedis)
 
-    let sql = `select   tbl_aluno.*, tbl_genero.nome as genero
+    let sql = `select   tbl_aluno.*, tbl_genero.nome as genero, tbl_nivel.nome, tbl_qualidade_do_sono.qualidade
     
     from tbl_aluno
         inner join tbl_genero
-            on tbl_genero.id = tbl_aluno.id_genero where tbl_aluno.id = ${idAluno}`
+            on tbl_genero.id = tbl_aluno.id_genero
+        inner join tbl_nivel
+            on tbl_nivel.id = tbl_aluno.id_nivel_experiencia
+        inner join tbl_qualidade_do_sono
+            on tbl_qualidade_do_sono.id = tbl_aluno.id_qualidade_do_sono
+            
+            where tbl_aluno.id = ${idAluno}`
 
     let resultadoAluno = await prisma.$queryRawUnsafe(sql)
 
