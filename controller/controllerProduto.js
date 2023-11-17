@@ -106,8 +106,7 @@ const inserirProduto =  async (dadosProduto) => {
     let dadosProdutoJSON = {}
 
     if(
-        dadosProduto.nome == ''|| dadosProduto.nome == undefined || dadosProduto.nome.length > 45 || 
-        dadosProduto.descricao.length > 120 || dadosProduto.codigo.length > 10 || 
+        dadosProduto.nome == ''|| dadosProduto.nome == undefined || dadosProduto.nome.length > 45 || dadosProduto.codigo.length > 10 || 
         dadosProduto.preco == '' || dadosProduto.preco == undefined || dadosProduto.preco.length > 12 || 
         dadosProduto.status == '' || dadosProduto.status == undefined || dadosProduto.status > 15 ||  
         dadosProduto.id_academia == '' || dadosProduto.id_academia == undefined || isNaN(dadosProduto.id_academia)  ||
