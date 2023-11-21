@@ -20,7 +20,7 @@ const selectAllAlunos = async function (){
     select  tbl_aluno.*, tbl_genero.nome as genero
 
     from tbl_aluno
-        left join tbl_genero
+        inner join tbl_genero
             on tbl_genero.id = tbl_aluno.id_genero;
 `
 
