@@ -1600,6 +1600,17 @@ app.get('/kalos/reserva/id/:id', cors(), async function(request, response){
     response.json(dadosReserva)
 })
 
+//Pegar valor total vendido
+app.get('/kalos/reservaValorByIdAcademia/id/:id', cors(), async function(request, response){
+
+    let id = request.params.id
+
+    let dadosReserva = await controllerReserva.pegarValorVendido(id)
+
+    response.status(dadosReserva.status)
+    response.json(dadosReserva)
+})
+
 app.delete('/kalos/reserva/id/:id', cors(), async function(request, response){
 
     let id = request.params.id
