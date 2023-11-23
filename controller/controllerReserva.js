@@ -181,6 +181,36 @@ const deletarReserva = async function (idReserva) {
     }
 }
 
+
+const pegarValorVendido = async (idAcademia) => {
+
+    let dadosReservaJSON = {}
+    let soma = 0
+    if (idAcademia == '' ||idAcademia == undefined || isNaN(idAcademia)) {
+        return message.ERROR_INVALID_ID
+    } else {
+
+        let resultado = await reservaDAO.selectValorByIdAcademia(idAcademia)
+
+      if(resultado){
+        dadosReservaJSON.status = message.SUCCESS_REQUEST.status
+        dadosReservaJSON.message = message.SUCCESS_REQUEST.message
+
+        for(const valor of resultado){
+            let valorNovo = parseFloat(valor.total)
+            soma = soma + valorNovo
+        }
+
+        dadosReservaJSON.valor = soma
+
+        return dadosReservaJSON
+      }else{
+        return message.ERROR_INTERNAL_SERVER
+      }
+
+    }
+}
+
 module.exports = {
     getReservasByIdAlunoIdAcademia,
     inserirReserva,
@@ -188,4 +218,5 @@ module.exports = {
     getReservaById,
     deletarReserva,
     getReservasByIdAcademia
+    pegarValorVendido
 }

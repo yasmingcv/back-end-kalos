@@ -50,6 +50,18 @@ const selectExercicioByName = async function(nomeExercicio){
         return false
 }
 
+const selectExercicioByNameAndIdAcademia = async function(nomeExercicio, idAcademia){
+
+    let sql = `select * from tbl_exercicio where nome = '${nomeExercicio}' AND tbl_exercicio.id_academia = ${idAcademia}`
+
+    let resultadoExercicios = await prisma.$queryRawUnsafe(sql)
+
+    if(resultadoExercicios.length > 0)
+        return resultadoExercicios
+    else
+        return false
+}
+
 // Insere um novo exercício
 const insertExercicio = async function(dadosExercicio){
 
@@ -124,6 +136,7 @@ module.exports = {
     selectLastId,
     insertExercicio,
     updateExercicio,
-    deleteExercicio
+    deleteExercicio,
+    selectExercicioByNameAndIdAcademia
 }
 

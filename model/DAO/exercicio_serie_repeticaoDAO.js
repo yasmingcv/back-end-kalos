@@ -86,6 +86,7 @@ const selectExercicioSerieRepeticaoByIDTreinoNivelCategoria = async function(id)
 }
 
 
+
 module.exports = {
     selectExercicioSerieRepeticaoByID,
     selectExercicioSerieRepeticaoByIDTreinoNivelCategoria

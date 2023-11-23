@@ -133,11 +133,12 @@ const deletarTreino = async function (idTreino) {
 
         if (statusId) {
             let resultadoDadosTreino = await treinoDAO.deleteTreino(idTreino)
-
             if (resultadoDadosTreino) {
                 return message.SUCCESS_DELETE_ITEM
             } else {
-                return message.ERROR_INTERNAL_SERVER
+                return message.ERROR_INTERNAL_SERVE
+                
+                R
             }
         } else {
             return message.ERROR_INVALID_ID
