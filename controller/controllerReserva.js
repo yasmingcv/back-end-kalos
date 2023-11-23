@@ -217,6 +217,6 @@ module.exports = {
     atualizarReserva,
     getReservaById,
     deletarReserva,
-    getReservasByIdAcademia
+    getReservasByIdAcademia,
     pegarValorVendido
 }
