@@ -43,11 +43,11 @@ const selectAlunoById = async function(idAluno){
      tbl_genero.nome as genero, tbl_nivel.nome as nome_nivel, tbl_qualidade_do_sono.qualidade as qualidade_do_sono
     
     from tbl_aluno
-        inner join tbl_genero
+        left join tbl_genero
             on tbl_genero.id = tbl_aluno.id_genero
-        inner join tbl_nivel
+        left join tbl_nivel
             on tbl_nivel.id = tbl_aluno.id_nivel_experiencia
-        inner join tbl_qualidade_do_sono
+        left join tbl_qualidade_do_sono
             on tbl_qualidade_do_sono.id = tbl_aluno.id_qualidade_do_sono
             
             where tbl_aluno.id = ${idAluno}`

@@ -40,6 +40,36 @@ const getReservasByIdAlunoIdAcademia = async function (idAcademia, idAluno) {
     }
 }
 
+const getReservasByIdAcademia = async function (idAcademia) {
+
+    
+    let dadosReservasJSON = {}
+
+    if (idAcademia == '' || idAcademia == undefined || isNaN(idAcademia)) {
+        return message.ERROR_INVALID_ID
+    } else {
+
+        let dadosReservas = await reservaDAO.selectReservasByIdAcademia(idAcademia)
+
+        if (dadosReservas) {
+
+            dadosReservasJSON.status = message.SUCCESS_REQUEST.status
+            dadosReservasJSON.message = message.SUCCESS_REQUEST.message
+            dadosReservasJSON.quantidade = dadosReservas.length
+            dadosReservasJSON.reservas = dadosReservas
+
+            for(const reserva of dadosReservas){
+                let fotos = await fotosDAO.selectFotosByIdProduto(reserva.id_produto)
+                reserva.foto = fotos[0].url
+            }
+
+            return dadosReservasJSON
+        } else {
+            return message.ERROR_NOT_FOUND
+        }
+    }
+}
+
 
 const inserirReserva = async function (dadosReserva) {
     console.log(dadosReserva);
@@ -187,5 +217,6 @@ module.exports = {
     atualizarReserva,
     getReservaById,
     deletarReserva,
+    getReservasByIdAcademia
     pegarValorVendido
 }

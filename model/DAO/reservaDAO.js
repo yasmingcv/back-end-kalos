@@ -77,6 +77,35 @@ const selectReservasByIdAlunoAndIdAcademia = async function(idAluno, idAcademia)
 			on tbl_produto.id = tbl_reserva.id_produto
             
 		where tbl_aluno.id = ${idAluno} and tbl_produto.id_academia = ${idAcademia}
+
+  		order by id desc
+;`
+
+    let resultReservas = await prisma.$queryRawUnsafe(sql)
+
+    if(resultReservas.length > 0){
+        return resultReservas
+    } else {
+        return false
+    }
+}
+
+const selectReservasByIdAcademia = async function(idAcademia){
+
+    let sql = `select tbl_reserva.*, tbl_aluno.nome as nome_aluno,  tbl_status_reserva.nome as status_reserva, tbl_produto.nome as nome_produto, tbl_produto.id_academia
+	
+    from tbl_reserva
+    
+		inner join tbl_aluno
+			on tbl_aluno.id = tbl_reserva.id_aluno
+		inner join tbl_status_reserva
+			on tbl_status_reserva.id = tbl_reserva.id_status_reserva
+		inner join tbl_produto
+			on tbl_produto.id = tbl_reserva.id_produto
+            
+		where tbl_produto.id_academia = ${idAcademia}
+
+  		order by id desc
 ;`
 
     let resultReservas = await prisma.$queryRawUnsafe(sql)
@@ -166,5 +195,6 @@ module.exports = {
     deleteReserva,
     selectReservaById,
     selectLastId,
+    selectReservasByIdAcademia
     selectValorByIdAcademia
 }
