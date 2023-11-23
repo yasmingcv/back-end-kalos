@@ -890,6 +890,17 @@ app.get('/kalos/exercicio/idAcademia/:idAcademia', cors(), async function(reques
     response.json(dadosExercicio)
 })
 
+app.get('/kalos/exercicio/nome/:nome/idAcademia/:idAcademia', cors(), async function(request, response){
+
+    let nomeExercicio = request.params.nome
+    let idAcademia = request.params.idAcademia
+
+    let dadosExercicio = await controllerExercicio.getExercicioByNameAndIdAcademia(nomeExercicio, idAcademia)
+
+    response.status(dadosExercicio.status)
+    response.json(dadosExercicio)
+})
+
 app.get('/kalos/exercicio/id/:id', cors(), async function(request, response){
 
     let idExercicio = request.params.id

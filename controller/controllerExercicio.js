@@ -83,6 +83,36 @@ const getExercicioByName = async function(nomeExercicio){
 
 }
 
+// Retorna um exercício pelo nome
+const getExercicioByNameAndIdAcademia = async function(nomeExercicio, idAcademia){
+
+    let dadosExercicioJSON = {}
+
+    if(
+        nomeExercicio == '' || nomeExercicio == undefined || !isNaN(nomeExercicio)
+        
+    ){
+        return message.ERROR_INVALID_NAME
+    }else if(idAcademia == '' || idAcademia == undefined || isNaN(idAcademia)){
+        return message.ERROR_INVALID_ID
+    } else {
+
+        let dadosExercicio = await exercicioDAO.selectExercicioByNameAndIdAcademia(nomeExercicio, idAcademia)
+
+        if(dadosExercicio){
+
+            dadosExercicioJSON.status = message.SUCCESS_REQUEST.status
+            dadosExercicioJSON.message = message.SUCCESS_REQUEST.message
+            dadosExercicioJSON.exercicio = dadosExercicio
+
+            return dadosExercicioJSON
+        } else {
+            return message.ERROR_NOT_FOUND
+        }
+    }
+
+}
+
 // Insere um novo exercicio
 const inserirExercicio = async function(dadosExercicio){
 
@@ -178,5 +208,6 @@ module.exports = {
     getExercicioByName,
     inserirExercicio,
     atualizarExercicio,
-    deletarExercicio
+    deletarExercicio,
+    getExercicioByNameAndIdAcademia
 }
