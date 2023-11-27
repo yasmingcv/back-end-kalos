@@ -195,6 +195,6 @@ module.exports = {
     deleteReserva,
     selectReservaById,
     selectLastId,
-    selectReservasByIdAcademia
+    selectReservasByIdAcademia,
     selectValorByIdAcademia
 }
