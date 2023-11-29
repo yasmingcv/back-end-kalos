@@ -52,6 +52,7 @@ const selectFotosByIdProduto = async (idFotos) => {
     `
 
     let resultadoDadosFotos = await prisma.$queryRawUnsafe(sql)
+    console.log(resultadoDadosFotos)
 
 if(resultadoDadosFotos.length > 0)
     return resultadoDadosFotos
