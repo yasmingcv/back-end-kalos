@@ -30,7 +30,11 @@ const getReservasByIdAlunoIdAcademia = async function (idAcademia, idAluno) {
 
             for(const reserva of dadosReservas){
                 let fotos = await fotosDAO.selectFotosByIdProduto(reserva.id_produto)
-                reserva.foto = fotos[0].url
+                if(fotos){
+                       reserva.foto = fotos[0].url 
+                    } else {
+                        reserva.foto = null
+                    }
             }
 
             return dadosReservasJSON
@@ -61,7 +65,12 @@ const getReservasByIdAcademia = async function (idAcademia) {
             if(dadosReservas.length > 0){
                 for(const reserva of dadosReservas){
                     let fotos = await fotosDAO.selectFotosByIdProduto(reserva.id_produto)
-                    reserva.foto = fotos[0].url
+                    if(fotos){
+                       reserva.foto = fotos[0].url 
+                    } else {
+                        reserva.foto = null
+                    }
+                    
                 }
             }
             
