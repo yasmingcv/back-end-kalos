@@ -58,10 +58,13 @@ const getReservasByIdAcademia = async function (idAcademia) {
             dadosReservasJSON.quantidade = dadosReservas.length
             dadosReservasJSON.reservas = dadosReservas
 
-            for(const reserva of dadosReservas){
-                let fotos = await fotosDAO.selectFotosByIdProduto(reserva.id_produto)
-                reserva.foto = fotos[0].url
+            if(dadosReservas.length > 0){
+                for(const reserva of dadosReservas){
+                    let fotos = await fotosDAO.selectFotosByIdProduto(reserva.id_produto)
+                    reserva.foto = fotos[0].url
+                }
             }
+            
 
             return dadosReservasJSON
         } else {
