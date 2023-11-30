@@ -37,7 +37,7 @@ const getReservasByIdAlunoIdAcademia = async function (idAcademia, idAluno) {
                     } else {
                         reserva.foto = null
              
-            }
+            }}
 
             return dadosReservasJSON
         } else {
