@@ -28,13 +28,15 @@ const getReservasByIdAlunoIdAcademia = async function (idAcademia, idAluno) {
             dadosReservasJSON.quantidade = dadosReservas.length
             dadosReservasJSON.reservas = dadosReservas
 
+            console.log(dadosReservasJSON);
             for(const reserva of dadosReservas){
                 let fotos = await fotosDAO.selectFotosByIdProduto(reserva.id_produto)
+
                 if(fotos){
                        reserva.foto = fotos[0].url 
                     } else {
                         reserva.foto = null
-                    }
+             
             }
 
             return dadosReservasJSON
