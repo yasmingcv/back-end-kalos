@@ -35,7 +35,9 @@ const getTreinoNivelCategoriaById = async function(idTreinoNivelCategoria){
                      i++
                      exercicio.numero = i
                 }
-            } 
+            } else {
+                exerciciosTreino = null
+            }
             
             
 
