@@ -31,14 +31,13 @@ const getReservasByIdAlunoIdAcademia = async function (idAcademia, idAluno) {
             console.log(dadosReservasJSON);
             for(const reserva of dadosReservas){
                 let fotos = await fotosDAO.selectFotosByIdProduto(reserva.id_produto)
-                console.log(fotos);
-                if(fotos.length == 0 || fotos == false){
-                    reserva.foto = ''
-                } else {
-                    reserva.foto = fotos[0].url
-                }
-                
-            }
+
+                if(fotos){
+                       reserva.foto = fotos[0].url 
+                    } else {
+                        reserva.foto = null
+             
+            }}
 
             return dadosReservasJSON
         } else {
@@ -65,10 +64,18 @@ const getReservasByIdAcademia = async function (idAcademia) {
             dadosReservasJSON.quantidade = dadosReservas.length
             dadosReservasJSON.reservas = dadosReservas
 
-            for(const reserva of dadosReservas){
-                let fotos = await fotosDAO.selectFotosByIdProduto(reserva.id_produto)
-                reserva.foto = fotos[0].url
+            if(dadosReservas.length > 0){
+                for(const reserva of dadosReservas){
+                    let fotos = await fotosDAO.selectFotosByIdProduto(reserva.id_produto)
+                    if(fotos){
+                       reserva.foto = fotos[0].url 
+                    } else {
+                        reserva.foto = null
+                    }
+                    
+                }
             }
+            
 
             return dadosReservasJSON
         } else {
