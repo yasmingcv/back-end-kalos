@@ -146,7 +146,7 @@ const selectReservasByIdProduto = async function(idProduto){
 
 const selectReservaById = async function(idReserva){
 
-    let sql = `select tbl_reserva.*, tbl_aluno.nome as nome_aluno,  tbl_status_reserva.nome as status_reserva, tbl_produto.nome as nome_produto, tbl_produto.id_academia
+    let sql = `select tbl_reserva.*, tbl_aluno.nome as nome_aluno,  tbl_aluno.foto as foto_aluno, tbl_status_reserva.nome as status_reserva, tbl_produto.nome as nome_produto, tbl_produto.id_academia
 	
     from tbl_reserva
     
@@ -158,7 +158,8 @@ const selectReservaById = async function(idReserva){
 			on tbl_produto.id = tbl_reserva.id_produto
             
 		where tbl_reserva.id = ${idReserva}
-;`
+
+  		order by id desc`
 
     let resultReservas = await prisma.$queryRawUnsafe(sql)
 
