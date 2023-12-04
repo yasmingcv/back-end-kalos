@@ -187,6 +187,8 @@ const updateAluno = async function(dadosAluno){
                 id_nivel_experiencia = ${dadosAluno.id_nivel_experiencia},
                 id_genero = ${dadosAluno.id_genero} where id = ${dadosAluno.id}`
 
+    console.log(sql)
+
 
     let resultadoAluno = await prisma.$executeRawUnsafe(sql)
 
