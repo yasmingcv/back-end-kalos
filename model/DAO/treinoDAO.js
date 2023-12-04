@@ -81,6 +81,8 @@ const insertTreino = async function(dadosTreino){
                 ${dadosTreino.id_academia}
             )`
 
+    console.log(sql)
+
     let rsTreino = await prisma.$queryRawUnsafe(sql)
 
     console.warn("rstreino",rsTreino);
