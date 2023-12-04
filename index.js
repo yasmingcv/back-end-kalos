@@ -853,7 +853,7 @@ app.put('/kalos/alunoAcademia/id/:id', cors(), bodyParserJSON, async function(re
         //recebe o ID  do aluno pelo parametro
         let idAlunoAcademia = request.params.id
 
-        let resultadoDadosAlunoAcademia = await controllerAlunoAcademia.atualizarAlunoAcademia( idAlunoAcademia, dadosBody)
+        let resultadoDadosAlunoAcademia = await controllerAluno.atualizarAluno(dadosBody, idAlunoAcademia)
 
         response.status(resultadoDadosAlunoAcademia.status)
         response.json(resultadoDadosAlunoAcademia)
