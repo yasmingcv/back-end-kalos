@@ -853,7 +853,7 @@ app.put('/kalos/alunoAcademia/id/:id', cors(), bodyParserJSON, async function(re
         //recebe o ID  do aluno pelo parametro
         let idAlunoAcademia = request.params.id
 
-        let resultadoDadosAlunoAcademia = await controllerAlunoAcademia.atualizarAlunoAcademia( idAlunoAcademia, dadosBody)
+        let resultadoDadosAlunoAcademia = await controllerAluno.atualizarAluno(dadosBody, idAlunoAcademia)
 
         response.status(resultadoDadosAlunoAcademia.status)
         response.json(resultadoDadosAlunoAcademia)
@@ -1593,6 +1593,17 @@ app.get('/kalos/reserva/idAcademia/:idAcademia', cors(), async function(request,
     let idAcademia = request.params.idAcademia
 
     let reservas = await controllerReserva.getReservasByIdAcademia(idAcademia)
+
+    response.status(reservas.status)
+    response.json(reservas)
+})
+
+//Filtra as reservas pelo id do produto
+app.get('/kalos/reserva/idProduto/:idProduto', cors(), async function(request, response){
+
+    let idProduto = request.params.idProduto
+
+    let reservas = await controllerReserva.getReservasByIdProduto(idProduto)
 
     response.status(reservas.status)
     response.json(reservas)
