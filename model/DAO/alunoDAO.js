@@ -182,7 +182,6 @@ const updateAluno = async function(dadosAluno){
                 frequencia_cardiaca = '${dadosAluno.frequencia_cardiaca}',
                 objetivo = '${dadosAluno.objetivo}',
                 id_qualidade_do_sono = ${dadosAluno.id_qualidade_do_sono},
-                id_qualidade_do_sono = ${dadosAluno.id_qualidade_do_sono},
                 frequencia_treino_semanal = ${dadosAluno.frequencia_treino_semanal},
                 id_nivel_experiencia = ${dadosAluno.id_nivel_experiencia},
                 id_genero = ${dadosAluno.id_genero} where id = ${dadosAluno.id}`
